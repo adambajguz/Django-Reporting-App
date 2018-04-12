@@ -1,0 +1,46 @@
+Spreadsheet(user:typ,
+			spreadsheet_name:typ,
+			spreadsheet_creation_date:,
+			spreadsheet_last_modification:,
+			content:,
+			variable_names:)
+			
+
+
+Plot(plot_name:,
+	 plot_creation_date:,
+	 plot_last_modification:,
+     spreadsheet:,
+	 x_variable:,
+	 y_variable:,
+	 plot_type:)
+
+	
+Raport(user:,
+	   raport_name:,
+	   raport_creation_date:,
+	   raport_last_modification:)
+	
+RaportElementText(raport:,
+				  element_name:,
+				  text:)
+	
+RaportElementTable(raport:,
+				   table_caption:,
+				   spreadsheet:,
+				   column_start:,
+				   column_end:,
+				   row_start:,
+				   row_end:,
+				   style:,
+				   rows_columns_inverted:)
+	
+RaportElementPlot(raport:,
+				  plot_caption:,)
+				  plot:)
+	
+RaportElementRaport(raport:,
+					embedded_raport_caption:,
+					embedded_raport:,
+					element_start:,
+					element_end:)
