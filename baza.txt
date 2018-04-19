@@ -1,56 +1,46 @@
-Spreadsheet(user:User,
-			spreadsheet_name:string,
-			spreadsheet_creation_date:date,
-			spreadsheet_last_modification:date)
+Spreadsheet(user:typ,
+			spreadsheet_name:typ,
+			spreadsheet_creation_date:,
+			spreadsheet_last_modification:,
+			content:,
+			variable_names:)
 			
-		
-Column(spreadsheet:Spreadsheet,
-	   column_name:string,
-	   data:string)
-					
-Plot(plot_name:string,
-     spreadsheet:Spreadsheet,
-	 plot_name:string,
-	 plot_creation_date:date,
-	 plot_last_modification:date,
-	 plot_type:char)
-	 
-PlotData(plot:Plot,
-		 column:Column,
-		 type:int)
 
-Report(user:User,
-	   report_name:string,
-	   report_creation_date:date,
-	   report_last_modification:date)
+
+Plot(plot_name:,
+	 plot_creation_date:,
+	 plot_last_modification:,
+     spreadsheet:,
+	 x_variable:,
+	 y_variable:,
+	 plot_type:)
+
 	
-ReportElementText(report:Report,
-				  element_name:string,
-				  text:string,
-				  order:int)
+Raport(user:,
+	   raport_name:,
+	   raport_creation_date:,
+	   raport_last_modification:)
 	
-ReportElementTable(report:Report,
-				   element_name:string,
-				   table_caption:string,
-				   style:char,
-				   rows_columns_inverted:bool
-				   order:int)
-				   
-ReportElementTableData(report_element_table:ReportElementTable,
-					   spreadsheet:Spreadsheet,
-				       column:Column,
-				       order:int)				   
+RaportElementText(raport:,
+				  element_name:,
+				  text:)
 	
-ReportElementPlot(report:Report,
-				  element_name:string,
-				  plot_caption:string,)
-				  plot:Plot,
-				  order:int)
+RaportElementTable(raport:,
+				   table_caption:,
+				   spreadsheet:,
+				   column_start:,
+				   column_end:,
+				   row_start:,
+				   row_end:,
+				   style:,
+				   rows_columns_inverted:)
 	
-ReportElementRaport(report:Report,
-				    element_name:string,
-					embedded_report_caption:string,
-					embedded_report:Report,
-					element_start:int,
-					element_end:int,
-					order:int)
+RaportElementPlot(raport:,
+				  plot_caption:,)
+				  plot:)
+	
+RaportElementRaport(raport:,
+					embedded_raport_caption:,
+					embedded_raport:,
+					element_start:,
+					element_end:)

@@ -8,11 +8,6 @@ class Spreadsheet(models.Model):
 	spreadsheet_last_modification = models.AutoDateTimeField(default=timezone.now)
     content = models.TextField()
 	variable_names = models.TextField()
-	
-class Column(models.Model):
-    spreadsheet = models.ForeignKey(Spreadsheet)
-    column_name = models.CharField(max_length=255)
-    data = models.TextField()
 
 class Plot(models.Model):
     PLOT_TYPES = (
@@ -25,31 +20,24 @@ class Plot(models.Model):
     plot_name = models.CharField(max_length=255)
 	plot_creation_date = models.DateField(default=timezone.now, editable=False)
 	plot_last_modification = models.AutoDateTimeField(default=timezone.now)
+    spreadsheet = models.ForeignKey(Spreadsheet)
+	x_variable = models.CharField(max_length=255)
+	y_variable = models.CharField(max_length=255)
 	plot_type = models.CharField(max_length=1, choices=PLOT_TYPES)
-	
-class PlotData(models.Model):
-    PLOTDATA_TYPES = (
-		('D', 'DataColumn'),
-        ('G', 'GroupingColumn'),
-    )
-	
-    plot = models.ForeignKey(Plot)
-	column = models.ForeignKey(Columns)
-	type = models.CharField(max_length=1, choices=PLOTDATA_TYPES)
 
-class Report(models.Model):
-    user = models.ForeignKey(User, unique=True)
-    report_name = models.CharField(max_length=255)
-	report_creation_date = models.DateField(default=timezone.now, editable=False)
-	report_last_modification = models.AutoDateTimeField(default=timezone.now)
 	
-class ReportElementText(models.Model):
-	report = models.ForeignKey(Report)
+class Raport(models.Model):
+    user = models.ForeignKey(User, unique=True)
+    raport_name = models.CharField(max_length=255)
+	raport_creation_date = models.DateField(default=timezone.now, editable=False)
+	raport_last_modification = models.AutoDateTimeField(default=timezone.now)
+	
+class RaportElementText(models.Model):
+	raport = models.ForeignKey(Raport)
     element_name = models.CharField(max_length=255)
 	text = models.TextField()
-	order = models.IntegerField()
 	
-class ReportElementTable(models.Model):
+class RaportElementTable(models.Model):
     TABLE_STYLE = (
 		('C', 'Classic'),
         ('M', 'Modern'),
@@ -57,34 +45,24 @@ class ReportElementTable(models.Model):
         ('A', 'Alternating'),
     )
 	
-	report = models.ForeignKey(Report)
+	raport = models.ForeignKey(Raport)
     table_caption = models.CharField(max_length=255)
+	spreadsheet = models.ForeignKey(Spreadsheet)
+	column_start = models.IntegerField()
+	column_end = models.IntegerField()
+	row_start = models.IntegerField()
+	row_end = models.IntegerField()
 	style = models.CharField(max_length=1, choices=TABLE_STYLE)
     rows_columns_inverted = models.BooleanField(default=False)
-	order = models.IntegerField()
 	
-class ReportElementTableData(models.Model):
-    TABLE_STYLE = (
-		('C', 'Classic'),
-        ('M', 'Modern'),
-        ('O', 'Office'),
-        ('A', 'Alternating'),
-    )
-	
-	report = models.ForeignKey(ReportElementTable)
-	column = models.ForeignKey(Column)
-	order = models.IntegerField()	
-	
-class ReportElementPlot(models.Model):
-	report = models.ForeignKey(Report)
+class RaportElementPlot(models.Model):
+	raport = models.ForeignKey(Raport)
     plot_caption = models.CharField(max_length=255)
 	plot = models.ForeignKey(Plot)
-	order = models.IntegerField()
 	
-class ReportElementRaport(models.Model):
-	report = models.ForeignKey(Report)
+class RaportElementRaport(models.Model):
+	raport = models.ForeignKey(Raport)
     embedded_raport_caption = models.CharField(max_length=255)
-	embedded_raport = models.ForeignKey(Report)
+	embedded_raport = models.ForeignKey(Raport)
 	element_start = models.IntegerField()
 	element_end = models.IntegerField()
-	order = models.IntegerField()
