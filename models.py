@@ -81,7 +81,7 @@ class ReportElementPlot(models.Model):
 	plot = models.ForeignKey(Plot)
 	order = models.IntegerField()
 	
-class ReportElementRaport(models.Model):
+class ReportElementReport(models.Model):
 	report = models.ForeignKey(Report)
     embedded_raport_caption = models.CharField(max_length=255)
 	embedded_raport = models.ForeignKey(Report)

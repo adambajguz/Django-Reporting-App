@@ -47,7 +47,7 @@ ReportElementPlot(report:Report,
 				  plot:Plot,
 				  order:int)
 	
-ReportElementRaport(report:Report,
+ReportElementReport(report:Report,
 				    element_name:string,
 					embedded_report_caption:string,
 					embedded_report:Report,
