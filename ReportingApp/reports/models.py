@@ -3,12 +3,12 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 class Spreadsheet(models.Model):
-	user = models.ForeignKey(User, unique=True, on_delete=models.PROTECT)
+	user = models.ForeignKey(User, unique=False, on_delete=models.PROTECT)
 	spreadsheet_name = models.CharField(max_length=255)
 	spreadsheet_creation_date = models.DateField(default=timezone.now, editable=False)
 	spreadsheet_last_modification = models.DateTimeField(default=timezone.now)
-	content = models.TextField()
-	variable_names = models.TextField()
+	# content = models.TextField()
+	# variable_names = models.TextField()
 	
 class Column(models.Model):
 	spreadsheet = models.ForeignKey(Spreadsheet, on_delete=models.PROTECT)
@@ -39,7 +39,7 @@ class PlotData(models.Model):
 	type = models.CharField(max_length=1, choices=PLOTDATA_TYPES)
 
 class Report(models.Model):
-	user = models.ForeignKey(User, unique=True, on_delete=models.PROTECT)
+	user = models.ForeignKey(User, unique=False, on_delete=models.PROTECT)
 	report_name = models.CharField(max_length=255)
 	report_creation_date = models.DateField(default=timezone.now, editable=False)
 	report_last_modification = models.DateTimeField(default=timezone.now)
