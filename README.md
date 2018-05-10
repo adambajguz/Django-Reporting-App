@@ -4,7 +4,8 @@
 ## TEMAT:
 
 4) Aplikacja Django wspomagająca tworzenie raportów
-Raport jest dokumentem (lub fragmentem dokumentu) zawierającym tekst, tabele i/lub wykresy graficzne. Aplikacja powinna pozwalać na umieszczenie w wybranym miejscu strony www elementów raportu. Wartości do tabel i wykresów mają być przekazywane jako argumenty odpowiednich funkcji. Aplikacja powinna oferować kilka formatów tabel i kilka rodzajów wykresów (np. liniowy, słupkowy, kołowy). 
+
+Raport jest dokumentem (lub fragmentem dokumentu) zawierającym tekst, tabele i/lub wykresy graficzne. Aplikacja powinna pozwalać na umieszczenie w wybranym miejscu strony www elementów raportu. Wartości do tabel i wykresów mają być przekazywane jako argumenty odpowiednich funkcji. Aplikacja powinna oferować kilka formatów tabel i kilka rodzajów wykresów (np. liniowy, słupkowy, kołowy).
 projekt dla grupy maksymalnie 4-osobowej
 
 
