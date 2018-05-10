@@ -3,6 +3,7 @@ from django.http import HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
 
 from .models import Spreadsheet
+from .forms import SpreadsheetForm
 
 def home(request):
     spreadsheets = Spreadsheet.objects.all()
@@ -17,6 +18,36 @@ def spreadsheets(request):
     return render(request, 'spreadsheets.html', context={'spreadsheets': spreadsheets, 'num_spreadsheets': num_spreadsheets}, )
 
 @login_required
+def spreadsheets_add(request):
+    new_spreadsheet = Spreadsheet.objects.create(spreadsheet_name='New Spreadsheet', user=request.user)
+    return redirect('spreadsheets_edit', id=new_spreadsheet.id)
+
+@login_required
+def spreadsheets_edit(request, **kwargs):
+    # Get Spreadsheet
+    spreadsheet = Spreadsheet.objects.get(id=kwargs.get('id'))
+    spreadsheet_form = SpreadsheetForm(request.POST or None,
+        initial={
+            'spreadsheet_name': spreadsheet.spreadsheet_name,
+        }
+    )
+
+    if request.method == 'POST':
+        # Update `spreadsheet` object
+        if spreadsheet_form.is_valid():
+            new_data = spreadsheet_form.cleaned_data
+            print('OLD VERISON:', spreadsheet)
+            print('NEW VERISON:', new_data)
+            # Update object's fields
+
+            for attr, value in new_data.items():
+                print('{} = {}'.format(attr, value))
+                setattr(spreadsheet, attr, value)
+            spreadsheet.save()
+
+    return render(request, 'spreadsheets_edit.html', context={'spreadsheet': spreadsheet, 'spreadsheet_form': spreadsheet_form}, )
+
+@login_required
 def spreadsheets_delete(request, **kwargs):
     spreadsheet_id = kwargs.get('id')
 
@@ -26,7 +57,7 @@ def spreadsheets_delete(request, **kwargs):
     try:
         spreadsheet_to_delete = spreadsheets.get(id=spreadsheet_id)
     except:
-        raise Http404
+        raise Http404('No Spreadsheet found!')
 
     if request.method == 'POST':
         # Check if user clicked on `CANCEL`

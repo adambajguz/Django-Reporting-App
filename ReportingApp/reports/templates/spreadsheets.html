@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-
   <ul>
     <li><strong>Spreadsheets count:</strong> {{ num_spreadsheets }}</li>
   </ul>
@@ -17,4 +16,8 @@
     </a>
     </br>
   {% endfor %}
+
+  <a href="add/">
+    <span>Add</span>
+  </a>
 {% endblock %}

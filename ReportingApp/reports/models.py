@@ -5,8 +5,9 @@ from django.utils import timezone
 class Spreadsheet(models.Model):
 	user = models.ForeignKey(User, unique=False, on_delete=models.CASCADE)
 	spreadsheet_name = models.CharField(max_length=255)
-	spreadsheet_creation_date = models.DateField(default=timezone.now, editable=False)
-	spreadsheet_last_modification = models.DateTimeField(default=timezone.now)
+	spreadsheet_creation_date = models.DateField(auto_now_add=True, editable=False)
+	spreadsheet_last_modification = models.DateTimeField(auto_now=True)
+
 	# content = models.TextField()
 	# variable_names = models.TextField()
 
@@ -24,8 +25,8 @@ class Plot(models.Model):
 	)
 
 	plot_name = models.CharField(max_length=255)
-	plot_creation_date = models.DateField(default=timezone.now, editable=False)
-	plot_last_modification = models.DateTimeField(default=timezone.now)
+	plot_creation_date = models.DateField(auto_now_add=True, editable=False)
+	plot_last_modification = models.DateTimeField(auto_now_add=True)
 	plot_type = models.CharField(max_length=1, choices=PLOT_TYPES)
 
 class PlotData(models.Model):
@@ -41,8 +42,8 @@ class PlotData(models.Model):
 class Report(models.Model):
 	user = models.ForeignKey(User, unique=False, on_delete=models.CASCADE)
 	report_name = models.CharField(max_length=255)
-	report_creation_date = models.DateField(default=timezone.now, editable=False)
-	report_last_modification = models.DateTimeField(default=timezone.now)
+	report_creation_date = models.DateField(auto_now_add=True, editable=False)
+	report_last_modification = models.DateTimeField(auto_now_add=True)
 
 class ReportElementText(models.Model):
 	report = models.ForeignKey(Report, on_delete=models.CASCADE)
