@@ -23,7 +23,7 @@
       {% block sidebar %}
       <ul class="sidebar-nav">
           <li><a href="{% url 'home' %}">Home</a></li>
-          <li><a href="">All spreadsheets</a></li>
+          <li><a href="{% url 'spreadsheets' %}">All spreadsheets</a></li>
 
            {% if user.is_authenticated %}
              <li>User: {{ user.get_username }}</li>

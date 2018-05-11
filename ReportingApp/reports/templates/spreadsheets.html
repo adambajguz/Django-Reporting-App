@@ -5,19 +5,25 @@
     <li><strong>Spreadsheets count:</strong> {{ num_spreadsheets }}</li>
   </ul>
 
+  <a href="add/">
+    <span>Add</span>
+  </a>
+  <hr>
+
   {% for spreadsheet in spreadsheets %}
     <p>USER: {{ spreadsheet.user }}</p>
     <p>SPREADSHEET NAME: {{ spreadsheet.spreadsheet_name }}</p>
     <p>CREATED: {{ spreadsheet.spreadsheet_creation_date }}</p>
     <p>LAST MODIFIED: {{ spreadsheet.spreadsheet_last_modification }}</p>
 
-    <a href="{{ spreadsheet.id }}/delete/">
-      <button>X</button>
+    <a href="{{ spreadsheet.id }}/edit/">
+      <span>Edit</span>
     </a>
-    </br>
+    <a href="{{ spreadsheet.id }}/delete/">
+      <span>Delete</span>
+    </a>
+    <hr>
   {% endfor %}
 
-  <a href="add/">
-    <span>Add</span>
-  </a>
+
 {% endblock %}
