@@ -36,13 +36,21 @@ def spreadsheets_edit(request, **kwargs):
 
     columns = Column.objects.filter(spreadsheet__id = spreadsheet.id)
 
+    num_rows = 0
+    c = list()
     for current_column in columns:
+        c.append(current_column.data.split(";"))
         current_column.data = current_column.data.split(";")
+
         print("UNPACKED: ", current_column.data)
         print("REPACKED", ";".join(current_column.data))
         print("JSON PACKED: ", json.dumps(current_column.data))
         jsonDec = json.decoder.JSONDecoder()
         print("JSON UNPACKED: ", jsonDec.decode(json.dumps(current_column.data)))
+        num_rows = max(num_rows,len(current_column.data))
+
+    print(c)
+
 
     if request.method == 'POST':
         # Update `spreadsheet` object
@@ -56,8 +64,8 @@ def spreadsheets_edit(request, **kwargs):
                 print('{} = {}'.format(attr, value))
                 setattr(spreadsheet, attr, value)
             spreadsheet.save()
-
-    return render(request, 'spreadsheets_edit.html', context={'spreadsheet': spreadsheet, 'spreadsheet_form': spreadsheet_form, 'columns':columns}, )
+    
+    return render(request, 'spreadsheets_edit.html', context={'spreadsheet': spreadsheet, 'spreadsheet_form': spreadsheet_form, 'columns': columns, 'rows': range(0,num_rows)}, )
 
 @login_required
 def spreadsheets_delete(request, **kwargs):

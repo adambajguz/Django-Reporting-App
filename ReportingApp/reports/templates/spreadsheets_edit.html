@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load index %}
 
 {% block content %}
 
@@ -13,10 +14,45 @@
   <div>
     <input type="submit" value="Save" />
   </div>
+
+<hr>
+<style>
+  table, th, td {
+      border: 1px solid black;
+  }
+  input {
+    width: 100%;
+      box-sizing: border-box;
+  }
+</style>
+
+<table>
+  <thead>
+    <tr>
+      {% for current_column in columns %}
+      <th>
+        <input type="text" name="var_header_H{{forloop.counter}}" value="{{current_column.column_name}}">
+      </th>
+      {% endfor %}
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for it in rows %}
+    <tr>
+      {% for current_column in columns %}
+        <td>
+          <input type="text" name="var_cell_R{{it}}_C{{forloop.counter}}" value="{{current_column.data|index:it }}">
+        </td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 </form>
 
 {% for current_column in columns %}
-<p>COLUMN NAME: {{current_column.column_name}}</p>
+<p>COLUMN NAME: </p>
 <p>DATA: {{current_column.data}}</p>
 
   {% for val in current_column.data %}
