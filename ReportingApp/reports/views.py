@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
 
-from .models import Spreadsheet
+from .models import Spreadsheet, Column
 from .forms import SpreadsheetForm
+
+import json
 
 def home(request):
     spreadsheets = Spreadsheet.objects.all()
@@ -32,6 +34,16 @@ def spreadsheets_edit(request, **kwargs):
         }
     )
 
+    columns = Column.objects.filter(spreadsheet__id = spreadsheet.id)
+
+    for current_column in columns:
+        current_column.data = current_column.data.split(";")
+        print("UNPACKED: ", current_column.data)
+        print("REPACKED", ";".join(current_column.data))
+        print("JSON PACKED: ", json.dumps(current_column.data))
+        jsonDec = json.decoder.JSONDecoder()
+        print("JSON UNPACKED: ", jsonDec.decode(json.dumps(current_column.data)))
+
     if request.method == 'POST':
         # Update `spreadsheet` object
         if spreadsheet_form.is_valid():
@@ -45,7 +57,7 @@ def spreadsheets_edit(request, **kwargs):
                 setattr(spreadsheet, attr, value)
             spreadsheet.save()
 
-    return render(request, 'spreadsheets_edit.html', context={'spreadsheet': spreadsheet, 'spreadsheet_form': spreadsheet_form}, )
+    return render(request, 'spreadsheets_edit.html', context={'spreadsheet': spreadsheet, 'spreadsheet_form': spreadsheet_form, 'columns':columns}, )
 
 @login_required
 def spreadsheets_delete(request, **kwargs):

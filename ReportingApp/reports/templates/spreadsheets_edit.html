@@ -15,4 +15,14 @@
   </div>
 </form>
 
+{% for current_column in columns %}
+<p>COLUMN NAME: {{current_column.column_name}}</p>
+<p>DATA: {{current_column.data}}</p>
+
+  {% for val in current_column.data %}
+  ROW: {{val}}<br>
+  {% endfor %}
+</br>
+{% endfor %}
+
 {% endblock %}
