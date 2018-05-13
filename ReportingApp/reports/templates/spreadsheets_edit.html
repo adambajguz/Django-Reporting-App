@@ -4,60 +4,52 @@
 {% block content %}
 
 {% if form.errors %}
-  <p>Your username and password didn't match. Please try again.</p>
+<p>Your username and password didn't match. Please try again.</p>
 {% endif %}
 
-<form method="post" action="{% url 'spreadsheets_edit' id=spreadsheet.id %}">
-{% csrf_token %}
-
+<form class="uk-form" method="post" action="{% url 'spreadsheets_edit' id=spreadsheet.id %}">
+  {% csrf_token %}
+  
   {{spreadsheet_form}}
-  <div>
-    <input type="submit" value="Save" />
-  </div>
+  <input type="submit" value="Save" />
 
-<hr>
-<style>
-  table, th, td {
-      border: 1px solid black;
-  }
-  input {
-    width: 100%;
-      box-sizing: border-box;
-  }
-</style>
+  <hr>
+  <div class="uk-overflow-container">
+  <table class="uk-table uk-table-hover uk-table-striped uk-table-condensed ">
+    <thead>
+      <tr>
+        <th class="uk-text-bold">No.</th>
+        {% for current_column in columns %}
+        <th class="uk-text-bold">
+          <input type="text" name="var_header_H{{forloop.counter}}" value="{{current_column.column_name}}">
+        </th>
+        {% endfor %}
+      </tr>
+    </thead>
 
-<table>
-  <thead>
-    <tr>
-      {% for current_column in columns %}
-      <th>
-        <input type="text" name="var_header_H{{forloop.counter}}" value="{{current_column.column_name}}">
-      </th>
-      {% endfor %}
-    </tr>
-  </thead>
-
-  <tbody>
-    {% for it in rows %}
-    <tr>
-      {% for current_column in columns %}
+    <tbody>
+      {% for it in rows %}
+      <tr>
+        <td>{{forloop.counter}}</td>
+        {% for current_column in columns %}
         <td>
           <input type="text" name="var_cell_R{{it}}_C{{forloop.counter}}" value="{{current_column.data|index:it }}">
         </td>
+        {% endfor %}
+      </tr>
       {% endfor %}
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    </tbody>
+  </table>
+</div>
 </form>
 
 {% for current_column in columns %}
 <p>COLUMN NAME: </p>
 <p>DATA: {{current_column.data}}</p>
 
-  {% for val in current_column.data %}
-  ROW: {{val}}<br>
-  {% endfor %}
+{% for val in current_column.data %}
+ROW: {{val}}<br>
+{% endfor %}
 </br>
 {% endfor %}
 
