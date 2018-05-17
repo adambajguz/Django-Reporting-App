@@ -1,24 +1,28 @@
-{% extends "base.html" %}
+{% extends "base.html" %} 
+
+
 {% block content %}
 
-<h1>Raporting App</h1>
+<div class="uk-width-1-1">
+	<h1>Raporting App</h1>
 
-<p>Welcome to
-  <em>Raporting App</em>.</p>
+	<p>Welcome to
+		<em>Raporting App</em>.</p>
 
-<h2>Dynamic content</h2>
-<p>LOGIN I HASŁO DO PANELU ADMINISTRATOR: admin developer </p>
-<ul>
-  <li>
-    <strong>Spreadsheets count:</strong> {{ num_spreadsheets }}</li>
-</ul>
+	<h2>Dynamic content</h2>
+	<p>LOGIN I HASŁO DO PANELU ADMINISTRATOR: admin developer </p>
+	<ul>
+		<li>
+			<strong>Spreadsheets count:</strong> {{ num_spreadsheets }}</li>
+	</ul>
 
-{% for sp in spreadsheets %}
-<p>USER: {{sp.user}}</p>
-<p>SPREADSHEET NAME: {{sp.spreadsheet_name}}</p>
-<p>CREATED: {{sp.spreadsheet_creation_date}}</p>
-<p>LAST MODIFIED: {{sp.spreadsheet_last_modification}}</p>
-</br>
-{% endfor %}
+	{% for sp in spreadsheets %}
+	<p>USER: {{sp.user}}</p>
+	<p>SPREADSHEET NAME: {{sp.spreadsheet_name}}</p>
+	<p>CREATED: {{sp.spreadsheet_creation_date}}</p>
+	<p>LAST MODIFIED: {{sp.spreadsheet_last_modification}}</p>
+	</br>
+	{% endfor %}
+</div>
 
 {% endblock %}

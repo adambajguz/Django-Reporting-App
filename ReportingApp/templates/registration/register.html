@@ -1,49 +1,48 @@
 {% extends "base.html" %}
 
-{% block content %} 
 
-{% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
-{% endif %}
+{% block content %}
 
-<form method="post" class="uk-form uk-form-stacked" action="{% url 'register' %}{% if next %}?next={{next}}{% endif %}">
-  {% csrf_token %}
-    
-  {{ register_form.non_field_errors }}
-  {% for hidden_field in register_form.hidden_fields %}
-    {{ hidden_field.errors }}
-    {{ hidden_field }} 
-  {% endfor %} 
-  
-  {% if next != '/accounts/logout/' %}
-  <input type="hidden" name="next" value="{{ next }}" />
-  {% endif %}
+<div class="uk-width-1-1">
+	{% if form.errors %}
+	<p>Your username and password didn't match. Please try again.</p>
+	{% endif %}
 
-  <legend>Registration</legend>
+	<form method="post" class="uk-form uk-form-stacked" action="{% url 'register' %}{% if next %}?next={{next}}{% endif %}">
+		{% csrf_token %}
+		
+		{{ register_form.non_field_errors }}
+		
+		{% for hidden_field in register_form.hidden_fields %}
+			{{ hidden_field.errors }}
+			{{ hidden_field }}
+		{% endfor %}
+		
+		{% if next != '/accounts/logout/' %}
+		<input type="hidden" name="next" value="{{ next }}" />
+		{% endif %}
 
-  {% for field in register_form.visible_fields %}
-  <div class="uk-form-row">
-    <label class="uk-form-label" for="">{{ field.label_tag }}</label>
+		<legend>Registration</legend>
 
-    {% if field.errors %}
-    <div class="uk-alert uk-alert-danger">{{ field.errors }}</div>
-    {% endif %}
+		{% for field in register_form.visible_fields %}
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="">{{ field.label_tag }}</label>
 
-    <div class="uk-form-controls">
-      {{ field }}
-      <span class="uk-form-help-inline">{{ field.help_text }}...</span>
-    </div>
-  </div>
-  {% endfor %} 
-  
-  <div class="uk-form-row">
-    <input class="uk-button" type="submit" value="Register" />
-  </div>
-</form>
+			{% if field.errors %}
+			<div class="uk-alert uk-alert-danger">{{ field.errors }}</div>
+			{% endif %}
 
-{# Assumes you setup the password_reset view in your URLconf #}
-<p>
-  <a href="{% url 'password_reset' %}">Lost password?</a>
-</p>
+			<div class="uk-form-controls">
+				{{ field }}
+				<span class="uk-form-help-inline">{{ field.help_text }}help text</span>
+			</div>
+		</div>
+		{% endfor %}
+
+		<div class="uk-form-row">
+			<input class="uk-button" type="submit" value="Register" />
+		</div>
+	</form>
+</div>
 
 {% endblock %}

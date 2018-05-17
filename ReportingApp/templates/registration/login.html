@@ -1,29 +1,41 @@
 {% extends "base.html" %}
+
+{% load custom_tags %}
+
+
 {% block content %}
 
-{% if form.errors %}
-<div class="uk-width-1-1 uk-form-danger">Your username and password didn't match. Please try again.</div>
-{% endif %}
+<div class="uk-width-1-4 uk-container-center uk-align-center">
 
-<form method="post" action="{% url 'login' %}{% if next %}?next={{next}}{% endif %}">
-  {% csrf_token %}
+	{% if form.errors %}
+	<div class="uk-alert uk-alert-danger">Your username and password didn't match. Please try again.</div>
+	{% endif %}
 
-  <div>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
-  </div>
-  <div>
-    <td>{{ form.password.label_tag }}</td>
-    <td>{{ form.password }}</td>
-  </div>
+	<form class="uk-form uk-form-stacked" method="post" action="{% url 'login' %}{% if next %}?next={{next}}{% endif %}">
+		{% csrf_token %}
 
-  <input type="submit" value="Login" /> {% if next != '/accounts/logout/' %}
-  <input type="hidden" name="next" value="{{ next }}" /> {% endif %}
-</form>
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="">{{ form.username.label_tag }}</label>
+			<div class="uk-form-controls">{{ form.username | addclass:"uk-width-1-1" }}</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="">{{ form.password.label_tag }}</label>
+			<div class="uk-form-controls">{{ form.password | addclass:"uk-width-1-1" }}</div>
+		</div>
 
-{# Assumes you setup the password_reset view in your URLconf #}
-<p>
-  <a href="{% url 'password_reset' %}">Lost password?</a>
-</p>
+		<div class="uk-form-row">
+			<input class="uk-button" type="submit" value="Login" />
+		</div>
+
+		{% if next != '/accounts/logout/' %}
+		<input type="hidden" name="next" value="{{ next }}" />
+		{% endif %}
+	</form>
+
+	{# Assumes you setup the password_reset view in your URLconf #}
+	<p>
+		<a href="{% url 'password_reset' %}">Lost password?</a>
+	</p>
+</div>
 
 {% endblock %}

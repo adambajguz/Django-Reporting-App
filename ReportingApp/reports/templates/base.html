@@ -3,70 +3,120 @@
 
 <head>
 
-  {% block title %}
-  <title>Local Library</title>
-  {% endblock %}
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	{% block title %}
+	<title>Local Library</title>
+	{% endblock %}
 
-  <!-- Add additional CSS in static file -->
-  {% load static %}
-  <link rel="stylesheet" href={% static 'uikit/css/uikit.almost-flat.css' %} />
-  <script src={% static 'jquery-3.3.1.min.js' %}></script>
-  <script src="uikit/js/uikit.min.js"></script>
-  <link rel="stylesheet" href="{% static 'base.css' %}">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Add additional CSS in static file -->
+	{% load static %}
+	<link rel="stylesheet" href={% static 'uikit/css/uikit.almost-flat.css' %} />
+	<script src={% static 'uikit/js/jquery-3.3.1.min.js' %}></script>
+	<script src={% static 'uikit/js/uikit.min.js' %}></script>
+	<script src={% static 'uikit/js/components/sticky.min.js' %}></script>
+	<link rel="stylesheet" href="{% static 'base.css' %}">
 </head>
 
-<body>
-  <nav class="uk-navbar">
-    <a href="" class="uk-navbar-brand">Brand</a>
-    <ul class="uk-navbar-nav">
-      <li>1</li>
-      <li>2</li>
-    </ul>
-    <div class="uk-navbar-content">Test1</div>
-    <div class="uk-navbar-content uk-navbar-center">Test2</div>
-  </nav>
+<body id="body">
+	<nav class="uk-navbar uk-navbar-attached uk-position-z-index" data-uk-sticky>
+		<div class="uk-margin-large-left uk-margin-large-right">
+			<a href="" class="uk-navbar-brand uk-margin-right">ReportingApp</a>
 
-  <div class="container-fluid">
+			{% block sidebar %}
+			<ul class="uk-navbar-nav">
+				<li class="uk-parent" data-uk-dropdown="" aria-haspopup="true" aria-expanded="false">
+					<a href="" class="uk-navbar-nav-subtitle">Parent
+						<div>Subtitle</div>
+					</a>
 
-    <div class="row">
-      <div class="col-sm-2">
-        {% block sidebar %}
-        <ul class="sidebar-nav">
-          <li>
-            <a href="{% url 'home' %}">Home</a>
-          </li>
-          <li>
-            <a href="{% url 'spreadsheets' %}">All spreadsheets</a>
-          </li>
+					<div class="uk-dropdown uk-dropdown-navbar uk-dropdown-bottom" aria-hidden="true" tabindex="" style="top: 40px; left: 0px;">
+						<ul class="uk-nav uk-nav-navbar">
+							<li>
+								<a href="#">Item</a>
+							</li>
+							<li>
+								<a href="#">Another item</a>
+							</li>
+							<li class="uk-nav-header">Header</li>
+							<li>
+								<a href="#">Item</a>
+							</li>
+							<li>
+								<a href="#">Another item</a>
+							</li>
+							<li class="uk-nav-divider"></li>
+							<li>
+								<a href="#">Separated item</a>
+							</li>
+						</ul>
+					</div>
 
-          {% if user.is_authenticated %}
-          <li>User: {{ user.get_username }}</li>
-          <li>
-            <a href="{% url 'logout'%}">Logout</a>
-          </li>
-          {% else %}
-          <li>
-            <a href="{% url 'login'%}{% if request.path != '/accounts/logout/' %}?next={{request.path}}{% endif %}">Login</a>
-          </li>
-          <li>
-            <a href="{% url 'register'%}?next={{request.path}}">Register</a>
-          </li>
-          {% endif %}
-        </ul>
-        {% endblock %}
-      </div>
-      <div class="col-sm-10 ">
-        {% block content %}
-        {% endblock %}
-      </div>
-    </div>
+				</li>
 
-  </div>
+
+				<li>
+					<a href="{% url 'home' %}">Home</a>
+				</li>
+				<li>
+					<a href="{% url 'spreadsheets' %}">All spreadsheets</a>
+				</li>
+			</ul>
+
+			<ul class="uk-navbar-flip uk-navbar-nav">
+				<div class="uk-navbar-content">{{ user.get_username }}</div>
+
+				{% if user.is_authenticated %}
+				<li>
+					<a href="{% url 'logout'%}">Logout</a>
+				</li>
+				{% else %}
+				<li>
+					<a href="{% url 'login'%}{% if request.path != '/accounts/logout/' %}?next={{request.path}}{% endif %}">Login</a>
+				</li>
+				<li>
+					<a href="{% url 'register'%}?next={{request.path}}">Register</a>
+				</li>
+				{% endif %}
+			</ul>
+			{% endblock %}
+
+			<div class="uk-navbar-content">Test1</div>
+			<div class="uk-navbar-content uk-navbar-center">Test2</div>
+		</div>
+	</nav>
+
+
+	<div class="uk-block uk-containter-center uk-margin-left uk-margin-right uk-margin-top uk-margin-bottom uk-margin-remove-top uk-margin-remove-bottom uk-padding-remove">
+		<div class="uk-grid">
+			<div class="uk-width-1-5">
+				<div class="uk-panel uk-panel-box uk-panel-box-main">
+					<div class="uk-panel-badge uk-badge">..TEST.</div>
+					<h3 class="uk-panel-title">.TEST@..</h3>
+
+					<div class="uk-grid">
+						<div class="uk-width-1-1">
+							Test
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="uk-width-4-5 uk-padding-remove">
+				<div class="uk-panel uk-panel-box uk-panel-box-main uk-margin-left">
+					<div class="uk-panel-badge uk-badge">..TEST.</div>
+					<h3 class="uk-panel-title">.TEST@..</h3>
+
+					<div class="uk-grid">
+						{% block content %} 
+						{% endblock %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 
 </html>
