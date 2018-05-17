@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
 
-from .models import Spreadsheet, Column
+from .models import Spreadsheet, Column, Cell
 from .forms import SpreadsheetForm
 
 import json
@@ -22,6 +22,12 @@ def spreadsheets(request):
 @login_required
 def spreadsheets_add(request):
     new_spreadsheet = Spreadsheet.objects.create(spreadsheet_name='New Spreadsheet', user=request.user)
+
+    for idx in range(0,4):
+        col = Column.objects.create(spreadsheet=new_spreadsheet, column_name="New column #" + str(idx))
+        for _ in range(0,5):
+            Cell.objects.create(column=col)
+
     return redirect('spreadsheets_edit', id=new_spreadsheet.id)
 
 @login_required
@@ -33,39 +39,45 @@ def spreadsheets_edit(request, **kwargs):
             'spreadsheet_name': spreadsheet.spreadsheet_name,
         }
     )
-
+    # Load columns from the database
     columns = Column.objects.filter(spreadsheet__id = spreadsheet.id)
 
-    num_rows = 0
-    c = list()
-    for current_column in columns:
-        c.append(current_column.data.split(";"))
-        current_column.data = current_column.data.split(";")
-
-        print("UNPACKED: ", current_column.data)
-        print("REPACKED", ";".join(current_column.data))
-        print("JSON PACKED: ", json.dumps(current_column.data))
-        jsonDec = json.decoder.JSONDecoder()
-        print("JSON UNPACKED: ", jsonDec.decode(json.dumps(current_column.data)))
-        num_rows = max(num_rows,len(current_column.data))
-
-    print(c)
-
-
     if request.method == 'POST':
-        # Update `spreadsheet` object
+        # Extract columns
+        for idx, column in enumerate(columns):
+            header = request.POST.get('header_C' + str(idx + 1))
+            cells = request.POST.getlist('cells_C' + str(idx + 1))
+
+            column.column_name = header
+            test = Cell.objects.filter(column=column.id).all()
+            # test.update(contents='2')
+
+            for idx, cell in enumerate(cells):
+                record = test[idx]
+                # test[idx].contets = cell !!!!!!!
+                record.contents = cell
+                record.save(update_fields=['contents'])
+
         if spreadsheet_form.is_valid():
             new_data = spreadsheet_form.cleaned_data
-            print('OLD VERISON:', spreadsheet)
-            print('NEW VERISON:', new_data)
-            # Update object's fields
-
+            # Update `spreadsheet` object
             for attr, value in new_data.items():
                 print('{} = {}'.format(attr, value))
                 setattr(spreadsheet, attr, value)
             spreadsheet.save()
-    
-    return render(request, 'spreadsheets_edit.html', context={'spreadsheet': spreadsheet, 'spreadsheet_form': spreadsheet_form, 'columns': columns, 'rows': range(0,num_rows)}, )
+
+    num_rows = 0
+    rows = []
+    for current_column in columns:
+        cells = [cell.contents for cell in current_column.cells.all()]
+        print(cells)
+        rows.append(cells)
+        num_rows = max(num_rows,len(cells))
+
+    return render(request, 'spreadsheets_edit.html', context={'spreadsheet': spreadsheet,
+                                                              'spreadsheet_form': spreadsheet_form,
+                                                              'columns': columns,
+                                                              'num_rows': range(0,num_rows), 'rows': rows})
 
 @login_required
 def spreadsheets_delete(request, **kwargs):

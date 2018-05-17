@@ -8,13 +8,13 @@ class Spreadsheet(models.Model):
 	spreadsheet_creation_date = models.DateField(auto_now_add=True, editable=False)
 	spreadsheet_last_modification = models.DateTimeField(auto_now=True)
 
-	# content = models.TextField()
-	# variable_names = models.TextField()
-
 class Column(models.Model):
 	spreadsheet = models.ForeignKey(Spreadsheet, on_delete=models.CASCADE)
 	column_name = models.CharField(max_length=255)
-	data = models.TextField()
+
+class Cell(models.Model):
+	contents = models.CharField(max_length=256, default='', blank=True, null=True)
+	column = models.ForeignKey(Column, related_name='cells', on_delete=models.CASCADE)
 
 class Plot(models.Model):
 	PLOT_TYPES = (

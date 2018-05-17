@@ -7,13 +7,14 @@
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
 
-<form class="uk-form" method="post" action="{% url 'spreadsheets_edit' id=spreadsheet.id %}">
+<form class="uk-form" method="post" name="edit_form" action="{% url 'spreadsheets_edit' id=spreadsheet.id %}">
   {% csrf_token %}
-  
+
   {{spreadsheet_form}}
   <input type="submit" value="Save" />
 
   <hr>
+
   <div class="uk-overflow-container">
   <table class="uk-table uk-table-hover uk-table-striped uk-table-condensed ">
     <thead>
@@ -21,19 +22,22 @@
         <th class="uk-text-bold">No.</th>
         {% for current_column in columns %}
         <th class="uk-text-bold">
-          <input type="text" name="var_header_H{{forloop.counter}}" value="{{current_column.column_name}}">
+          <input type="text" name="header_C{{ forloop.counter }}" value="{{current_column.column_name}}">
         </th>
         {% endfor %}
       </tr>
     </thead>
 
     <tbody>
-      {% for it in rows %}
+      {% for it in num_rows %}
       <tr>
-        <td>{{forloop.counter}}</td>
+        <td>
+          {{forloop.counter}}
+        </td>
+
         {% for current_column in columns %}
         <td>
-          <input type="text" name="var_cell_R{{it}}_C{{forloop.counter}}" value="{{current_column.data|index:it }}">
+          <input type="text" name="cells_C{{ forloop.counter }}" value="{{ rows | index:forloop.counter0 | index:it }}">
         </td>
         {% endfor %}
       </tr>
@@ -42,15 +46,5 @@
   </table>
 </div>
 </form>
-
-{% for current_column in columns %}
-<p>COLUMN NAME: </p>
-<p>DATA: {{current_column.data}}</p>
-
-{% for val in current_column.data %}
-ROW: {{val}}<br>
-{% endfor %}
-</br>
-{% endfor %}
 
 {% endblock %}
