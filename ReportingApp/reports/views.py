@@ -55,7 +55,7 @@ def spreadsheets_edit(request, **kwargs):
 
             for idx, cell in enumerate(cells):
                 record = test[idx]
-                # test[idx].contets = cell !!!!!!!
+                # test[idx].contets = cell !!!!!!! does not work because does not :)
                 record.contents = cell
                 record.save(update_fields=['contents'])
 
@@ -63,7 +63,7 @@ def spreadsheets_edit(request, **kwargs):
             new_data = spreadsheet_form.cleaned_data
             # Update `spreadsheet` object
             for attr, value in new_data.items():
-                print('{} = {}'.format(attr, value))
+                # print('{} = {}'.format(attr, value))
                 setattr(spreadsheet, attr, value)
             spreadsheet.save()
 
@@ -71,7 +71,6 @@ def spreadsheets_edit(request, **kwargs):
     rows = []
     for current_column in columns:
         cells = [cell.contents for cell in current_column.cells.all()]
-        print(cells)
         rows.append(cells)
         num_rows = max(num_rows,len(cells))
 
