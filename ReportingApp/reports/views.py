@@ -49,6 +49,7 @@ def spreadsheets_edit(request, **kwargs):
             cells = request.POST.getlist('cells_C' + str(idx + 1))
 
             column.column_name = header
+            column.save()
             test = Cell.objects.filter(column=column.id).all()
             # test.update(contents='2')
 
