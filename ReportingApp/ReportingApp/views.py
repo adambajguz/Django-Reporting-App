@@ -42,12 +42,12 @@ def register(request, **kwargs):
             # data.get('repeat_password')
 
             # Register a new user
-            name = data.get('username')
-            user = User.objects.create_user(username=name,
+            username = data.get('username')
+            user = User.objects.create_user(username=username,
                                  email=data.get('email'),
                                  password=data.get('password'))
 
-            messages.add_message(request, messages.SUCCESS, name, extra_tags='username')
+            messages.add_message(request, messages.SUCCESS, username, extra_tags='username')
 
             # error(request, 'test')
             return redirect('login')
