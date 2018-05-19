@@ -1,4 +1,5 @@
 {% extends "./base/base_quickactions.html" %}
+{% load tz %}
 
 {% block breadcrumbs %}
 	<a href="{% url 'home' %}">{{ block.super }}</a> » Spreadsheets
@@ -6,16 +7,15 @@
 
 
 {% block quick_actions %}
-	<h4>Last spreadsheets:</h4>
-	<ul class="uk-list uk-list-line">
-		{% for spreadsheet in spreadsheets|slice:"0:3" %}
-		<li>
-			<p>SPREADSHEET NAME: {{ spreadsheet.spreadsheet_name }}</p>
-			<p>LAST MODIFIED: {{ spreadsheet.spreadsheet_last_modification }}</p>
-
-			<a href="{{ spreadsheet.id }}/edit/">Edit</a>
-			<a href="{{ spreadsheet.id }}/delete/">Delete</a>
-		</li>
+	<h4>Recent spreadsheets:</h4>
+	<dl class="uk-description-list-line">
+		{% for spreadsheet in spreadsheets|dictsortreversed:"spreadsheet_last_modification"|slice:"0:3" %}
+		<dt>
+			<a class="uk-link-muted" href="{{ spreadsheet.id }}/edit/"><em>{{ spreadsheet.spreadsheet_name }}</em></a>
+		</dt>
+		<dd>
+			<p>Modified: {{ spreadsheet.last_modification_days_ago }}</p>
+		</dd>
 		{% endfor %}
 	</ul>
 	<hr style="color: #CCE6FF; border-color: #CCE6FF; background-color: #CCE6FF;">
@@ -26,29 +26,35 @@
 
 
 {% block content %}
-
 <div class="uk-width-1-1">
-	<ul>
-		<li>
-			<strong>Spreadsheets count:</strong> {{ num_spreadsheets }}</li>
-	</ul>
-
-
-
-	<hr>
-	<ul class="uk-list uk-list-striped">
-		{% for spreadsheet in spreadsheets %}
-		<li>
-			<p>USER: {{ spreadsheet.user }}</p>
-			<p>SPREADSHEET NAME: {{ spreadsheet.spreadsheet_name }}</p>
-			<p>CREATED: {{ spreadsheet.spreadsheet_creation_date }}</p>
-			<p>LAST MODIFIED: {{ spreadsheet.spreadsheet_last_modification }}</p>
-
-			<a href="{{ spreadsheet.id }}/edit/">Edit</a>
-			<a href="{{ spreadsheet.id }}/delete/">Delete</a>
-		</li>
-		{% endfor %}
-	</ul>
+	<table class="uk-table uk-table-hover uk-table-striped">
+		<caption>You have {{ num_spreadsheets }} spreadsheet{% if num_spreadsheets > 1 or num_spreadsheets == 0%}s{% endif %}</caption>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Creation</th>
+				<th>Last modification</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for spreadsheet in spreadsheets %}
+			<tr>
+				<td class="uk-text-bold">{{ spreadsheet.spreadsheet_name }}</td>
+				<td>{{ spreadsheet.spreadsheet_creation_date }}</td>
+				<td>
+					<i data-uk-tooltip="{delay:250}" title="{{ spreadsheet.spreadsheet_last_modification|localtime }}">
+						{{spreadsheet.last_modification_days_ago}}
+					</i>
+				</td>
+				<td>
+					<a href="{{ spreadsheet.id }}/edit/">Edit</a>
+					<a href="{{ spreadsheet.id }}/delete/">Delete</a>
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 </div>
 
 {% endblock %}

@@ -1,12 +1,61 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from datetime import datetime, timedelta
 
 class Spreadsheet(models.Model):
 	user = models.ForeignKey(User, unique=False, on_delete=models.CASCADE)
 	spreadsheet_name = models.CharField(max_length=255)
 	spreadsheet_creation_date = models.DateField(auto_now_add=True, editable=False)
 	spreadsheet_last_modification = models.DateTimeField(auto_now=True)
+
+	def last_modification_days_ago(self):
+		time = timezone.now()
+		format_str=""
+		if self.spreadsheet_last_modification.day == time.day:
+			hours = time.hour - self.spreadsheet_last_modification.hour
+
+			if hours == 0:
+				return "less than an hour ago"
+			elif hours == 1:
+				format_str = " hour ago"
+			else:
+				format_str = " hours ago"
+
+			return str(hours) + format_str
+		else:
+			if self.spreadsheet_last_modification.month == time.month:
+				days = time.day - self.spreadsheet_last_modification.day
+
+				if days == 0:
+					return "yesterday"
+				elif days == 1:
+					format_str = " day ago"
+				else:
+					format_str = " days ago"
+				return str(days) + format_str
+			else:
+				if self.spreadsheet_last_modification.year == time.year:
+					months = time.month - self.spreadsheet_last_modification.month
+
+					if months == 0:
+						return "this month"
+					elif months == 1:
+						format_str = " month ago"
+					else:
+						format_str = " months ago"
+					return str(months) + format_str
+				else:
+					years = time.year - self.spreadsheet_last_modification.year
+
+					if years == 0:
+						return "this year"
+					elif years == 1:
+						format_str = " year ago"
+					else:
+						format_str = " years ago"
+					return str(years) + format_str
+		return self.spreadsheet_last_modification
 
 class Column(models.Model):
 	spreadsheet = models.ForeignKey(Spreadsheet, on_delete=models.CASCADE)

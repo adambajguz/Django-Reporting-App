@@ -17,11 +17,14 @@ def spreadsheets(request):
     # Filter spreadsheets by currenly logon user
     spreadsheets = Spreadsheet.objects.filter(user__id = request.user.id)
     num_spreadsheets = len(spreadsheets)
+    print(spreadsheets[1].last_modification_days_ago())
     return render(request, 'spreadsheets.html', context={'spreadsheets': spreadsheets, 'num_spreadsheets': num_spreadsheets}, )
 
 @login_required
 def spreadsheets_add(request):
-    new_spreadsheet = Spreadsheet.objects.create(spreadsheet_name='New Spreadsheet', user=request.user)
+    spreadsheets_count = len(Spreadsheet.objects.filter(user__id = request.user.id))
+
+    new_spreadsheet = Spreadsheet.objects.create(spreadsheet_name='New Spreadsheet #' + str(spreadsheets_count + 1), user=request.user)
 
     for idx in range(0,4):
         col = Column.objects.create(spreadsheet=new_spreadsheet, column_name="New column #" + str(idx))
