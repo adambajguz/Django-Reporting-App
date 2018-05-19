@@ -92,6 +92,8 @@ def spreadsheets_delete(request, **kwargs):
         raise Http404('No Spreadsheet found!')
 
     if request.method == 'POST':
+        print("======")
+        print(request.POST)
         # Check if user clicked on `CANCEL`
         if request.POST.get('cancel'):
             # Go back to spreadsheet list

@@ -1,5 +1,8 @@
-{% extends "base.html" %} 
+{% extends "./base/base_spreadsheets.html" %} 
 
+{% block breadcrumbs %}
+	{{ block.super }} » Delete Spreadsheet
+{% endblock %}
 
 {% block content %}
 
@@ -9,11 +12,12 @@
 			<p>Are you sure you want to delete this spreadsheet?</p>
 		</div>
 
-		<form class="uk-form uk-form-stacked" action="#" method="post">
-				{% csrf_token %}
+		<form class="uk-form uk-form-stacked" action="" method="post">
+			{% csrf_token %}
+
 			<div class=uk-row>
-				<button name="cancel" class="uk-button">Cancel</button>
-				<button name="cancel" class="uk-button uk-button-danger">Delete</button>
+				<button name="cancel" value="Cancel" class="uk-button" type="submit">Cancel</button>
+				<button name="delete" value="Delete" class="uk-button uk-button-danger" type="submit">Delete</button>
 			</div>
 		</form>
 	</div>

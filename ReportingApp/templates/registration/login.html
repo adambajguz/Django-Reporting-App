@@ -1,8 +1,11 @@
-{% extends "base.html" %}
+{% extends "../base/base.html" %}
 
 {% load custom_tags %}
 {% load widget_tweeks %}
 
+{% block breadcrumbs %}
+	<a href="{% url 'home' %}">{{ block.super }}</a> » Login
+{% endblock %}
 
 {% block content %}
 
@@ -45,7 +48,8 @@
 
 	{# Assumes you setup the password_reset view in your URLconf #}
 	<p>
-		<a href="{% url 'password_reset' %}">Lost password?</a>
+
+		<a class="" href="{% url 'password_reset' %}">Lost password?</a>
 	</p>
 </div>
 

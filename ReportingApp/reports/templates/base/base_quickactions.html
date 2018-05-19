@@ -1,0 +1,14 @@
+{% extends "./base.html" %}
+
+{% block sidemenu %}
+<div class="uk-panel uk-panel-box uk-panel-box-main">
+        <h3 class="uk-panel-title">Quick actions</h3>
+
+        <div class="uk-grid">
+            <div class="uk-width-1-1">
+                {% block quick_actions %} 
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

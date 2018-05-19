@@ -1,7 +1,11 @@
-{% extends "base.html" %}
+{% extends "./base/base_spreadsheets_quickactions.html" %}
 
 {% load custom_tags %}
 {% load widget_tweeks %}
+
+{% block breadcrumbs %}
+	{{ block.super }} » Edit Spreadsheet
+{% endblock %}
 
 {% block content %}
 
