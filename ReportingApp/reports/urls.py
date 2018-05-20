@@ -8,4 +8,10 @@ urlpatterns = [
     url(r'^spreadsheets/add/$', views.spreadsheets_add),
     url(r'^spreadsheets/(?P<id>\d+)/delete/$', views.spreadsheets_delete, name='spreadsheets_delete'),
     url(r'^spreadsheets/(?P<id>\d+)/edit/$', views.spreadsheets_edit, name='spreadsheets_edit'),
+
+    path(r'plots/', views.spreadsheets, name='plots'),
+
+     path(r'reports/', views.spreadsheets, name='reports'),
+
+
 ]

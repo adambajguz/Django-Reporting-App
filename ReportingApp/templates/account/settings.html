@@ -1,0 +1,57 @@
+{% extends "../base/base.html" %}
+
+{% block breadcrumbs %}
+	<a href="{% url 'home' %}">{{ block.super }}</a> » Settings
+{% endblock %}
+
+{% block content %}
+
+<div class="uk-width-1-2 uk-container-center">
+	{% if form.errors %}
+	<p>Your username and password didn't match. Please try again.</p>
+	{% endif %}
+
+	<form method="post" class="uk-form uk-form-stacked" action="{% url 'register' %}{% if next %}?next={{next}}{% endif %}">
+		{% csrf_token %}
+		<legend>Registration</legend>
+
+		{% if register_form.non_field_errors %}
+		<div class="uk-alert uk-alert-danger">{{ register_form.non_field_errors }}</div>
+		{% endif %}
+
+		{% if register_form.hidden_fields %}
+		<div class="uk-alert uk-alert-danger">
+		{% for hidden_field in register_form.hidden_fields %}
+			{{ hidden_field.errors }}
+			{{ hidden_field }}
+		{% endfor %}
+		</div>
+		{% endif %}
+
+		{% if next != '/accounts/logout/' %}
+		<input type="hidden" name="next" value="{{ next }}" />
+		{% endif %}
+
+
+		{% for field in register_form.visible_fields %}
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="{{ field.name }}">{{ field.label_tag|safe }}</label>
+
+			{% if field.errors %}
+			<div class="uk-alert uk-alert-danger">{{ field.errors.as_text }}</div>
+			{% endif %}
+
+			<div class="uk-form-controls">
+				{{ field }}
+				<p class="uk-form-help-block"><em>{{ field.help_text }}</em></p>
+			</div>
+		</div>
+		{% endfor %}
+
+		<div class="uk-form-row">
+			<button name="register" class="uk-button uk-button-primary">Register</button>
+		</div>
+	</form>
+</div>
+
+{% endblock %}

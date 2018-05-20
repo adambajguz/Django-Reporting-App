@@ -13,6 +13,11 @@ class Spreadsheet(models.Model):
 	row_number = models.IntegerField(default=5)
 	column_number = models.IntegerField(default=0)
 
+	class Meta:
+		indexes = [
+			models.Index(fields=['user']),
+		]	
+
 	@classmethod
 	def create(cls, user):
 		spreadsheets_count = Spreadsheet.objects.filter(user__id = user.id).count()
@@ -88,6 +93,11 @@ class Column(models.Model):
 	spreadsheet = models.ForeignKey(Spreadsheet, on_delete=models.CASCADE)
 	column_name = models.CharField(max_length=255)
 
+	class Meta:
+		indexes = [
+			models.Index(fields=['spreadsheet']),
+		]	
+
 	@classmethod
 	def add_multiple_columns(cls, spreadsheet, num_columns):
 		for _ in range(0, num_columns):
@@ -109,8 +119,12 @@ class Column(models.Model):
 		col_num = spreadsheet.column_number
 
 		new_col = Column.objects.create(spreadsheet=spreadsheet, column_name="New column #" + str(col_num))
-		for _ in range(0, num_cells):
-			Cell.objects.create(column=new_col)
+		# for _ in range(0, num_cells):
+		# 	Cell.objects.create(column=new_col)
+
+		cell_data = {"column": new_col}
+		cell_list = [Cell(**cell_data) for i in range(0, num_cells)]
+		Cell.objects.bulk_create(cell_list)
 
 		spreadsheet.column_number = col_num + 1
 		spreadsheet.save()
@@ -121,6 +135,11 @@ class Cell(models.Model):
 	contents = models.CharField(max_length=256, default='', blank=True, null=True)
 	column = models.ForeignKey(Column, related_name='cells', on_delete=models.CASCADE)
 
+	class Meta:
+		indexes = [
+			models.Index(fields=['contents']),
+		]
+
 class Plot(models.Model):
 	PLOT_TYPES = (
 		('B', 'Bar'),
@@ -128,6 +147,8 @@ class Plot(models.Model):
 		('S', 'Scatter'),
 		('P', 'Pie'),
 	)
+
+	user = models.ForeignKey(User, unique=False, on_delete=models.CASCADE)
 
 	plot_name = models.CharField(max_length=255)
 	plot_creation_date = models.DateField(auto_now_add=True, editable=False)
@@ -142,7 +163,7 @@ class PlotData(models.Model):
 
 	plot = models.ForeignKey(Plot, on_delete=models.CASCADE)
 	column = models.ForeignKey(Column, on_delete=models.CASCADE)
-	type = models.CharField(max_length=1, choices=PLOTDATA_TYPES)
+	plot_type = models.CharField(max_length=1, choices=PLOTDATA_TYPES, default='D')
 
 class Report(models.Model):
 	user = models.ForeignKey(User, unique=False, on_delete=models.CASCADE)
@@ -166,7 +187,7 @@ class ReportElementTable(models.Model):
 
 	report = models.ForeignKey(Report, on_delete=models.CASCADE)
 	table_caption = models.CharField(max_length=255)
-	style = models.CharField(max_length=1, choices=TABLE_STYLE)
+	style = models.CharField(max_length=1, choices=TABLE_STYLE, default='C')
 	rows_columns_inverted = models.BooleanField(default=False)
 	order = models.IntegerField()
 

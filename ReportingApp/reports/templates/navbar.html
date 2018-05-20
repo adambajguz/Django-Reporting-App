@@ -1,38 +1,34 @@
 <nav class="uk-navbar uk-navbar-attached uk-position-z-index" data-uk-sticky>
     <div class="uk-margin-large-left uk-margin-large-right">
-        <a href="" class="uk-navbar-brand uk-margin-right">ReportingApp</a>
+        <a href="{% url 'home' %}" class="uk-navbar-brand uk-margin-right">ReportingApp</a>
 
         <ul class="uk-navbar-nav">
             <li>
                 <a href="{% url 'home' %}">{{'Home' | upper}}</a>
             </li>
             <li>
-                <a href="{% url 'spreadsheets' %}">All spreadsheets</a>
+                <a href="{% url 'spreadsheets' %}">Spreadsheets</a>
             </li>
-
+            <li>
+                 <a href="{% url 'plots' %}">Plots</a>
+            </li>
             <li class="uk-parent" data-uk-dropdown="" aria-haspopup="true" aria-expanded="false">
-                <a href="" class="uk-navbar-nav-subtitle">Parent
-                    <div>Subtitle</div>
+                <a href="" class="uk-navbar-nav-subtitle">Report
+                    <div>management</div>
                 </a>
 
                 <div class="uk-dropdown uk-dropdown-navbar uk-dropdown-bottom" aria-hidden="true" tabindex="" style="top: 40px; left: 0px;">
                     <ul class="uk-nav uk-nav-navbar">
+                        <li class="uk-nav-header">General</li>
                         <li>
-                            <a href="#">Item</a>
-                        </li>
-                        <li>
-                            <a href="#">Another item</a>
-                        </li>
-                        <li class="uk-nav-header">Header</li>
-                        <li>
-                            <a href="#">Item</a>
+                            <a href="{% url 'reports' %}">Show all</a>
                         </li>
                         <li>
                             <a href="#">Another item</a>
                         </li>
                         <li class="uk-nav-divider"></li>
                         <li>
-                            <a href="#">Separated item</a>
+                            <a href="#">Export</a>
                         </li>
                     </ul>
                 </div>
@@ -47,22 +43,16 @@
     
                     <div class="uk-dropdown uk-dropdown-navbar uk-dropdown-bottom" aria-hidden="true" tabindex="" style="top: 40px; left: 0px;">
                         <ul class="uk-nav uk-nav-navbar">
+                            <li class="uk-nav-header"> My account</li>
                             <li>
-                                <a href="#">Item</a>
+                                <a href="{% url 'profile' %}">My profile</a>
                             </li>
                             <li>
-                                <a href="#">Another item</a>
-                            </li>
-                            <li class="uk-nav-header">Header</li>
-                            <li>
-                                <a href="#">Item</a>
-                            </li>
-                            <li>
-                                <a href="#">Another item</a>
+                                <a href="{% url 'settings' %}">Settings</a>
                             </li>
                             <li class="uk-nav-divider"></li>
                             <li>
-                                <a href="{% url 'logout'%}"><i class="uk-icon-sign-out"></i> LOGOUT</a>
+                                <a href="{% url 'logout' %}"><i class="uk-icon-sign-out"></i> LOGOUT</a>
                             </li>
                         </ul>
                     </div>

@@ -1,16 +1,10 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 
-from .models import Spreadsheet, Column, Cell
-from .forms import SpreadsheetForm
-
-import json
-
-def home(request):
-    spreadsheets = Spreadsheet.objects.all()
-    num_spreadsheets = len(spreadsheets)
-    return render(request, 'home.html', context={'spreadsheets': spreadsheets, 'num_spreadsheets': num_spreadsheets}, )
+from reports.models import Spreadsheet, Column, Cell
+from reports.forms import SpreadsheetForm
 
 @login_required
 def spreadsheets(request):
@@ -25,13 +19,8 @@ def spreadsheets_add(request):
 
     return redirect('spreadsheets_edit', id=new_spreadsheet.id)
 
-import time
-from datetime import timedelta
-
 @login_required
 def spreadsheets_edit(request, **kwargs):
-    start_time = time.monotonic()
-
     # Get id
     spreadsheet_id = kwargs.get('id')
 
@@ -61,10 +50,6 @@ def spreadsheets_edit(request, **kwargs):
             return redirect('spreadsheets_delete', id=spreadsheet_id)
 
         # Extract columns
-        print("SAVE")
-        print("ROW:",spreadsheet_to_edit.row_number)
-        print("COL: ",spreadsheet_to_edit.column_number)
-
         for idx, column in enumerate(columns):
             header = request.POST.get('header_C' + str(idx + 1))
             cells = request.POST.getlist('cells_C' + str(idx + 1))
@@ -75,47 +60,45 @@ def spreadsheets_edit(request, **kwargs):
                 column.save()
             database_cells = Cell.objects.filter(column=column.id)
 
-            for jdx, cell in enumerate(cells):
-                record = database_cells[jdx]
-                # database_cells[idx].contets = cell !!!!!!! does not work because does not :)
 
-                # Check if contents was updeated (speeds up saving about 10 times)
-                if record.contents != cell:
-                    record.contents = cell
-                    record.save(update_fields=['contents'])
+            with transaction.atomic():
+                for jdx, cell in enumerate(cells):
+                    record = database_cells[jdx]
+                    # database_cells[idx].contets = cell !!!!!!! does not work because does not :)
 
+                    # Check if contents was updated (speeds up saving about 10 times)
+                    if record.contents != cell:
+                        record.contents = cell
+                        record.save(update_fields=['contents'])
 
-            # Update `spreadsheet` object
-            for attr, value in new_data.items():
-                # print('{} = {}'.format(attr, value))
-                setattr(spreadsheet_to_edit, attr, value)
+        # Update `spreadsheet` object
+        for attr, value in new_data.items():
+            # print('{} = {}'.format(attr, value))
+            setattr(spreadsheet_to_edit, attr, value)
+        spreadsheet_to_edit.save()
+
+        if request.POST.get('add_row'):
+            #Add new cells
+            new_cells_list = []
+            for current_column in columns:
+                new_cells_list.append(Cell(column=current_column))
+
+            Cell.objects.bulk_create(new_cells_list)
+
+            spreadsheet_to_edit.row_number = spreadsheet_to_edit.row_number + 1
             spreadsheet_to_edit.save()
+        elif request.POST.get('add_column'):
+            #Add new column
+            Column.add_column(spreadsheet_to_edit)
 
-            end_time = time.monotonic()
-            print(timedelta(seconds=end_time - start_time))
-
-            if request.POST.get('add_row'):
-                #Add new cells
-                for current_column in columns:
-                    Cell.objects.create(column=current_column)
-                
-                spreadsheet_to_edit.row_number = spreadsheet_to_edit.row_number + 1
-                spreadsheet_to_edit.save()
-            elif request.POST.get('add_column'):
-                #Add new column
-                Column.add_column(spreadsheet_to_edit)
-
-                #Reload columns since we added one new
-                columns = Column.objects.filter(spreadsheet__id = spreadsheet_to_edit.id)
+            #Reload columns since we added one new
+            columns = Column.objects.filter(spreadsheet__id = spreadsheet_to_edit.id)
 
     rows = []
     for current_column in columns:
-        # cells = [cell.contents for cell in current_column.cells.all()]
         cells = current_column.cells.all()
         rows.append(cells.values_list('contents', flat=True))
 
-    end_time = time.monotonic()
-    print(timedelta(seconds=end_time - start_time)) 
     return render(request, 'spreadsheets_edit.html', context={'spreadsheet': spreadsheet_to_edit,
                                                               'spreadsheet_form': spreadsheet_form,
                                                               'columns': columns,

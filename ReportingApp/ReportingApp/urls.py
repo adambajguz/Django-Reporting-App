@@ -29,6 +29,9 @@ urlpatterns = [
     # path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/register/', views.register, name='register'),
 
+    path('accounts/settings/', views.settings, name='settings'),
+    path('accounts/profile/', views.profile, name='profile'),
+
     url(r'^accounts/login/$', auth_views.LoginView.as_view(redirect_authenticated_user = True), name="login"),
     # url('accounts/login/', login_forbidden(auth_views.LoginView.as_view()), name='login'),
     # path('accounts/login/', views.login, name='login'),
