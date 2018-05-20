@@ -19,7 +19,7 @@
 		{% endfor %}
 	</ul>
 	<hr style="color: #CCE6FF; border-color: #CCE6FF; background-color: #CCE6FF;">
-	<a class="uk-button uk-button-primary" href="add/">Create spreadsheet</a>
+	<a class="uk-button uk-button-primary" href="add/"><i class="uk-icon-plus"></i> Create spreadsheet</a>
 
 {% endblock %}
 
@@ -40,7 +40,7 @@
 		<tbody>
 			{% for spreadsheet in spreadsheets %}
 			<tr>
-				<td class="uk-text-bold">{{ spreadsheet.spreadsheet_name }}</td>
+				<td class="uk-text-bold"><a href="{{ spreadsheet.id }}/edit/">{{ spreadsheet.spreadsheet_name }}</a></td>
 				<td>{{ spreadsheet.spreadsheet_creation_date }}</td>
 				<td>
 					<i data-uk-tooltip="{delay:250}" title="{{ spreadsheet.spreadsheet_last_modification|localtime }}">
@@ -48,8 +48,8 @@
 					</i>
 				</td>
 				<td>
-					<a href="{{ spreadsheet.id }}/edit/">Edit</a>
-					<a href="{{ spreadsheet.id }}/delete/">Delete</a>
+					<a href="{{ spreadsheet.id }}/edit/"><i class="uk-icon-pencil"></i> Edit</a>
+					<a class="uk-margin-left" href="{{ spreadsheet.id }}/delete/"><i class="uk-icon-trash"></i> Delete</a>
 				</td>
 			</tr>
 			{% endfor %}

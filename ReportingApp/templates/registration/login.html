@@ -28,12 +28,12 @@
 		{% csrf_token %}
 
 		<div class="uk-form-row">
-			<label class="uk-form-label" for="">{{ form.username.label_tag }}</label>
+			<label class="uk-form-label" for="{{ form.username.name }}"><i class="uk-icon-user"></i> {{ form.username.label_tag }}</label>
 			<div class="uk-form-controls">{% render_field form.username value=registration_username class+="uk-width-1-1" %}</div>
 		</div>
 
 		<div class="uk-form-row">
-			<label class="uk-form-label" for="">{{ form.password.label_tag }}</label>
+			<label class="uk-form-label" for="{{ form.password.name }}"><i class="uk-icon-unlock"></i> {{ form.password.label_tag }}</label>
 			<div class="uk-form-controls">{{ form.password | add_class:"uk-width-1-1" }}</div>
 		</div>
 
@@ -49,7 +49,7 @@
 	{# Assumes you setup the password_reset view in your URLconf #}
 	<p>
 
-		<a class="" href="{% url 'password_reset' %}">Lost password?</a>
+		<a class="" href="{% url 'password_reset' %}"><i class="uk-icon-external-link"></i> Lost password?</a>
 	</p>
 </div>
 

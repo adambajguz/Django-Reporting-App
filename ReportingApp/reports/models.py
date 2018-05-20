@@ -6,8 +6,20 @@ from datetime import datetime, timedelta
 class Spreadsheet(models.Model):
 	user = models.ForeignKey(User, unique=False, on_delete=models.CASCADE)
 	spreadsheet_name = models.CharField(max_length=255)
+	spreadsheet_description = models.TextField(default='')
 	spreadsheet_creation_date = models.DateField(auto_now_add=True, editable=False)
 	spreadsheet_last_modification = models.DateTimeField(auto_now=True)
+
+
+	@classmethod
+	def create(cls, user):
+		spreadsheets_count = len(Spreadsheet.objects.filter(user__id = user.id))
+
+		new_spreadsheet = Spreadsheet.objects.create(spreadsheet_name='New Spreadsheet #' + str(spreadsheets_count + 1), user=user)
+
+		Column.add_multiple_columns(new_spreadsheet, num_cells=10, num_columns=5)
+
+		return new_spreadsheet
 
 	def last_modification_days_ago(self):
 		time = timezone.now()
@@ -60,6 +72,19 @@ class Spreadsheet(models.Model):
 class Column(models.Model):
 	spreadsheet = models.ForeignKey(Spreadsheet, on_delete=models.CASCADE)
 	column_name = models.CharField(max_length=255)
+
+	@classmethod
+	def add_multiple_columns(cls, spreadsheet, num_cells, num_columns):
+		for _ in range(0, num_columns):
+			cls.add_column(spreadsheet, num_cells)
+
+	@classmethod	
+	def add_column(cls, spreadsheet, num_cells):
+		columns = Column.objects.filter(spreadsheet__id = spreadsheet.id)
+
+		col = Column.objects.create(spreadsheet=spreadsheet, column_name="New column #" + str(columns.count()))
+		for _ in range(0, num_cells):
+			Cell.objects.create(column=col)
 
 class Cell(models.Model):
 	contents = models.CharField(max_length=256, default='', blank=True, null=True)

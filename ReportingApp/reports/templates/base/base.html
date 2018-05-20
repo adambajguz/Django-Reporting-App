@@ -27,6 +27,8 @@
 	{% include "navbar.html" %}
 
 	<div class="uk-block uk-containter-center uk-margin-left uk-margin-right uk-margin-top uk-margin-bottom uk-margin-remove-top uk-margin-remove-bottom uk-padding-remove">
+		{% block cotainer_start %} 
+		{% endblock %}
 		<div class="uk-grid">
 			<div class="uk-width-1-5">
 				{% block sidemenu %} 
@@ -54,6 +56,8 @@
 				</div>
 			</div>
 		</div>
+		{% block container_end %} 
+		{% endblock %}
 	</div>
 </body>
 

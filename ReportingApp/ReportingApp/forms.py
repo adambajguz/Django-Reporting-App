@@ -1,18 +1,27 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.utils.safestring import mark_safe
 
 class RegistrationForm(forms.Form):
     username = forms.RegexField(regex=r'^[\w.@+-]+$',
                                 max_length=150,
-                                label="Username",
+                                label=mark_safe('<i class="uk-icon-user"></i> Username'),
                                 help_text="Username can contain only letters, numbers and @/./+/-/_ characters.",
                                 error_messages={'invalid': "This value may contain only letters, numbers and @/./+/-/_ characters."},
                                 widget=forms.TextInput(attrs={'placeholder': 'Username', 'class': "uk-width-1-1"}))
 
-    email = forms.EmailField(max_length=150, widget=forms.TextInput(attrs={'placeholder': 'Email', 'class': "uk-width-1-1"}))
-    password = forms.CharField(max_length=150, widget=forms.PasswordInput(attrs={'placeholder': 'Password', 'class': "uk-width-1-1"}))
-    repeat_password = forms.CharField(max_length=150, widget=forms.PasswordInput(attrs={'placeholder': 'Repeat password', 'class': "uk-width-1-1"}))
+    email = forms.EmailField(max_length=150,
+                             label=mark_safe('<i class="uk-icon-envelope"></i> e-mail'),
+                             widget=forms.TextInput(attrs={'placeholder': 'Email', 'class': "uk-width-1-1"}))
+
+    password = forms.CharField(max_length=150,
+                               label=mark_safe('<i class="uk-icon-unlock"></i> Password'),
+                               widget=forms.PasswordInput(attrs={'placeholder': 'Password', 'class': "uk-width-1-1"}))
+
+    repeat_password = forms.CharField(max_length=150,
+                                      label=mark_safe('<i class="uk-icon-unlock"></i> Repeat password'),
+                                      widget=forms.PasswordInput(attrs={'placeholder': 'Repeat password', 'class': "uk-width-1-1"}))
 
     def clean_username(self):
         username = self.cleaned_data['username']

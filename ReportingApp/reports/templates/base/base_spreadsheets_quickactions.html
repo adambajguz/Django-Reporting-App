@@ -1,3 +1,5 @@
 {% extends "./base_quickactions.html" %}
 
-{% include 'spreadsheets_breadcrumb.html' %}
+{% block breadcrumbs %}
+	<a href="{% url 'home' %}">{{ block.super }}</a> » <a href="{% url 'spreadsheets' %}">Spreadsheets</a>
+{% endblock %}
