@@ -70,17 +70,20 @@ def spreadsheets_edit(request, **kwargs):
             header = request.POST.get('header_C' + str(idx + 1))
             cells = request.POST.getlist('cells_C' + str(idx + 1))
 
-            column.column_name = header
-            column.save()
+            # check if column name was updeated (speeds up saving about 10 times)
+            if column.column_name != header:
+                column.column_name = header
+                column.save()
             database_cells = Cell.objects.filter(column=column.id)
 
             for jdx, cell in enumerate(cells):
                 record = database_cells[jdx]
                 # database_cells[idx].contets = cell !!!!!!! does not work because does not :)
-                record.contents = cell
-                record.save(update_fields=['contents'])
 
-
+                # check if contents was updeated (speeds up saving about 10 times)
+                if record.contents != cell:
+                    record.contents = cell
+                    record.save(update_fields=['contents'])
 
         if spreadsheet_form.is_valid():
             new_data = spreadsheet_form.cleaned_data
@@ -100,7 +103,7 @@ def spreadsheets_edit(request, **kwargs):
                     Cell.objects.create(column=current_column)
             elif request.POST.get('add_column'):
                 # Get all ids of columns in current spreadsheet
-                current_columns_count = columns.values_list('id', flat=True)
+                current_columns_ids = columns.values_list('id', flat=True)
                 # Calculate number of columns
                 current_columns_count = current_columns_ids.count()
                 # Get total number of cells in column
