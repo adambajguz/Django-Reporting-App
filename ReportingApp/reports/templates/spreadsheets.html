@@ -24,37 +24,48 @@
 {% endblock %}
 
 
-
 {% block content %}
+{% regroup spreadsheets by spreadsheets.spreadsheet_creation_date as spreadsheets_sorted %}
+
 <div class="uk-width-1-1">
+	{% if num_spreadsheets == 0%}
+		<i><small style="color: #444;">No spreadsheets found</small></i>
+	{% else %}
 	<table class="uk-table uk-table-hover uk-table-striped">
-		<caption>You have {{ num_spreadsheets }} spreadsheet{% if num_spreadsheets > 1 or num_spreadsheets == 0%}s{% endif %}</caption>
+		<caption>You have {{ num_spreadsheets }} spreadsheet{% if num_spreadsheets <= 1%}s{% endif %}</caption>
 		<thead>
 			<tr>
-				<th>Name</th>
-				<th>Creation</th>
-				<th>Last modification</th>
-				<th>Actions</th>
+				<th>NAME</th>
+				<th>DESCRIPTION</th>
+				<th>CREATED</th>
+				<th>MODIFIED</th>
+				<th>ACTIONS</th>
 			</tr>
 		</thead>
 		<tbody>
-			{% for spreadsheet in spreadsheets %}
+			{% for spreadsheet in spreadsheets_sorted %}
 			<tr>
-				<td class="uk-text-bold"><a href="{{ spreadsheet.id }}/edit/">{{ spreadsheet.spreadsheet_name }}</a></td>
-				<td>{{ spreadsheet.spreadsheet_creation_date }}</td>
-				<td>
+				<td class="uk-width-2-10 uk-text-bold"><a class="uk-link-muted" href="{{ spreadsheet.id }}/edit/">{{ spreadsheet.spreadsheet_name }}</a></td>
+				<td class="uk-width-4-10" style="max-width: 50%;"><p<small>{{ spreadsheet.spreadsheet_description | truncatewords:32 }}</small></p></td>
+				<td class="uk-width-1-10">{{ spreadsheet.spreadsheet_creation_date }}</td>
+				<td class="uk-width-1-10">
 					<i data-uk-tooltip="{delay:250}" title="{{ spreadsheet.spreadsheet_last_modification|localtime }}">
 						{{spreadsheet.last_modification_days_ago}}
 					</i>
 				</td>
-				<td>
-					<a href="{{ spreadsheet.id }}/edit/"><i class="uk-icon-pencil"></i> Edit</a>
-					<a class="uk-margin-left" href="{{ spreadsheet.id }}/delete/"><i class="uk-icon-trash"></i> Delete</a>
+				<td class="uk-width-2-10">
+					<a class="uk-button uk-button-success uk-button-mini" href="{{ spreadsheet.id }}/edit/">
+						<i class="uk-icon-pencil"></i> Edit
+					</a>
+					<a class="uk-margin-small-left uk-button uk-button-danger uk-button-mini " href="{{ spreadsheet.id }}/delete/">
+						<i class="uk-icon-trash"></i> Delete
+					</a>
 				</td>
 			</tr>
 			{% endfor %}
 		</tbody>
 	</table>
+	{% endif %}
 </div>
 
 {% endblock %}

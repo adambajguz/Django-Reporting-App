@@ -10,63 +10,78 @@ class Spreadsheet(models.Model):
 	spreadsheet_creation_date = models.DateField(auto_now_add=True, editable=False)
 	spreadsheet_last_modification = models.DateTimeField(auto_now=True)
 
+	row_number = models.IntegerField(default=5)
+	column_number = models.IntegerField(default=0)
 
 	@classmethod
 	def create(cls, user):
-		spreadsheets_count = len(Spreadsheet.objects.filter(user__id = user.id))
+		spreadsheets_count = Spreadsheet.objects.filter(user__id = user.id).count()
 
 		new_spreadsheet = Spreadsheet.objects.create(spreadsheet_name='New Spreadsheet #' + str(spreadsheets_count + 1), user=user)
 
-		Column.add_multiple_columns(new_spreadsheet, num_cells=10, num_columns=5)
+		Column.add_multiple_columns_and_cells(new_spreadsheet, num_cells=5, num_columns=3)
 
 		return new_spreadsheet
 
 	def last_modification_days_ago(self):
 		time = timezone.now()
 		format_str=""
-		if self.spreadsheet_last_modification.day == time.day:
-			hours = time.hour - self.spreadsheet_last_modification.hour
 
-			if hours == 0:
-				return "less than an hour ago"
-			elif hours == 1:
-				format_str = " hour ago"
+		if self.spreadsheet_last_modification.hour == time.hour:
+			minutes = time.minute - self.spreadsheet_last_modification.minute
+
+			if minutes == 0:
+				return "just now"
+			elif minutes == 1:
+				format_str = " minute ago"
 			else:
-				format_str = " hours ago"
+				format_str = " minutes ago"
 
-			return str(hours) + format_str
+			return str(minutes) + format_str
 		else:
-			if self.spreadsheet_last_modification.month == time.month:
-				days = time.day - self.spreadsheet_last_modification.day
+			if self.spreadsheet_last_modification.day == time.day:
+				hours = time.hour - self.spreadsheet_last_modification.hour
 
-				if days == 0:
-					return "yesterday"
-				elif days == 1:
-					format_str = " day ago"
+				if hours == 0:
+					return "this hour"
+				elif hours == 1:
+					format_str = " hour ago"
 				else:
-					format_str = " days ago"
-				return str(days) + format_str
+					format_str = " hours ago"
+
+				return str(hours) + format_str
 			else:
-				if self.spreadsheet_last_modification.year == time.year:
-					months = time.month - self.spreadsheet_last_modification.month
+				if self.spreadsheet_last_modification.month == time.month:
+					days = time.day - self.spreadsheet_last_modification.day
 
-					if months == 0:
-						return "this month"
-					elif months == 1:
-						format_str = " month ago"
+					if days == 0:
+						return "yesterday"
+					elif days == 1:
+						format_str = " day ago"
 					else:
-						format_str = " months ago"
-					return str(months) + format_str
+						format_str = " days ago"
+					return str(days) + format_str
 				else:
-					years = time.year - self.spreadsheet_last_modification.year
+					if self.spreadsheet_last_modification.year == time.year:
+						months = time.month - self.spreadsheet_last_modification.month
 
-					if years == 0:
-						return "this year"
-					elif years == 1:
-						format_str = " year ago"
+						if months == 0:
+							return "this month"
+						elif months == 1:
+							format_str = " month ago"
+						else:
+							format_str = " months ago"
+						return str(months) + format_str
 					else:
-						format_str = " years ago"
-					return str(years) + format_str
+						years = time.year - self.spreadsheet_last_modification.year
+
+						if years == 0:
+							return "this year"
+						elif years == 1:
+							format_str = " year ago"
+						else:
+							format_str = " years ago"
+						return str(years) + format_str
 		return self.spreadsheet_last_modification
 
 class Column(models.Model):
@@ -74,17 +89,33 @@ class Column(models.Model):
 	column_name = models.CharField(max_length=255)
 
 	@classmethod
-	def add_multiple_columns(cls, spreadsheet, num_cells, num_columns):
+	def add_multiple_columns(cls, spreadsheet, num_columns):
 		for _ in range(0, num_columns):
-			cls.add_column(spreadsheet, num_cells)
+			cls.add_column(spreadsheet)
+
+	@classmethod
+	def add_multiple_columns_and_cells(cls, spreadsheet, num_cells, num_columns):
+		for _ in range(0, num_columns):
+			cls.add_column_and_cells(spreadsheet, num_cells)
 
 	@classmethod	
-	def add_column(cls, spreadsheet, num_cells):
-		columns = Column.objects.filter(spreadsheet__id = spreadsheet.id)
+	def add_column(cls, spreadsheet):
+		row_num = spreadsheet.row_number
 
-		col = Column.objects.create(spreadsheet=spreadsheet, column_name="New column #" + str(columns.count()))
+		return cls.add_column_and_cells(spreadsheet, row_num)
+
+	@classmethod	
+	def add_column_and_cells(cls, spreadsheet, num_cells):
+		col_num = spreadsheet.column_number
+
+		new_col = Column.objects.create(spreadsheet=spreadsheet, column_name="New column #" + str(col_num))
 		for _ in range(0, num_cells):
-			Cell.objects.create(column=col)
+			Cell.objects.create(column=new_col)
+
+		spreadsheet.column_number = col_num + 1
+		spreadsheet.save()
+
+		return new_col
 
 class Cell(models.Model):
 	contents = models.CharField(max_length=256, default='', blank=True, null=True)

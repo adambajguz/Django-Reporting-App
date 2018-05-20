@@ -34,15 +34,14 @@
 	{% endfor %}
 
 	<hr style="color: #CCE6FF; border-color: #CCE6FF; background-color: #CCE6FF;">
-	<div class="uk-button-group">
-		<button name="add_row" value="Add row" class="uk-button uk-button-success"><i class="uk-icon-th-list"></i> Insert row</button>
-		<button name="add_column" value="Add column" class="uk-button uk-button-success"><i class="uk-icon-arrows-h"></i> Insert column</button>
-	</div>
 
+	<p><button name="add_row" value="Add row" class="uk-button uk-button-success"><i class="uk-icon-th-list"></i> Insert row</button></p>
+	<p><button name="add_column" value="Add column" class="uk-button uk-button-success"><i class="uk-icon-arrows-h"></i> Insert Column</button></p>
 
 	<hr style="color: #CCE6FF; border-color: #CCE6FF; background-color: #CCE6FF;">
-	<button class="uk-button uk-button-primary"><i class="uk-icon-save"></i> Save</button>
 
+	<button name="delete" value="Delete" class="uk-margin-bottom uk-button uk-button-danger"><i class="uk-icon-trash"></i> Delete speadsheet</button>
+	<button class="uk-margin-bottom uk-button uk-button-primary"><i class="uk-icon-save"></i> Save</button>
 {% endblock %}
 
 {% block content %}
@@ -56,7 +55,7 @@
 			<table class="uk-table uk-table-hover uk-table-striped uk-table-condensed ">
 				<thead>
 					<tr>
-						<th class="uk-text-bold">No.</th>
+						<th class="uk-text-bold"><span class="uk-float-right">No.</span></th>
 						{% for current_column in columns %}
 						<th class="uk-text-bold">
 							<input type="text" style="min-width: 150px;" name="header_C{{ forloop.counter }}" class="uk-width-1-1" value="{{current_column.column_name}}">
@@ -69,7 +68,7 @@
 					{% for it in num_rows %}
 					<tr>
 						<td>
-							{{forloop.counter}}
+							<strong class="uk-float-right">{{forloop.counter}}</strong>
 						</td>
 
 						{% for current_column in columns %}

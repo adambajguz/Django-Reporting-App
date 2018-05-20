@@ -41,15 +41,36 @@
         </ul>
 
         <ul class="uk-navbar-flip uk-navbar-nav">
-            <div class="uk-navbar-content">{{ user.get_username }}</div>
-
             {% if user.is_authenticated %}
-            <li>
-                <a href="{% url 'logout'%}">{{'Logout' | upper}}</a>
-            </li>
+            <li class="uk-parent" data-uk-dropdown="" aria-haspopup="true" aria-expanded="false">
+                    <a href="">{{ user.get_username }} <i class="uk-icon-chevron-down"></i></a>
+    
+                    <div class="uk-dropdown uk-dropdown-navbar uk-dropdown-bottom" aria-hidden="true" tabindex="" style="top: 40px; left: 0px;">
+                        <ul class="uk-nav uk-nav-navbar">
+                            <li>
+                                <a href="#">Item</a>
+                            </li>
+                            <li>
+                                <a href="#">Another item</a>
+                            </li>
+                            <li class="uk-nav-header">Header</li>
+                            <li>
+                                <a href="#">Item</a>
+                            </li>
+                            <li>
+                                <a href="#">Another item</a>
+                            </li>
+                            <li class="uk-nav-divider"></li>
+                            <li>
+                                <a href="{% url 'logout'%}"><i class="uk-icon-sign-out"></i> LOGOUT</a>
+                            </li>
+                        </ul>
+                    </div>
+    
+                </li>
             {% else %}
             <li>
-                <a href="{% url 'login'%}{% if request.path != '/accounts/logout/' %}?next={{request.path}}{% endif %}">{{'Login' | upper}}</a>
+                <a href="{% url 'login'%}{% if request.path != '/accounts/logout/' %}?next={{request.path}}{% endif %}"><i class="uk-icon-sign-in"></i> {{'Login' | upper}}</a>
             </li>
             <li>
                 <a href="{% url 'register'%}?next={{request.path}}">{{'Register' | upper}}</a>

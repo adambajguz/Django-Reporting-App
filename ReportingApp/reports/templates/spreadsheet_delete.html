@@ -9,7 +9,7 @@
 <div class="uk-width-1-1">
 	<div class="uk-width-medium-1-2 uk-container-center">
 		<div class="uk-alert uk-alert-warning">
-			<p>Are you sure you want to delete '{{ spreadsheet_name }}' spreadsheet?</p>
+			<p>Are you sure you want to delete <strong>'{{ spreadsheet_name }}'</strong> spreadsheet?</p>
 		</div>
 
 		<form class="uk-form uk-form-stacked" action="" method="post">
@@ -17,7 +17,7 @@
 
 			<div class=uk-row>
 				<button name="cancel" value="Cancel" class="uk-button" type="submit">Cancel</button>
-				<button name="delete" value="Delete" class="uk-button uk-button-danger" type="submit">Delete</button>
+				<button name="delete" value="Delete" class="uk-button uk-button-danger" type="submit"><i class="uk-icon-trash"></i> Delete permanently</button>
 			</div>
 		</form>
 	</div>

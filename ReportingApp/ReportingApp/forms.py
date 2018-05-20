@@ -20,7 +20,7 @@ class RegistrationForm(forms.Form):
                                widget=forms.PasswordInput(attrs={'placeholder': 'Password', 'class': "uk-width-1-1"}))
 
     repeat_password = forms.CharField(max_length=150,
-                                      label=mark_safe('<i class="uk-icon-unlock"></i> Repeat password'),
+                                      label=mark_safe('<i class="uk-icon-lock"></i> Repeat password'),
                                       widget=forms.PasswordInput(attrs={'placeholder': 'Repeat password', 'class': "uk-width-1-1"}))
 
     def clean_username(self):
