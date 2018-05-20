@@ -25,7 +25,6 @@
 
 
 {% block content %}
-{% regroup spreadsheets by spreadsheets.spreadsheet_creation_date as spreadsheets_sorted %}
 
 <div class="uk-width-1-1">
 	{% if num_spreadsheets == 0%}
@@ -43,7 +42,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% for spreadsheet in spreadsheets_sorted %}
+			{% for spreadsheet in spreadsheets %}
 			<tr>
 				<td class="uk-width-2-10 uk-text-bold"><a class="uk-link-muted" href="{{ spreadsheet.id }}/edit/">{{ spreadsheet.spreadsheet_name }}</a></td>
 				<td class="uk-width-4-10" style="max-width: 50%;"><p<small>{{ spreadsheet.spreadsheet_description | truncatewords:32 }}</small></p></td>
