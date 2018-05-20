@@ -1,5 +1,6 @@
 {% extends "./base/base.html" %} 
 
+{% load static %}
 
 {% block content %}
 
@@ -9,20 +10,89 @@
 	<p>Welcome to
 		<em>Raporting App</em>.</p>
 
-	<h2>Dynamic content</h2>
-	<p>LOGIN I HASŁO DO PANELU ADMINISTRATOR: admin developer </p>
-	<ul>
-		<li>
-			<strong>Spreadsheets count:</strong> {{ num_spreadsheets }}</li>
+
+	<br>	<br>
+	<hr>
+	<br>	<br>
+
+	<ul id="filter" class="uk-subnav uk-subnav-pill">
+		<li class="uk-active" data-uk-filter=""><a href="#">All</a></li>
+		<li data-uk-filter="filter-a" class=""><a href="#">Filter A</a></li>
+		<li data-uk-filter="filter-b" class=""><a href="#">Filter B</a></li>
 	</ul>
 
-	{% for sp in spreadsheets %}
-	<p>USER: {{sp.user}}</p>
-	<p>SPREADSHEET NAME: {{sp.spreadsheet_name}}</p>
-	<p>CREATED: {{sp.spreadsheet_creation_date}}</p>
-	<p>LAST MODIFIED: {{sp.spreadsheet_last_modification}}</p>
-	</br>
-	{% endfor %}
+	<div class="uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-large-1-4 tm-grid-heights" data-uk-grid="{gutter: 20, controls: '#filter'}" style="position: relative; margin-left: -20px; height: 394px;">
+		<div data-uk-filter="filter-a" data-grid-prepared="true" aria-hidden="false" 
+		style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 0px; opacity: 1; left: 0px; display: block;">
+		<div class="uk-panel-box">A 1</div></div>
+		<div data-uk-filter="filter-b" data-grid-prepared="true" aria-hidden="false" 
+		style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 0px; opacity: 1; left: 210.688px; display: block;"
+		><div class="uk-panel-box">B 2</div></div>
+		<div data-uk-filter="filter-a" data-grid-prepared="true" aria-hidden="false" 
+		style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 0px; opacity: 1; left: 421.375px; display: block;">
+		<div class="uk-panel-box">A 3</div></div>
+		<div data-uk-filter="filter-b" data-grid-prepared="true" aria-hidden="false" 
+		style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 0px; opacity: 1; left: 632.063px; display: block;">
+		<div class="uk-panel-box">B 4</div></div>
+		<div data-uk-filter="filter-b" data-grid-prepared="true" aria-hidden="false" 
+		style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 132px; opacity: 1; left: 0px; display: block;">
+		<div class="uk-panel-box">B 5</div></div>
+		<div data-uk-filter="filter-a" data-grid-prepared="true" aria-hidden="false" 
+		style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 152px; opacity: 1; left: 210.688px; display: block;">
+		<div class="uk-panel-box">A 6</div></div>
+		<div data-uk-filter="filter-b" data-grid-prepared="true" aria-hidden="false" 
+		style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 212px; opacity: 1; left: 421.375px; display: block;">
+		<div class="uk-panel-box">B 7</div></div>
+		<div data-uk-filter="filter-a,filter-b" data-grid-prepared="true" aria-hidden="false" 
+		style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 172px; opacity: 1; left: 632.063px;">
+		<div class="uk-panel-box">A+B 8</div></div>
+	</div>
+
+	<br>	<br>
+	<hr>
+	<br>	<br>
+
+	<div class="uk-grid uk-grid-width-medium-1-4" data-uk-grid-margin="">
+		<div class="uk-row-first">
+			<a href="{% static 'img/placeholder_800x600_1.jpg' %}" data-uk-lightbox="{group:'group1'}" title="Title">
+				<img src="{% static 'img/placeholder_800x600_1.jpg' %}" width="800" height="600" alt="">
+			</a>
+		</div>
+		<div>
+			<a href="{% static 'img/placeholder_800x600_2.jpg' %}" data-lightbox-type="image" data-uk-lightbox="{group:'group1'}" title="Title">
+				<img src="{% static 'img/placeholder_800x600_2.jpg' %}" width="800" height="600" alt="">
+			</a>
+		</div>
+		<div>
+			<a href="{% static 'img/placeholder_800x600_3.jpg' %}" data-lightbox-type="image" data-uk-lightbox="{group:'group1'}" title="Title">
+				<img src="{% static 'img/placeholder_800x600_3.jpg' %}" width="800" height="600" alt="">
+			</a>
+		</div>
+		<div>
+			<a href="{% static 'img/placeholder_800x600_4.jpg' %}" data-lightbox-type="image" data-uk-lightbox="{group:'group1'}" title="Title">
+				<img src="{% static 'img/placeholder_800x600_2.jpg' %}" width="800" height="600" alt="">
+			</a>
+		</div>
+
+	</div>
+
+	<br>	<br>
+	<hr>
+	<br>	<br>
+
+	<textarea data-uk-htmleditor="{markdown:true, mode:'split', maxsplitsize:1000}">
+#Heading
+
+Lorem ipsum dolor sit **amet**, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. [This is a link](#)
+			
+* Item
+* Item
+* Item
+			
+## Heading
+
+Ut enim ad *minim* veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+	</textarea>
 </div>
 
 {% endblock %}

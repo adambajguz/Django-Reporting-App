@@ -7,10 +7,6 @@
 {% block content %}
 
 <div class="uk-width-1-2 uk-container-center">
-	{% if form.errors %}
-	<p>Your username and password didn't match. Please try again.</p>
-	{% endif %}
-
 	<form method="post" class="uk-form uk-form-stacked" action="{% url 'register' %}{% if next %}?next={{next}}{% endif %}">
 		{% csrf_token %}
 		<legend>Registration</legend>

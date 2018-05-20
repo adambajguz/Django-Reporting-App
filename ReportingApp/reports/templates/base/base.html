@@ -14,13 +14,29 @@
 	{% load static %}
 	<link rel="stylesheet" href={% static 'uikit/css/uikit.almost-flat.css' %} />
 	<link rel="stylesheet" href={% static 'uikit/css/components/sticky.min.css' %} />
+	<link rel="stylesheet" href={% static 'uikit/css/components/slidenav.almost-flat.min.css' %} />
 	<link rel="stylesheet" href={% static 'uikit/css/components/tooltip.min.css' %} />
+	<link rel="stylesheet" href={% static 'uikit/css/components/htmleditor.almost-flat.min.css' %} />
+	<link rel="stylesheet" href={% static 'codemirror/lib/codemirror.css' %}/>
+	<link rel="stylesheet" href={% static 'codemirror/addon/scroll/simplescrollbars.css' %}/>
 
 
 	<script src={% static 'uikit/js/jquery-3.3.1.min.js' %}></script>
 	<script src={% static 'uikit/js/uikit.min.js' %}></script>
 	<script src={% static 'uikit/js/components/sticky.min.js' %}></script>
 	<script src={% static 'uikit/js/components/tooltip.min.js' %}></script>
+	<script src={% static 'uikit/js/components/lightbox.min.js' %}></script>
+	<script src={% static 'uikit/js/components/grid.min.js' %}></script>
+
+	<script src={% static 'uikit/js/components/htmleditor.js' %}></script>
+
+	<script src={% static 'codemirror/lib/codemirror.js' %}></script>
+	<script src={% static 'codemirror/mode/markdown/markdown.js' %}></script>
+	<script src={% static 'codemirror/addon/mode/overlay.js' %}></script>
+	<script src={% static 'codemirror/addon/scroll/simplescrollbars.js' %}></script>
+	<script src={% static 'codemirror/mode/xml/xml.js' %}></script>
+	<script src={% static 'codemirror/mode/gfm/gfm.js' %}></script>
+	<script src={% static 'marked.min.js' %}></script>
 </head>
 
 <body id="body" style="min-width: 1280px;">

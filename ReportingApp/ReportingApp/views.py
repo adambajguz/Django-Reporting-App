@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 
 from reports.models import Spreadsheet
 
-from .forms import RegistrationForm, UserSettingsForm
+from .forms import RegistrationForm, UserDetailsChangeForm, UserPasswordChangeForm
 
 
 def anonymous_required(view_function, redirect_to = None):
@@ -70,33 +70,42 @@ def profile(request):
 
 @login_required
 def settings(request):
-    user_settings_form = UserSettingsForm(request.POST or None,
+    user_details_form = UserDetailsChangeForm(request.POST or None,
         initial={
-            'username': '',
-            'email': '',
-            'password': '',
-            'repeat_password': '',
+            'first_name': request.user.first_name,
+            'last_name': request.user.last_name,
+            'username': request.user.username,
+            'email': request.user.email,
         }
     )
-    if request.method == 'POST':
-        if user_settings_form.is_valid():
-            data = user_settings_form.cleaned_data
 
-            # data.get('username')
-            # data.get('email')
-            # data.get('password')
-            # data.get('repeat_password')
+    user_password_form = UserPasswordChangeForm(request.POST or None,
+        initial={
+            'old_password': '',
+            'new_password': '',
+            'repeat_new_password': '',
+        }
+    )
 
-            # Register a new user
-            username = data.get('username')
-            user = User.objects.create_user(username=username,
-                                 email=data.get('email'),
-                                 password=data.get('password'))
+    # if request.method == 'POST':
+    #     if user_details_form.is_valid():
+    #         data = user_details_form.cleaned_data
 
-            messages.add_message(request, messages.SUCCESS, username, extra_tags='username')
+    #         # data.get('username')
+    #         # data.get('email')
+    #         # data.get('password')
+    #         # data.get('repeat_password')
 
-            # error(request, 'test')
-            return redirect('login')
+    #         # Register a new user
+    #         username = data.get('username')
+    #         user = User.objects.create_user(username=username,
+    #                              email=data.get('email'),
+    #                              password=data.get('password'))
 
-    return render(request, 'account/settings.html', context={'register_form': user_settings_form})
+    #         messages.add_message(request, messages.SUCCESS, username, extra_tags='username')
+
+    #         # error(request, 'test')
+    #         return redirect('settings')
+
+    return render(request, 'account/settings.html', context={'details_form': user_details_form, 'password_form': user_password_form})
 
