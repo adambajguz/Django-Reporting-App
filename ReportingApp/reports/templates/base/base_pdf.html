@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+	{% block title %}
+	<title>Django ReportingApp</title>
+	{% endblock %}
+
+	<meta charset="utf-8">
+
+</head>
+
+<body id="body" style="min-width: 1280px;">
+
+	<div class="uk-block uk-containter-center uk-margin-left uk-margin-right uk-margin-top uk-margin-bottom uk-margin-remove-top uk-margin-remove-bottom uk-padding-remove">
+		{% block cotainer_start %} 
+		{% endblock %}
+		<div class="uk-grid">
+			<div class="uk-width-1-5">
+				{% block sidemenu %} 
+				{% endblock %}
+				<div class="uk-panel uk-panel-box uk-panel-box-main">
+					<h3 class="uk-panel-title"><i class="uk-icon-info"></i> About app</h3>
+					<div class="uk-grid">
+						<div class="uk-width-1-1">
+							Test
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="uk-width-4-5 uk-padding-remove">
+				<div class="uk-panel uk-panel-box uk-panel-box-main uk-margin-left">
+					<!-- <div class="uk-panel-badge uk-badge">..TEST.</div> -->
+					<h3 class="uk-panel-title">
+						{% block breadcrumbs %}Home{% endblock %}
+					</h3>
+					<div class="uk-grid">
+						{% block content %} 
+						{% endblock %}
+					</div>
+				</div>
+			</div>
+		</div>
+		{% block container_end %} 
+		{% endblock %}
+	</div>
+</body>
+
+</html>

@@ -1,0 +1,56 @@
+{% extends "./base/base_pdf.html" %}
+
+{% load custom_tags %}
+
+{% block content %}
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>FC-python wrapper</title>
+	{% load static %} 
+   <script type="text/javascript" src="{% static "fusioncharts/fusioncharts.js" %}"></script>
+   <script type="text/javascript" src="{% static "fusioncharts/themes/fusioncharts.theme.fint.js" %}"></script>
+</head>
+<body>
+	<div id="chart-1">{{ output|safe }}</div>
+</body>
+</html>
+<!-- 
+ 
+
+<div class="uk-width-1-1">
+	<div id="chart-1">{{ output|safe }}</div>
+		<div class="uk-overflow-container">
+			<table class="uk-table uk-table-hover uk-table-striped uk-table-condensed ">
+				<thead>
+					<tr>
+						<th class="uk-text-bold"><span class="uk-float-right">No.</span></th>
+						{% for current_column in columns %}
+						<th class="uk-text-bold">
+							{{ current_column.column_name }}
+						</th>
+						{% endfor %}
+					</tr>
+				</thead>
+
+				<tbody>
+					{% for it in num_rows %}
+					<tr>
+						<td>
+							<strong class="uk-float-right">{{forloop.counter}}</strong>
+						</td>
+
+						{% for current_column in columns %}
+						<td>
+							{{ rows | index:forloop.counter0 | index:it }}
+						</td>
+						{% endfor %}
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+</div> -->
+
+{% endblock %}

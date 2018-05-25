@@ -6,11 +6,15 @@ from django.db import transaction
 from reports.models import Spreadsheet, Column, Cell
 from reports.forms import SpreadsheetForm
 
+from reports.utils.PdfRender import PdfRender
+
+
 @login_required
 def spreadsheets(request):
     # Filter spreadsheets by currenly logon user
     spreadsheets = Spreadsheet.objects.filter(user__id = request.user.id)
     num_spreadsheets = spreadsheets.count()
+
     return render(request, 'spreadsheets.html', context={'spreadsheets': spreadsheets, 'num_spreadsheets': num_spreadsheets}, )
 
 @login_required
@@ -101,6 +105,90 @@ def spreadsheets_edit(request, **kwargs):
 
     return render(request, 'spreadsheets_edit.html', context={'spreadsheet': spreadsheet_to_edit,
                                                               'spreadsheet_form': spreadsheet_form,
+                                                              'columns': columns,
+                                                              'num_rows': range(0, spreadsheet_to_edit.row_number), 'rows': rows})
+
+
+import pygal
+
+
+class FruitPieChart():
+
+    def __init__(self, **kwargs):
+        self.chart = pygal.Pie(**kwargs)
+        self.chart.title = 'Amount of Fruits'
+
+    def get_data(self):
+        '''
+        Query the db for chart data, pack them into a dict and return it.
+        '''
+        data = {}
+        for fruit in Column.objects.all():
+            data[fruit.column_name] = fruit.spreadsheet.id
+        return data
+
+    def generate(self):
+        # Get chart data
+        chart_data = self.get_data()
+
+        # Add data to chart
+        for key, value in chart_data.items():
+            self.chart.add(key, value)
+
+        # Return the rendered SVG
+        #return self.chart.render_data_uri() 
+        return self.chart.render(is_unicode=True, disable_xml_declaration=True)
+
+from django.views.generic import TemplateView
+
+from pygal.style import DefaultStyle
+
+# from .charts import FruitPieChart
+
+
+
+@login_required
+def chart_pdf(request, **kwargs):
+    cht_fruits = FruitPieChart(
+            height=600,
+            width=800,
+            explicit_size=True,
+            style=DefaultStyle
+        )
+    return render(request, 'chart_test.html', context={'output': cht_fruits.generate()})
+
+
+    return PdfRender.render('chart_test.html', params={'output': cht_fruits.generate()})
+
+@login_required
+def spreadsheets_pdf(request, **kwargs):
+    # Get id
+    spreadsheet_id = kwargs.get('id')
+
+    # Get current user's spreadsheets
+    user_spreadsheets = request.user.spreadsheet_set.all()
+    # Check if the `spreadsheet_id` is correct
+    try:
+        spreadsheet_to_edit = user_spreadsheets.get(id=spreadsheet_id)
+    except:
+        return render(request, 'error_page.html', context={'error_message': "No spreadsheet with id:" + str(spreadsheet_id) + " was found!"})
+
+    spreadsheet_form = SpreadsheetForm(request.POST or None,
+        initial={
+            'spreadsheet_name': spreadsheet_to_edit.spreadsheet_name,
+            'spreadsheet_description': spreadsheet_to_edit.spreadsheet_description,
+        }
+    )
+
+    # Load columns from the database
+    columns = Column.objects.filter(spreadsheet__id = spreadsheet_to_edit.id)
+
+    rows = []
+    for current_column in columns:
+        cells = current_column.cells.all()
+        rows.append(cells.values_list('contents', flat=True))
+
+    return PdfRender.render('spreadsheets_pdf.html', params={'spreadsheet': spreadsheet_to_edit,
                                                               'columns': columns,
                                                               'num_rows': range(0, spreadsheet_to_edit.row_number), 'rows': rows})
 
