@@ -20,7 +20,6 @@
 	</ul>
 	<hr style="color: #CCE6FF; border-color: #CCE6FF; background-color: #CCE6FF;">
 	<a class="uk-button uk-button-primary" href="add/"><i class="uk-icon-plus"></i> Create spreadsheet</a>
-
 {% endblock %}
 
 
@@ -31,7 +30,7 @@
 		<i><small style="color: #444;">No spreadsheets found</small></i>
 	{% else %}
 	<table class="uk-table uk-table-hover uk-table-striped">
-		<caption>You have {{ num_spreadsheets }} spreadsheet{% if num_spreadsheets <= 1%}s{% endif %}</caption>
+		<caption>You have {{ num_spreadsheets }} spreadsheet{% if num_spreadsheets != 1%}s{% endif %}</caption>
 		<thead>
 			<tr>
 				<th>NAME</th>

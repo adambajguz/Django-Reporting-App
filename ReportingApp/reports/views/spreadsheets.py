@@ -136,6 +136,7 @@ class FruitPieChart():
             self.chart.add(key, value)
 
         # Return the rendered SVG
+        
         #return self.chart.render_data_uri() 
         return self.chart.render(is_unicode=True, disable_xml_declaration=True)
 
@@ -146,8 +147,6 @@ from pygal.style import DefaultStyle
 # from .charts import FruitPieChart
 
 
-
-@login_required
 def chart_pdf(request, **kwargs):
     cht_fruits = FruitPieChart(
             height=600,
@@ -155,7 +154,7 @@ def chart_pdf(request, **kwargs):
             explicit_size=True,
             style=DefaultStyle
         )
-    return render(request, 'chart_test.html', context={'output': cht_fruits.generate()})
+    #return render(request, 'chart_test.html', context={'output': cht_fruits.generate()})
 
 
     return PdfRender.render('chart_test.html', params={'output': cht_fruits.generate()})

@@ -45,10 +45,12 @@ class RegistrationForm(forms.Form):
 
 class UserDetailsChangeForm(forms.Form):
     first_name = forms.CharField(max_length=150,
+                                 required=False,
                                  label=mark_safe('<i class="uk-icon-user "></i> Name'),
-                               widget=forms.TextInput(attrs={'placeholder': 'Name', 'class': "uk-width-1-1"}))
+                                 widget=forms.TextInput(attrs={'placeholder': 'Name', 'class': "uk-width-1-1"}))
 
     last_name = forms.CharField(max_length=150,
+                                required=False,
                                 label=mark_safe('<i class="uk-icon-user "></i> Surname'),
                                 widget=forms.TextInput(attrs={'placeholder': 'Surname', 'class': "uk-width-1-1"}))
 
@@ -78,27 +80,35 @@ class UserDetailsChangeForm(forms.Form):
 
     def clean(self):
         form_data = self.cleaned_data
-        # if form_data['password'] != form_data['repeat_password']:
-        #     self.add_error('repeat_password', "Password does not match")
-        #     # raise ValidationError("Passwords does not match")
         return form_data
 
 class UserPasswordChangeForm(forms.Form):
-    password = forms.CharField(max_length=150,
-                               label=mark_safe('<i class="uk-icon-lock"></i> Old password'),
-                               widget=forms.PasswordInput(attrs={'placeholder': 'Old password', 'class': "uk-width-1-1"}))
+    old_password = forms.CharField(max_length=150,
+                                   label=mark_safe('<i class="uk-icon-lock"></i> Old password'),
+                                   widget=forms.PasswordInput(attrs={'placeholder': 'Old password', 'class': "uk-width-1-1"}))
 
     new_password = forms.CharField(max_length=150,
-                               label=mark_safe('<i class="uk-icon-unlock"></i> New assword '),
-                               widget=forms.PasswordInput(attrs={'placeholder': 'New password', 'class': "uk-width-1-1"}))
+                                   label=mark_safe('<i class="uk-icon-unlock"></i> New password '),
+                                   widget=forms.PasswordInput(attrs={'placeholder': 'New password', 'class': "uk-width-1-1"}))
 
     repeat_new_password = forms.CharField(max_length=150,
                                       label=mark_safe('<i class="uk-icon-unlock"></i> Repeat new password'),
                                       widget=forms.PasswordInput(attrs={'placeholder': 'Repeat new password', 'class': "uk-width-1-1"}))
+ 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user")
+        super(UserPasswordChangeForm, self).__init__(*args, **kwargs)
+
+
+    def clean_old_password(self):
+        valid = self.user.check_password(self.cleaned_data['old_password'])
+        if not valid:
+             raise forms.ValidationError("Password incorrect")
+        return valid
 
     def clean(self):
         form_data = self.cleaned_data
-        if form_data['password'] != form_data['repeat_password']:
-            self.add_error('repeat_password', "Password does not match")
+        if form_data['new_password'] != form_data['repeat_new_password']:
+            self.add_error('repeat_new_password', "Password does not match")
             # raise ValidationError("Passwords does not match")
         return form_data

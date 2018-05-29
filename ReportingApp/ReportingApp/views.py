@@ -12,6 +12,8 @@ from reports.models import Spreadsheet
 
 from .forms import RegistrationForm, UserDetailsChangeForm, UserPasswordChangeForm
 
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import authenticate, login
 
 def anonymous_required(view_function, redirect_to = None):
     return AnonymousRequired(view_function, redirect_to)
@@ -55,7 +57,6 @@ def register(request, **kwargs):
 
             messages.add_message(request, messages.SUCCESS, username, extra_tags='username')
 
-            # error(request, 'test')
             return redirect('login')
 
     return render(request, 'registration/register.html', context={'register_form': register_form})
@@ -70,16 +71,18 @@ def profile(request):
 
 @login_required
 def settings(request):
+    req_user = request.user
+
     user_details_form = UserDetailsChangeForm(request.POST or None,
         initial={
-            'first_name': request.user.first_name,
-            'last_name': request.user.last_name,
-            'username': request.user.username,
-            'email': request.user.email,
+            'first_name': req_user.first_name,
+            'last_name': req_user.last_name,
+            'username': req_user.username,
+            'email': req_user.email,
         }
     )
 
-    user_password_form = UserPasswordChangeForm(request.POST or None,
+    user_password_form = UserPasswordChangeForm(request.POST or None, user=request.user,
         initial={
             'old_password': '',
             'new_password': '',
@@ -87,25 +90,26 @@ def settings(request):
         }
     )
 
-    # if request.method == 'POST':
-    #     if user_details_form.is_valid():
-    #         data = user_details_form.cleaned_data
+    if request.method == 'POST':
+        print(request.POST)
+        if request.POST.get('submit') and not request.POST.get('submitPass') and user_details_form.is_valid():
+            data = user_details_form.cleaned_data
+            # Update `user` object
+            for attr, value in new_data.items():
+                # print('{} = {}'.format(attr, value))
+                setattr(req_user, attr, value)
+            plot_to_edit.save()
+            
+            update_session_auth_hash(request, req_user)
 
-    #         # data.get('username')
-    #         # data.get('email')
-    #         # data.get('password')
-    #         # data.get('repeat_password')
+        elif request.POST.get('submitPass') and not request.POST.get('submit') and user_password_form.is_valid():
+            data = user_password_form.cleaned_data
+            new_password = data.get('new_password')
+            req_user.set_password(new_password)
+            update_session_auth_hash(request, req_user)
 
-    #         # Register a new user
-    #         username = data.get('username')
-    #         user = User.objects.create_user(username=username,
-    #                              email=data.get('email'),
-    #                              password=data.get('password'))
-
-    #         messages.add_message(request, messages.SUCCESS, username, extra_tags='username')
-
-    #         # error(request, 'test')
-    #         return redirect('settings')
+            login_user = authenticate(request, username=req_user.username, password=new_password)
+            login(request, login_user)
 
     return render(request, 'account/settings.html', context={'details_form': user_details_form, 'password_form': user_password_form})
 

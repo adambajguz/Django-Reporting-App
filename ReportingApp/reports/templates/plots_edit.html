@@ -1,14 +1,14 @@
-{% extends "./base/base_spreadsheets_quickactions.html" %}
+{% extends "./base/base_plots_quickactions.html" %}
 
 {% load custom_tags %}
 {% load widget_tweeks %}
 
 {% block breadcrumbs %}
-	{{ block.super }} » Edit Spreadsheet
+	{{ block.super }} » Edit Plot
 {% endblock %}
 
 {% block cotainer_start %} 
-	<form class="uk-form" method="post" name="edit_form" action="{% url 'spreadsheets_edit' id=spreadsheet.id %}">
+	<form class="uk-form" method="post" name="edit_form" action="{% url 'plots_edit' id=plot.id %}">
 		{% csrf_token %}
 
 {% endblock %}
@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block quick_actions %}
-	{% for field in spreadsheet_form.visible_fields %}
+	{% for field in plot_form.visible_fields %}
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="{{ field.name }}">{{ field.label_tag|safe }}</label>
 
@@ -34,13 +34,8 @@
 	{% endfor %}
 
 	<hr style="color: #CCE6FF; border-color: #CCE6FF; background-color: #CCE6FF;">
-
-	<p><button name="add_row" value="Add row" class="uk-button uk-button-success"><i class="uk-icon-th-list"></i> Insert row</button></p>
-	<p><button name="add_column" value="Add column" class="uk-button uk-button-success"><i class="uk-icon-arrows-h"></i> Insert Column</button></p>
-
-	<hr style="color: #CCE6FF; border-color: #CCE6FF; background-color: #CCE6FF;">
-
-	<button name="delete" value="Delete" class="uk-margin-bottom uk-button uk-button-danger"><i class="uk-icon-trash"></i> Delete spreadsheet</button>
+	
+	<button name="delete" value="Delete" class="uk-margin-bottom uk-button uk-button-danger"><i class="uk-icon-trash"></i> Delete plot</button>
 	<button class="uk-margin-bottom uk-button uk-button-primary"><i class="uk-icon-save"></i> Save</button>
 {% endblock %}
 

@@ -155,6 +155,14 @@ class Plot(models.Model):
 	plot_last_modification = models.DateTimeField(auto_now_add=True)
 	plot_type = models.CharField(max_length=1, choices=PLOT_TYPES)
 
+	@classmethod
+	def create(cls, user):
+		plots_count = Plot.objects.filter(user__id = user.id).count()
+
+		new_plot = Plot.objects.create(plot_name='New Plot #' + str(plots_count + 1), user=user)
+
+		return new_plot
+
 class PlotData(models.Model):
 	PLOTDATA_TYPES = (
 		('D', 'DataColumn'),
