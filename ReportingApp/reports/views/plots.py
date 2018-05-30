@@ -7,6 +7,56 @@ from reports.forms import PlotForm
 
 from reports.models import Spreadsheet, Column, Cell, Plot, PlotData
 
+import pygal
+from pygal.style import DefaultStyle
+
+
+class FruitPieChart():
+
+    def __init__(self, **kwargs):
+        self.chart = pygal.Bar(**kwargs)
+        self.chart.title = 'Amount of Fruits'
+
+    def get_data(self):
+        '''
+        Query the db for chart data, pack them into a dict and return it.
+        '''
+        data = {}
+        for fruit in Column.objects.all():
+            data[fruit.column_name] = fruit.spreadsheet.id
+        return data
+
+    def generate(self):
+        # Get chart data
+        chart_data = self.get_data()
+
+        # Add data to chart
+        for key, value in chart_data.items():
+            self.chart.add(key, value)
+
+        # Return the rendered SVG
+        
+        return self.chart.render_data_uri() 
+        #return self.chart.render(is_unicode=True, disable_xml_declaration=True)
+
+
+# from .charts import FruitPieChart
+
+
+def chart_pdf(request, **kwargs):
+    cht_fruits = FruitPieChart(
+            height=600,
+            width=800,
+            explicit_size=True,
+            style=DefaultStyle
+        )
+    return render(request, 'chart_test.html', context={'output': cht_fruits.generate()})
+
+
+    # return PdfRender.render('chart_test.html', params={'output': cht_fruits.generate()})
+
+
+
 @login_required
 def plots(request):
     # Filter spreadsheets by currenly logon user
@@ -41,6 +91,13 @@ def plots_edit(request, **kwargs):
         }
     )
 
+    actual_plot = FruitPieChart(
+            height=600,
+            width=800,
+            explicit_size=True,
+            style=DefaultStyle
+        )
+
     if request.method == 'POST':
         if plot_form.is_valid():
             new_data = plot_form.cleaned_data
@@ -54,8 +111,10 @@ def plots_edit(request, **kwargs):
             setattr(plot_to_edit, attr, value)
         plot_to_edit.save()
 
+
     return render(request, 'plots_edit.html', context={'plot': plot_to_edit,
-                                                       'plot_form': plot_form,})
+                                                       'plot_form': plot_form,
+                                                       'plot_graphics': actual_plot.generate(),})
 
 @login_required
 def plots_delete(request, **kwargs):

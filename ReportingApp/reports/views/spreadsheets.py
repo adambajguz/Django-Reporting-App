@@ -108,57 +108,6 @@ def spreadsheets_edit(request, **kwargs):
                                                               'columns': columns,
                                                               'num_rows': range(0, spreadsheet_to_edit.row_number), 'rows': rows})
 
-
-import pygal
-
-
-class FruitPieChart():
-
-    def __init__(self, **kwargs):
-        self.chart = pygal.Pie(**kwargs)
-        self.chart.title = 'Amount of Fruits'
-
-    def get_data(self):
-        '''
-        Query the db for chart data, pack them into a dict and return it.
-        '''
-        data = {}
-        for fruit in Column.objects.all():
-            data[fruit.column_name] = fruit.spreadsheet.id
-        return data
-
-    def generate(self):
-        # Get chart data
-        chart_data = self.get_data()
-
-        # Add data to chart
-        for key, value in chart_data.items():
-            self.chart.add(key, value)
-
-        # Return the rendered SVG
-        
-        #return self.chart.render_data_uri() 
-        return self.chart.render(is_unicode=True, disable_xml_declaration=True)
-
-from django.views.generic import TemplateView
-
-from pygal.style import DefaultStyle
-
-# from .charts import FruitPieChart
-
-
-def chart_pdf(request, **kwargs):
-    cht_fruits = FruitPieChart(
-            height=600,
-            width=800,
-            explicit_size=True,
-            style=DefaultStyle
-        )
-    #return render(request, 'chart_test.html', context={'output': cht_fruits.generate()})
-
-
-    return PdfRender.render('chart_test.html', params={'output': cht_fruits.generate()})
-
 @login_required
 def spreadsheets_pdf(request, **kwargs):
     # Get id
