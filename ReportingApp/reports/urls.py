@@ -16,5 +16,4 @@ urlpatterns = [
     url(r'^plots/(?P<id>\d+)/edit/$', views.plots_edit, name='plots_edit'),
 
     path(r'reports/', views.spreadsheets, name='reports'),
-    path(r'chartpdf/', views.chart_pdf),
 ]

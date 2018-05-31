@@ -18,6 +18,9 @@ class Spreadsheet(models.Model):
 			models.Index(fields=['user']),
 		]	
 
+	def __str__(self):
+		return self.spreadsheet_name
+
 	@classmethod
 	def create(cls, user):
 		spreadsheets_count = Spreadsheet.objects.filter(user__id = user.id).count()
