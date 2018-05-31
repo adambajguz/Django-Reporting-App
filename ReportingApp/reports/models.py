@@ -152,11 +152,14 @@ class Plot(models.Model):
 	)
 
 	user = models.ForeignKey(User, unique=False, on_delete=models.CASCADE)
+	
+	spreadsheet = models.ForeignKey(Spreadsheet, on_delete=models.CASCADE)
 
 	plot_name = models.CharField(max_length=255)
 	plot_creation_date = models.DateField(auto_now_add=True, editable=False)
 	plot_last_modification = models.DateTimeField(auto_now=True)
 	plot_type = models.CharField(max_length=1, choices=PLOT_TYPES)
+
 
 	@classmethod
 	def create(cls, user):

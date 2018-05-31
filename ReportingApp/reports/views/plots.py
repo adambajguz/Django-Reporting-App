@@ -39,6 +39,8 @@ def plots_edit(request, **kwargs):
     plot_form = PlotForm(request.user, request.POST or None,
         initial={
             'plot_name': plot_to_edit.plot_name,
+            'plot_type': plot_to_edit.plot_type,
+            'spreadsheet': plot_to_edit.spreadsheet,
         }
     )
 
@@ -46,7 +48,11 @@ def plots_edit(request, **kwargs):
             height = 600,
             width = 800,
             explicit_size = True,
+            title = "Title"
         )
+
+    columns = Column.objects.filter(spreadsheet=plot_to_edit.spreadsheet)
+    actual_plot.set_data(columns)
 
     if request.method == 'POST':
         if plot_form.is_valid():
@@ -59,6 +65,7 @@ def plots_edit(request, **kwargs):
         for attr, value in new_data.items():
             # print('{} = {}'.format(attr, value))
             setattr(plot_to_edit, attr, value)
+
         plot_to_edit.save()
 
 

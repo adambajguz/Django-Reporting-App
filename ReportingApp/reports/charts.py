@@ -2,32 +2,41 @@ import pygal
 from pygal.style import DefaultStyle
 from reports.models import Column
 
+from django.db.models import FloatField
+from django.db.models.functions import Cast
+
 class BarChart():
 
     def __init__(self, **kwargs):
-        self.chart = pygal.Bar(**kwargs)
-        self.chart.title = 'Amount of Fruits'
-        self.chart.style = DefaultStyle
+        self.data = {}
 
+        self.chart = pygal.Pyramid(**kwargs)
+        self.chart.style = DefaultStyle(tooltip_font_size = 12)
+        self.chart.legend_at_bottom=True
+        self.chart.human_readable=True
 
-    def get_data(self):
-        '''
-        Query the db for chart data, pack them into a dict and return it.
-        '''
-        data = {}
-        for fruit in Column.objects.all():
-            data[fruit.column_name] = fruit.spreadsheet.id
-        return data
+    def set_data(self, columns):
+        for column in columns:
+            cells = column.cells.all()
+            cells_count = cells.count()
+            
+            self.chart.x_labels = map(str, range(1, cells_count+1))
+
+            cells_contents = cells.values('contents').annotate(as_float=Cast('contents', FloatField()))
+            cells_float = cells_contents.values_list('as_float', flat=True)
+
+            self.chart.add(column.column_name, cells_float)
 
     def generate(self):
-        # Get chart data
-        chart_data = self.get_data()
+        # # Get chart data
+        # chart_data = self.get_data()
 
-        # Add data to chart
-        for key, value in chart_data.items():
-            self.chart.add(key, value)
+        # # Add data to chart
+        # for key, value in chart_data.items():
+        #     self.chart.add(key, value)
 
         # Return the rendered SVG
+
         
         return self.chart.render_data_uri() 
 
