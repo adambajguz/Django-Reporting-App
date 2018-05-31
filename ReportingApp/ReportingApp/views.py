@@ -92,17 +92,15 @@ def settings(request):
 
     if request.method == 'POST':
         print(request.POST)
-        if request.POST.get('submit') and not request.POST.get('submitPass') and user_details_form.is_valid():
+        if 'submit' in request.POST and user_details_form.is_valid():
             data = user_details_form.cleaned_data
             # Update `user` object
             for attr, value in new_data.items():
                 # print('{} = {}'.format(attr, value))
                 setattr(req_user, attr, value)
-            plot_to_edit.save()
-            
-            update_session_auth_hash(request, req_user)
+            req_user.save()
 
-        elif request.POST.get('submitPass') and not request.POST.get('submit') and user_password_form.is_valid():
+        elif 'submitPass' in request.POST and user_password_form.is_valid():
             data = user_password_form.cleaned_data
             new_password = data.get('new_password')
             req_user.set_password(new_password)

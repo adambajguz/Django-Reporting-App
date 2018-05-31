@@ -153,12 +153,15 @@ class Plot(models.Model):
 
 	user = models.ForeignKey(User, unique=False, on_delete=models.CASCADE)
 	
-	spreadsheet = models.ForeignKey(Spreadsheet, on_delete=models.CASCADE)
+	spreadsheet = models.ForeignKey(Spreadsheet, on_delete=models.CASCADE, null=True, blank=True)
 
 	plot_name = models.CharField(max_length=255)
 	plot_creation_date = models.DateField(auto_now_add=True, editable=False)
 	plot_last_modification = models.DateTimeField(auto_now=True)
 	plot_type = models.CharField(max_length=1, choices=PLOT_TYPES)
+
+	data_columns = models.TextField(default='')
+	grouping_columns = models.TextField(default='')
 
 
 	@classmethod
@@ -169,15 +172,15 @@ class Plot(models.Model):
 
 		return new_plot
 
-class PlotData(models.Model):
-	PLOTDATA_TYPES = (
-		('D', 'DataColumn'),
-		('G', 'GroupingColumn'),
-	)
+# class PlotData(models.Model):
+# 	PLOTDATA_TYPES = (
+# 		('D', 'DataColumn'),
+# 		('G', 'GroupingColumn'),
+# 	)
 
-	plot = models.ForeignKey(Plot, on_delete=models.CASCADE)
-	column = models.ForeignKey(Column, on_delete=models.CASCADE)
-	plot_type = models.CharField(max_length=1, choices=PLOTDATA_TYPES, default='D')
+# 	plot = models.ForeignKey(Plot, on_delete=models.CASCADE)
+# 	column = models.ForeignKey(Column, on_delete=models.CASCADE)
+# 	plot_type = models.CharField(max_length=1, choices=PLOTDATA_TYPES, default='D')
 
 class Report(models.Model):
 	user = models.ForeignKey(User, unique=False, on_delete=models.CASCADE)

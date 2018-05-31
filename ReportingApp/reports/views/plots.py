@@ -5,7 +5,7 @@ from django.db import transaction
 
 from reports.forms import PlotForm
 
-from reports.models import Spreadsheet, Column, Cell, Plot, PlotData
+from reports.models import Spreadsheet, Column, Cell, Plot
 from reports.charts import BarChart
 
 
@@ -44,6 +44,29 @@ def plots_edit(request, **kwargs):
         }
     )
 
+    if request.method == 'POST':
+        if request.POST.get('delete'):
+            return redirect('plots_delete', id=plot_id)
+
+        if plot_form.is_valid():
+            new_data = plot_form.cleaned_data
+            # Update `plot` object
+            for attr, value in new_data.items():
+                # print('{} = {}'.format(attr, value))
+                setattr(plot_to_edit, attr, value)
+
+
+        plot_to_edit.data_columns = str(request.POST.getlist('data_col')).strip('[]').replace("'", "")
+        plot_to_edit.grouping_columns = str(request.POST.getlist('grouping_col')).strip('[]').replace("'", "")
+
+        plot_to_edit.save()
+
+    print("Test",plot_to_edit.data_columns)
+
+    data_columns = [int(i) for i in plot_to_edit.data_columns.replace("'", "").split(', ')]
+    grouping_columns = [int(i) for i in plot_to_edit.grouping_columns.replace("'", "").split(', ')]
+    # data_columns = []
+    # grouping_columns = []
     actual_plot = BarChart(
             height = 600,
             width = 800,
@@ -52,26 +75,14 @@ def plots_edit(request, **kwargs):
         )
 
     columns = Column.objects.filter(spreadsheet=plot_to_edit.spreadsheet)
-    actual_plot.set_data(columns)
-
-    if request.method == 'POST':
-        if plot_form.is_valid():
-            new_data = plot_form.cleaned_data
-
-        if request.POST.get('delete'):
-            return redirect('plots_delete', id=plot_id)
-
-        # Update `plot` object
-        for attr, value in new_data.items():
-            # print('{} = {}'.format(attr, value))
-            setattr(plot_to_edit, attr, value)
-
-        plot_to_edit.save()
-
+    actual_plot.set_data(columns.filter(id__in=data_columns))
 
     return render(request, 'plots_edit.html', context={'plot': plot_to_edit,
                                                        'plot_form': plot_form,
-                                                       'plot_graphics': actual_plot.generate(),})
+                                                       'plot_graphics': actual_plot.generate(),
+                                                       'columns': columns,
+                                                       'data_columns': data_columns,
+                                                       'grouping_columns': grouping_columns})
 
 @login_required
 def plots_delete(request, **kwargs):

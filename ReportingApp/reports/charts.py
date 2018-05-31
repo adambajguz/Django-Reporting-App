@@ -10,10 +10,9 @@ class BarChart():
     def __init__(self, **kwargs):
         self.data = {}
 
-        self.chart = pygal.Pyramid(**kwargs)
-        self.chart.style = DefaultStyle(tooltip_font_size = 12)
+        self.chart = pygal.Bar(**kwargs)
+        self.chart.style = DefaultStyle(tooltip_font_size = 14)
         self.chart.legend_at_bottom=True
-        self.chart.human_readable=True
 
     def set_data(self, columns):
         for column in columns:

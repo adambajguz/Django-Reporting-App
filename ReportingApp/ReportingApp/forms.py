@@ -79,8 +79,9 @@ class UserDetailsChangeForm(forms.Form):
         return email
 
     def clean(self):
-        form_data = self.cleaned_data
-        return form_data
+        if 'submit' in self.data:
+            form_data = self.cleaned_data
+            return form_data
 
 class UserPasswordChangeForm(forms.Form):
     old_password = forms.CharField(max_length=150,
@@ -107,8 +108,9 @@ class UserPasswordChangeForm(forms.Form):
         return valid
 
     def clean(self):
-        form_data = self.cleaned_data
-        if form_data['new_password'] != form_data['repeat_new_password']:
-            self.add_error('repeat_new_password', "Password does not match")
-            # raise ValidationError("Passwords does not match")
-        return form_data
+        if 'submitPass' in self.data:
+            form_data = self.cleaned_data
+            if form_data['new_password'] != form_data['repeat_new_password']:
+                self.add_error('repeat_new_password', "Password does not match")
+                # raise ValidationError("Passwords does not match")
+            return form_data
