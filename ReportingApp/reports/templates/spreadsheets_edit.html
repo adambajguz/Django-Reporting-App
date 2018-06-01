@@ -55,6 +55,7 @@
 
 		<div class="uk-overflow-container">
 			<table class="uk-table uk-table-hover uk-table-striped uk-table-condensed ">
+				{% if spreadsheet.column_number > 0%}
 				<thead>
 					<tr>
 						<th class="uk-text-bold"><span class="uk-float-right">No.</span></th>
@@ -93,6 +94,9 @@
 					</tr>
 					{% endfor %}
 				</tbody>
+				{% else %}
+				<caption>Your spreadsheet is empty!</caption>
+				{% endif %}
 			</table>
 		</div>
 </div>
