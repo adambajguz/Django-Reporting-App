@@ -9,6 +9,9 @@ urlpatterns = [
     url(r'^spreadsheets/(?P<id>\d+)/delete/$', views.spreadsheets_delete, name='spreadsheets_delete'),
     url(r'^spreadsheets/(?P<id>\d+)/edit/$', views.spreadsheets_edit, name='spreadsheets_edit'),
     url(r'^spreadsheets/(?P<id>\d+)/pdf/$', views.spreadsheets_pdf, name='spreadsheets_pdf'),
+    url(r'^spreadsheets/(?P<id>\d+)/edit/column/(?P<cid>\d+)/delete$', views.spreadsheets_column_delete, name='spreadsheets_column_delete'),
+    url(r'^spreadsheets/(?P<id>\d+)/edit/row/(?P<rid>\d+)/delete$', views.spreadsheets_row_delete, name='spreadsheets_row_delete'),
+
 
     path(r'plots/', views.plots, name='plots'),
     url(r'^plots/add/$', views.plots_add),

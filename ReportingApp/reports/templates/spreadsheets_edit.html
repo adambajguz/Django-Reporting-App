@@ -58,9 +58,16 @@
 				<thead>
 					<tr>
 						<th class="uk-text-bold"><span class="uk-float-right">No.</span></th>
+						<th class="uk-text-bold"><span class="uk-float-right"><i class="uk-icon-trash"></i></span></th>
+
 						{% for current_column in columns %}
 						<th class="uk-text-bold">
 							<input type="text" style="min-width: 150px;" name="header_C{{ forloop.counter }}" class="uk-width-1-1" value="{{current_column.column_name}}">
+						</th>
+						<th style="padding-left: 0; padding-bottom: 12px;">
+							<a class="uk-button uk-button-mini" href="{% url 'spreadsheets_column_delete' id=spreadsheet.id cid=current_column.id %}">
+								<i class="uk-icon-remove"></i>
+							</a>
 						</th>
 						{% endfor %}
 					</tr>
@@ -72,9 +79,14 @@
 						<td>
 							<strong class="uk-float-right">{{forloop.counter}}</strong>
 						</td>
+						<td style="padding-right: 0; padding-bottom: 12px;">
+							<a class="uk-button uk-button-mini" href="{% url 'spreadsheets_row_delete' id=spreadsheet.id rid=it %}">
+								<i class="uk-icon-remove"></i>
+							</a>
+						</td>
 
 						{% for current_column in columns %}
-						<td>
+						<td colspan="2">
 							<input type="text" style="min-width: 150px;" name="cells_C{{ forloop.counter }}" class="uk-width-1-1" value="{{ rows | index:forloop.counter0 | index:it }}">
 						</td>
 						{% endfor %}

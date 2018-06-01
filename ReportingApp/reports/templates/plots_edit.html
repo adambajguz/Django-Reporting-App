@@ -41,7 +41,10 @@
 		<p class="uk-panel-title">Data columns:</p>
 		{% for column in columns %}
 		<div class="uk-form-row">
-			<input type="checkbox" name="data_col" value="{{ column.id }}" {% if column.id in data_columns %}checked{% endif %} >{{ column.column_name }}</input>
+			<label>
+				<input type="checkbox" name="data_col" value="{{ column.id }}" {% if column.id in data_columns %}checked{% endif %}>
+				{{ column.column_name }}
+			</label>
 		</div>
 		{% endfor %}
 	</div>
@@ -54,7 +57,10 @@
 
 		{% for column in columns %}
 		<div class="uk-form-row">
-			<input type="checkbox" name="grouping_col" value="{{ column.id }}" {% if column.id in grouping_columns %}checked{% endif %}>{{ column.column_name }}</input>
+			<label>
+				<input type="checkbox" name="grouping_col" value="{{ column.id }}" {% if column.id in grouping_columns %}checked{% endif %}>
+				{{ column.column_name }}
+			</label>
 		</div>
 		{% endfor %}
 	</div>

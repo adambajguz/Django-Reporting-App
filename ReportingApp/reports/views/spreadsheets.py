@@ -132,13 +132,19 @@ def spreadsheets_pdf(request, **kwargs):
     columns = Column.objects.filter(spreadsheet__id = spreadsheet_to_edit.id)
 
     rows = []
+    rows_ids = []
+
     for current_column in columns:
         cells = current_column.cells.all()
         rows.append(cells.values_list('contents', flat=True))
+        rows_ids.append(cells.values_list('id', flat=True))
+
+
+    
 
     return PdfRender.render('spreadsheets_pdf.html', params={'spreadsheet': spreadsheet_to_edit,
                                                               'columns': columns,
-                                                              'num_rows': range(0, spreadsheet_to_edit.row_number), 'rows': rows})
+                                                              'num_rows': range(0, spreadsheet_to_edit.row_number), 'rows': rows, 'rows_ids': rows_ids,})
 
 @login_required
 def spreadsheets_delete(request, **kwargs):
@@ -164,3 +170,69 @@ def spreadsheets_delete(request, **kwargs):
             return redirect('spreadsheets')
 
     return render(request, 'spreadsheet_delete.html', context={'spreadsheet_name': spreadsheet_to_delete.spreadsheet_name},)
+
+@login_required
+def spreadsheets_column_delete(request, **kwargs):
+    spreadsheet_id = kwargs.get('id')
+    column_id = kwargs.get('cid')
+
+    # Get current user's spreadsheets
+    spreadsheets = request.user.spreadsheet_set.all()
+    # Check if the `spreadsheet_id` is correct
+    try:
+        source_spreadsheets = spreadsheets.get(id=spreadsheet_id)
+    except:
+        return render(request, 'error_page.html', context={'error_message': "No spreadsheet with id:" + str(spreadsheet_id) + " was found!"})
+
+    # Check if the `column_id` is correct
+    try:
+        column_to_delete = source_spreadsheets.column_set.get(id=column_id)
+    except:
+        return render(request, 'error_page.html', context={'error_message': "No column with id:" + str(column_id) + 
+                                                                            " was found in spreadsheet '" + source_spreadsheets.spreadsheet_name + "'!"})
+
+    if request.method == 'POST':
+        # Check if user clicked on `CANCEL`
+        if request.POST.get('cancel'):
+            # Go back to spreadsheet list
+            return redirect('spreadsheets_edit', id=spreadsheet_id)
+        elif request.POST.get('delete'):
+            # Delete spreadsheet by its ID
+            column_to_delete.delete()
+            # Go back to spreadsheet list
+            return redirect('spreadsheets_edit', id=spreadsheet_id)
+
+    return render(request, 'spreadsheet_column_delete.html', context={'spreadsheet_name': source_spreadsheets.spreadsheet_name, 'column_name': column_to_delete.column_name},)
+
+@login_required
+def spreadsheets_row_delete(request, **kwargs):
+    spreadsheet_id = kwargs.get('id')
+    row_id = kwargs.get('rid')
+
+    # Get current user's spreadsheets
+    spreadsheets = request.user.spreadsheet_set.all()
+    # Check if the `spreadsheet_id` is correct
+    try:
+        source_spreadsheets = spreadsheets.get(id=spreadsheet_id)
+    except:
+        return render(request, 'error_page.html', context={'error_message': "No spreadsheet with id:" + str(spreadsheet_id) + " was found!"})
+
+    # Check if the `coumn_id` is correct
+    try:
+        column_to_delete = source_spreadsheets.get(id=column_id)
+    except:
+        return render(request, 'error_page.html', context={'error_message': "No row with row_number:" + str(row_id) +
+                                                                            " was found in spreadsheet '" + source_spreadsheets.spreadsheet_name + "'!"})
+
+    if request.method == 'POST':
+        # Check if user clicked on `CANCEL`
+        if request.POST.get('cancel'):
+            # Go back to spreadsheet list
+            return redirect('spreadsheets_edit', id=spreadsheet_id)
+        elif request.POST.get('delete'):
+            # Delete spreadsheet by its ID
+            column_to_delete.delete()
+            # Go back to spreadsheet list
+            return redirect('spreadsheets_edit', id=spreadsheet_id)
+
+    return render(request, 'spreadsheet_column_delete.html', context={'spreadsheet_name': source_spreadsheets.spreadsheet_name, 'column_name': column_to_delete.column_name},)
