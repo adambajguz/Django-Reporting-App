@@ -1,7 +1,8 @@
-{% extends "./base/base_plots.html" %} 
+{% extends extend %} 
 
 {% block breadcrumbs %}
-	{{ block.super }} » Delete Plot
+	{{ block.super }} » {{ breadcrumb|safe }}
+
 {% endblock %}
 
 {% block content %}
@@ -9,7 +10,7 @@
 <div class="uk-width-1-1">
 	<div class="uk-width-medium-1-2 uk-container-center">
 		<div class="uk-alert uk-alert-warning">
-			<p>Are you sure you want to delete <strong>'{{ plot_name }}'</strong> plot?</p>
+			<p>Are you sure you want to delete {{ delete_text|safe }}?</p>
 		</div>
 
 		<form class="uk-form uk-form-stacked" action="" method="post">

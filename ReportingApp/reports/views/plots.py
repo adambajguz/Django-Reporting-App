@@ -107,4 +107,6 @@ def plots_delete(request, **kwargs):
             # Go back to spreadsheet list
             return redirect('plots')
 
-    return render(request, 'plot_delete.html', context={'plot_name': plot_to_delete.plot_name},)
+    return render(request, 'delete_page.html', context={'extend': "./base/base_plots.html",
+                                                        'breadcrumb': "Delete plot",
+                                                        'delete_text': "<strong>'"+ plot_to_delete.plot_name +"'</strong> plot"},)

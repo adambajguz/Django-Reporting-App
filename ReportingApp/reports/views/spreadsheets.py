@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
+from django.urls import reverse
 
 from reports.models import Spreadsheet, Column, Cell
 from reports.forms import SpreadsheetForm
@@ -165,7 +166,9 @@ def spreadsheets_delete(request, **kwargs):
             # Go back to spreadsheet list
             return redirect('spreadsheets')
 
-    return render(request, 'spreadsheet_delete.html', context={'spreadsheet_name': spreadsheet_to_delete.spreadsheet_name},)
+    return render(request, 'delete_page.html', context={'extend': "./base/base_spreadsheets.html",
+                                                        'breadcrumb': "Delete spreadsheet",
+                                                        'delete_text': "<strong>'"+ spreadsheet_to_delete.spreadsheet_name +"'</strong> spreadsheet"},)
 
 @login_required
 def spreadsheets_column_delete(request, **kwargs):
@@ -203,7 +206,11 @@ def spreadsheets_column_delete(request, **kwargs):
             # Go back to spreadsheet list
             return redirect('spreadsheets_edit', id=spreadsheet_id)
 
-    return render(request, 'spreadsheet_column_delete.html', context={'spreadsheet_name': source_spreadsheets.spreadsheet_name, 'column_name': column_to_delete.column_name},)
+    return render(request, 'delete_page.html', context={'extend': "./base/base_spreadsheets.html",
+                                                        'breadcrumb': "<a href=\"" + reverse('spreadsheets_edit', kwargs={'id': spreadsheet_id}) + "\"\>Edit spreadsheets</a> » Delete column",
+                                                        'delete_text': "<strong>'" + column_to_delete.column_name +
+                                                                       "'</strong> column form <strong>'" + source_spreadsheets.spreadsheet_name +
+                                                                       "'</strong> spreadsheet"},)
 
 @login_required
 def spreadsheets_row_delete(request, **kwargs):
@@ -246,4 +253,8 @@ def spreadsheets_row_delete(request, **kwargs):
             # Go back to spreadsheet list
             return redirect('spreadsheets_edit', id=spreadsheet_id)
 
-    return render(request, 'spreadsheet_row_delete.html', context={'spreadsheet_name': source_spreadsheets.spreadsheet_name, 'row_number': row_id},)
+    return render(request, 'delete_page.html', context={'extend': "./base/base_spreadsheets.html",
+                                                        'breadcrumb': "<a href=\"" + reverse('spreadsheets_edit', kwargs={'id': spreadsheet_id}) + "\"\>Edit spreadsheets</a> » Delete row",
+                                                        'delete_text': "row number <strong>'" + row_id +
+                                                                       "'</strong> form <strong>'" + source_spreadsheets.spreadsheet_name +
+                                                                       "'</strong> spreadsheet"},)
