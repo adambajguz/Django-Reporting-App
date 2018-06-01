@@ -12,11 +12,11 @@
 			<form method="post" class="uk-form uk-form-stacked" action="{% url 'settings' %}">
 				{% csrf_token %}
 				<legend>Change account details</legend>
-		
+
 				{% if details_form.non_field_errors %}
 				<div class="uk-alert uk-alert-danger">{{ details_form.non_field_errors }}</div>
 				{% endif %}
-		
+
 				{% if details_form.hidden_fields %}
 				<div class="uk-alert uk-alert-danger">
 				{% for hidden_field in details_form.hidden_fields %}
@@ -25,7 +25,7 @@
 				{% endfor %}
 				</div>
 				{% endif %}
-			
+
 		
 				{% for field in details_form.visible_fields %}
 				<div class="uk-form-row">

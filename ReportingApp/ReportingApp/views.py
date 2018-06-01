@@ -72,8 +72,9 @@ def profile(request):
 @login_required
 def settings(request):
     req_user = request.user
-
-    user_details_form = UserDetailsChangeForm(request.POST or None,
+    
+    # if request.method == 'GET':
+    user_details_form = UserDetailsChangeForm(
         initial={
             'first_name': req_user.first_name,
             'last_name': req_user.last_name,
@@ -81,33 +82,35 @@ def settings(request):
             'email': req_user.email,
         }
     )
-
-    user_password_form = UserPasswordChangeForm(request.POST or None, user=request.user,
-        initial={
-            'old_password': '',
-            'new_password': '',
-            'repeat_new_password': '',
-        }
-    )
+    user_password_form = UserPasswordChangeForm(user=req_user)
 
     if request.method == 'POST':
-        print(request.POST)
-        if 'submit' in request.POST and user_details_form.is_valid():
-            data = user_details_form.cleaned_data
-            # Update `user` object
-            for attr, value in new_data.items():
-                # print('{} = {}'.format(attr, value))
-                setattr(req_user, attr, value)
-            req_user.save()
+        if 'submit' in request.POST:
+            user_details_form = UserDetailsChangeForm(request.POST)            
+            if user_details_form.is_valid():
 
-        elif 'submitPass' in request.POST and user_password_form.is_valid():
-            data = user_password_form.cleaned_data
-            new_password = data.get('new_password')
-            req_user.set_password(new_password)
-            update_session_auth_hash(request, req_user)
+                data = user_details_form.cleaned_data
+                # Update `user` object
+                for attr, value in data.items():
+                    # print('{} = {}'.format(attr, value))
+                    setattr(req_user, attr, value)
+                req_user.save()
 
-            login_user = authenticate(request, username=req_user.username, password=new_password)
-            login(request, login_user)
+        elif 'submitPass' in request.POST:
+            user_password_form = UserPasswordChangeForm(request.POST, user=req_user)
+            if user_password_form.is_valid():
+                data = user_password_form.cleaned_data
+                new_password = data.get('new_password')
+                req_user.set_password(new_password)
+                req_user.save()
+                # update_session_auth_hash(request, req_user)
+
+                user = authenticate(username=req_user.username, password=new_password)
+                login(request, user)
+                # if user is not None and user.is_active:
+                #     login(request, user)
 
     return render(request, 'account/settings.html', context={'details_form': user_details_form, 'password_form': user_password_form})
 
+# def change_Account_details(request):
+#     form = 
