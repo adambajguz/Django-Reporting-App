@@ -1,7 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.db import transaction
 
 from reports.forms import PlotForm
 
@@ -11,7 +9,7 @@ from reports.charts import BarChart
 
 @login_required
 def plots(request):
-    # Filter spreadsheets by currenly logon user
+    # Filter spreadshplotseets by currenly logon user
     plots = Plot.objects.filter(user__id = request.user.id)
     num_plots = plots.count()
 
@@ -107,6 +105,6 @@ def plots_delete(request, **kwargs):
             # Go back to spreadsheet list
             return redirect('plots')
 
-    return render(request, 'delete_page.html', context={'extend': "./base/base_plots.html",
+    return render(request, 'delete_page.html', context={'extend': "base_plots.html",
                                                         'breadcrumb': "Delete plot",
                                                         'delete_text': "<strong>'"+ plot_to_delete.plot_name +"'</strong> plot"},)

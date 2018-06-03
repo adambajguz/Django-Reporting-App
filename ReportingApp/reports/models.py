@@ -186,7 +186,16 @@ class Report(models.Model):
 	user = models.ForeignKey(User, unique=False, on_delete=models.CASCADE)
 	report_name = models.CharField(max_length=255)
 	report_creation_date = models.DateField(auto_now_add=True, editable=False)
-	report_last_modification = models.DateTimeField(auto_now_add=True)
+	report_last_modification = models.DateTimeField(auto_now=True)
+
+	@classmethod
+	def create(cls, user):
+		reports_count = Report.objects.filter(user__id = user.id).count()
+
+		new_report = Report.objects.create(report_name='New Report #' + str(reports_count + 1), user=user)
+
+		return new_report
+
 
 class ReportElementText(models.Model):
 	report = models.ForeignKey(Report, on_delete=models.CASCADE)

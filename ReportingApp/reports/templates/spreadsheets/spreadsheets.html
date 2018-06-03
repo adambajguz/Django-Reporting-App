@@ -1,4 +1,4 @@
-{% extends "./base/base_quickactions.html" %}
+{% extends "base_quickactions.html" %}
 {% load tz %}
 
 {% block breadcrumbs %}
@@ -11,15 +11,15 @@
 	<dl class="uk-description-list-line">
 		{% for spreadsheet in spreadsheets|dictsortreversed:"spreadsheet_last_modification"|slice:"0:3" %}
 		<dt>
-			<a class="uk-link-muted" href="{{ spreadsheet.id }}/edit/"><em>{{ spreadsheet.spreadsheet_name }}</em></a>
+			<a class="uk-link-muted" href="{% url 'spreadsheets_edit' id=spreadsheet.id %}"><em>{{ spreadsheet.spreadsheet_name }}</em></a>
 		</dt>
 		<dd>
-			<p>Modified: {{ spreadsheet.last_modification_days_ago }}</p>
+			<p>Modified: {{ spreadsheet.spreadsheet_last_modification|timesince }}</p>
 		</dd>
 		{% endfor %}
 	</ul>
 	<hr style="color: #CCE6FF; border-color: #CCE6FF; background-color: #CCE6FF;">
-	<a class="uk-button uk-button-primary" href="add/"><i class="uk-icon-plus"></i> Create spreadsheet</a>
+	<a class="uk-button uk-button-primary" href="{% url 'spreadsheets_add' %}"><i class="uk-icon-plus"></i> Create spreadsheet</a>
 {% endblock %}
 
 
@@ -43,19 +43,19 @@
 		<tbody>
 			{% for spreadsheet in spreadsheets %}
 			<tr>
-				<td class="uk-width-2-10 uk-text-bold"><a class="uk-link-muted" href="{{ spreadsheet.id }}/edit/">{{ spreadsheet.spreadsheet_name }}</a></td>
+				<td class="uk-width-2-10 uk-text-bold"><a class="uk-link-muted" href="{% url 'spreadsheets_edit' id=spreadsheet.id %}">{{ spreadsheet.spreadsheet_name }}</a></td>
 				<td class="uk-width-4-10" style="max-width: 50%;"><p<small>{{ spreadsheet.spreadsheet_description | truncatewords:32 }}</small></p></td>
 				<td class="uk-width-1-10">{{ spreadsheet.spreadsheet_creation_date }}</td>
 				<td class="uk-width-1-10">
 					<i data-uk-tooltip="{delay:250}" title="{{ spreadsheet.spreadsheet_last_modification|localtime }}">
-						{{spreadsheet.last_modification_days_ago}}
+						{{spreadsheet.spreadsheet_last_modification|timesince}} ago
 					</i>
 				</td>
 				<td class="uk-width-2-10">
-					<a class="uk-button uk-button-success uk-button-mini" href="{{ spreadsheet.id }}/edit/">
+					<a class="uk-button uk-button-success uk-button-mini" href="{% url 'spreadsheets_edit' id=spreadsheet.id %}">
 						<i class="uk-icon-pencil"></i> Edit
 					</a>
-					<a class="uk-margin-small-left uk-button uk-button-danger uk-button-mini " href="{{ spreadsheet.id }}/delete/">
+					<a class="uk-margin-small-left uk-button uk-button-danger uk-button-mini " href="{% url 'spreadsheets_delete' id=spreadsheet.id %}">
 						<i class="uk-icon-trash"></i> Delete
 					</a>
 				</td>

@@ -1,0 +1,67 @@
+{% extends "base_quickactions.html" %}
+{% load tz %}
+
+{% block breadcrumbs %}
+	<a href="{% url 'home' %}">{{ block.super }}</a> » Reports
+{% endblock %}
+
+
+{% block quick_actions %}
+	<h4>Recent reports:</h4>
+	<dl class="uk-description-list-line">
+		{% for report in reports|dictsortreversed:"report_last_modification"|slice:"0:3" %}
+		<dt>
+			<a class="uk-link-muted" href="{% url 'reports_edit' id=report.id %}"><em>{{ report.report_name }}</em></a>
+		</dt>
+		<dd>
+			<p>Modified: {{ report.report_last_modification|timesince }}</p>
+		</dd>
+		{% endfor %}
+	</ul>
+	<hr style="color: #CCE6FF; border-color: #CCE6FF; background-color: #CCE6FF;">
+	<a class="uk-button uk-button-primary" href="{% url 'reports_add' %}"><i class="uk-icon-plus"></i> Create report</a>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="uk-width-1-1">
+	{% if num_reports == 0%}
+		<i><small style="color: #444;">No reports found</small></i>
+	{% else %}
+	<table class="uk-table uk-table-hover uk-table-striped">
+		<caption>You have {{ num_reports }} report{% if num_reports != 1%}s{% endif %}</caption>
+		<thead>
+			<tr>
+				<th>NAME</th>
+				<th>CREATED</th>
+				<th>MODIFIED</th>
+				<th>ACTIONS</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for report in reports %}
+			<tr>
+				<td class="uk-width-2-5 uk-text-bold"><a class="uk-link-muted" href="{% url 'reports_edit' id=report.id %}">{{ report.report_name }}</a></td>
+				<td class="uk-width-1-5">{{ report.report_creation_date }}</td>
+				<td class="uk-width-1-5">
+					<i data-uk-tooltip="{delay:250}" title="{{ report.report_last_modification|localtime }}">
+						{{report.report_last_modification|timesince}} ago
+					</i>
+				</td>
+				<td class="uk-width-2-5">
+					<a class="uk-button uk-button-success uk-button-mini" href="{% url 'reports_edit' id=report.id %}">
+						<i class="uk-icon-pencil"></i> Edit
+					</a>
+					<a class="uk-margin-small-left uk-button uk-button-danger uk-button-mini " href="{% url 'reports_delete' id=report.id %}">
+						<i class="uk-icon-trash"></i> Delete
+					</a>
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	{% endif %}
+</div>
+
+{% endblock %}

@@ -51,10 +51,19 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'ReportingApp.urls'
 
+REPORTS_TEMPLES_PATH = os.path.join(BASE_DIR, 'reports', 'templates')
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['./templates'],
+        'DIRS': [
+            './templates',
+            REPORTS_TEMPLES_PATH,
+            os.path.join(REPORTS_TEMPLES_PATH, 'base'),
+            os.path.join(REPORTS_TEMPLES_PATH, 'spreadsheets'),
+            os.path.join(REPORTS_TEMPLES_PATH, 'plots'),
+            os.path.join(REPORTS_TEMPLES_PATH, 'reports'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

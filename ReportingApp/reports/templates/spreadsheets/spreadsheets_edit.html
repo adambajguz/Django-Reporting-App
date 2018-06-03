@@ -1,4 +1,4 @@
-{% extends "./base/base_spreadsheets_quickactions.html" %}
+{% extends "base_spreadsheets_quickactions.html" %}
 
 {% load custom_tags %}
 {% load widget_tweeks %}
@@ -58,16 +58,16 @@
 				{% if spreadsheet.column_number > 0%}
 				<thead>
 					<tr>
-						<th class="uk-text-bold"><span class="uk-float-right">No.</span></th>
-						<th class="uk-text-bold"><span class="uk-float-right"><i class="uk-icon-trash"></i></span></th>
+						<th class="uk-text-bold" colspan="2"><span>No.</span></th>
 
 						{% for current_column in columns %}
 						<th class="uk-text-bold">
-							<input type="text" style="min-width: 150px;" name="header_C{{ forloop.counter }}" class="uk-width-1-1" value="{{current_column.column_name}}">
+							<input type="text" style="min-width: 150px;" name="header_C{{ forloop.counter }}" 
+								class="uk-width-1-1 uk-form-blank" value="{{current_column.column_name}}">
 						</th>
 						<th style="padding-left: 0; padding-bottom: 12px;">
-							<a class="uk-button uk-button-mini" href="{% url 'spreadsheets_column_delete' id=spreadsheet.id cid=current_column.id %}">
-								<i class="uk-icon-remove"></i>
+							<a class="uk-button uk-button-mini uk-border-circle" href="{% url 'spreadsheets_column_delete' id=spreadsheet.id cid=current_column.id %}">
+								<em><i class="uk-icon-remove"></i></em>
 							</a>
 						</th>
 						{% endfor %}
@@ -80,15 +80,16 @@
 						<td>
 							<strong class="uk-float-right">{{forloop.counter}}</strong>
 						</td>
-						<td style="padding-right: 0; padding-bottom: 12px;">
-							<a class="uk-button uk-button-mini" href="{% url 'spreadsheets_row_delete' id=spreadsheet.id rid=it %}">
-								<i class="uk-icon-remove"></i>
-							</a>
+						<td style="padding-right: 0; padding-bottom: 0px; margin-right: 0;">
+							<a class="uk-button uk-button-mini uk-border-circle" href="{% url 'spreadsheets_row_delete' id=spreadsheet.id rid=it %}">
+								<em><i class="uk-icon-remove"></i></em>
+							</a>	
 						</td>
 
 						{% for current_column in columns %}
 						<td colspan="2">
-							<input type="text" style="min-width: 150px;" name="cells_C{{ forloop.counter }}" class="uk-width-1-1" value="{{ rows | index:forloop.counter0 | index:it }}">
+							<input type="text" style="min-width: 150px;" name="cells_C{{ forloop.counter }}"
+								 class="uk-width-1-1 uk-form-blank" value="{{ rows | index:forloop.counter0 | index:it }}">
 						</td>
 						{% endfor %}
 					</tr>

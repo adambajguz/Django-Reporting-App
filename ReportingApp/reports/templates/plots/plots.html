@@ -1,4 +1,4 @@
-{% extends "./base/base_quickactions.html" %}
+{% extends "base_quickactions.html" %}
 {% load tz %}
 
 {% block breadcrumbs %}
@@ -11,15 +11,15 @@
 	<dl class="uk-description-list-line">
 		{% for plot in plots|dictsortreversed:"plot_last_modification"|slice:"0:3" %}
 		<dt>
-			<a class="uk-link-muted" href="{{ plot.id }}/edit/"><em>{{ plot.plot_name }}</em></a>
+			<a class="uk-link-muted" href="{% url 'plots_edit' id=plot.id %}"><em>{{ plot.plot_name }}</em></a>
 		</dt>
 		<dd>
-			<p>Modified: {{ plot.last_modification_days_ago }}</p>
+			<p>Modified: {{ plot.plot_last_modification|timesince }}</p>
 		</dd>
 		{% endfor %}
 	</ul>
 	<hr style="color: #CCE6FF; border-color: #CCE6FF; background-color: #CCE6FF;">
-	<a class="uk-button uk-button-primary" href="add/"><i class="uk-icon-plus"></i> Create plot</a>
+	<a class="uk-button uk-button-primary" href="{% url 'plots_add' %}"><i class="uk-icon-plus"></i> Create plot</a>
 {% endblock %}
 
 
@@ -42,18 +42,18 @@
 		<tbody>
 			{% for plot in plots %}
 			<tr>
-				<td class="uk-width-2-5 uk-text-bold"><a class="uk-link-muted" href="{{ plot.id }}/edit/">{{ plot.plot_name }}</a></td>
+				<td class="uk-width-2-5 uk-text-bold"><a class="uk-link-muted" href="{% url 'plots_edit' id=plot.id %}">{{ plot.plot_name }}</a></td>
 				<td class="uk-width-1-5">{{ plot.plot_creation_date }}</td>
 				<td class="uk-width-1-5">
 					<i data-uk-tooltip="{delay:250}" title="{{ plot.plot_last_modification|localtime }}">
-						{{plot.last_modification_days_ago}}
+						{{plot.plot_last_modification|timesince}} ago
 					</i>
 				</td>
 				<td class="uk-width-2-5">
-					<a class="uk-button uk-button-success uk-button-mini" href="{{ plot.id }}/edit/">
+					<a class="uk-button uk-button-success uk-button-mini" href="{% url 'plots_edit' id=plot.id %}">
 						<i class="uk-icon-pencil"></i> Edit
 					</a>
-					<a class="uk-margin-small-left uk-button uk-button-danger uk-button-mini " href="{{ plot.id }}/delete/">
+					<a class="uk-margin-small-left uk-button uk-button-danger uk-button-mini " href="{% url 'plots_delete' id=plot.id %}">
 						<i class="uk-icon-trash"></i> Delete
 					</a>
 				</td>
