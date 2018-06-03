@@ -44,9 +44,9 @@
 			{% for spreadsheet in spreadsheets %}
 			<tr>
 				<td class="uk-width-2-10 uk-text-bold"><a class="uk-link-muted" href="{% url 'spreadsheets_edit' id=spreadsheet.id %}">{{ spreadsheet.spreadsheet_name }}</a></td>
-				<td class="uk-width-4-10" style="max-width: 50%;"><p<small>{{ spreadsheet.spreadsheet_description | truncatewords:32 }}</small></p></td>
+				<td class="uk-width-3-10" style="max-width: 50%;"><p<small>{{ spreadsheet.spreadsheet_description | truncatewords:32 }}</small></p></td>
 				<td class="uk-width-1-10">{{ spreadsheet.spreadsheet_creation_date }}</td>
-				<td class="uk-width-1-10">
+				<td class="uk-width-2-10">
 					<i data-uk-tooltip="{delay:250}" title="{{ spreadsheet.spreadsheet_last_modification|localtime }}">
 						{{spreadsheet.spreadsheet_last_modification|timesince}} ago
 					</i>

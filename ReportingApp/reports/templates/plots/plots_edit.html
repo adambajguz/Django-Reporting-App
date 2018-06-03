@@ -36,34 +36,27 @@
 	<p>Last modification: {{ plot.plot_last_modification }}</p>
 
 	<hr style="color: #CCE6FF; border-color: #CCE6FF; background-color: #CCE6FF;">
-	
-	<div class="uk-panel uk-panel-box" style="max-height: 120px; overflow-y: scroll;">
-		<p class="uk-panel-title">Data columns:</p>
-		{% for column in columns %}
-		<div class="uk-form-row">
-			<label>
-				<input type="checkbox" name="data_col" value="{{ column.id }}" {% if column.id in data_columns %}checked{% endif %}>
-				{{ column.column_name }}
-			</label>
-		</div>
-		{% endfor %}
+
+	<p>Columns properties:</p>
+	<div class="uk-panel uk-panel-box" style="max-height: 190px; overflow-y: scroll;">
+		<dl class="uk-description-list-line">
+			{% for column in columns %}
+				<dt><em>{{ column.column_name }}</em></dt>
+				<dd>
+					<b>Use as: </b>
+					<label>
+						<input type="checkbox" name="data_col" value="{{ column.id }}" {% if column.id in data_columns %}checked{% endif %}>
+						data source, 
+					</label>
+					<label>
+						<input type="checkbox" name="grouping_col" value="{{ column.id }}" {% if column.id in grouping_columns %}checked{% endif %}>
+						grouping
+					</label>
+				</dd>
+			{% endfor %}
+		</dl>
 	</div>
 
-
-	<hr style="color: #CCE6FF; border-color: #CCE6FF; background-color: #CCE6FF;">
-
-	<div class="uk-panel uk-panel-box" style="max-height: 120px; overflow-y: scroll;">
-		<p class="uk-panel-title">Grouping columns:</p>
-
-		{% for column in columns %}
-		<div class="uk-form-row">
-			<label>
-				<input type="checkbox" name="grouping_col" value="{{ column.id }}" {% if column.id in grouping_columns %}checked{% endif %}>
-				{{ column.column_name }}
-			</label>
-		</div>
-		{% endfor %}
-	</div>
 	<hr style="color: #CCE6FF; border-color: #CCE6FF; background-color: #CCE6FF;">
 
 	<button name="delete" value="Delete" class="uk-margin-bottom uk-button uk-button-danger"><i class="uk-icon-trash"></i> Delete plot</button>

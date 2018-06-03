@@ -3464,12 +3464,13 @@ input:not([type]).uk-form-large {
  * Blank form
  */
 .uk-form-blank {
-  border-color: transparent !important;
+  border-color: #ddd !important;
   border-style: dashed !important;
   background: none !important;
 }
 .uk-form-blank:focus {
-  border-color: #ddd !important;
+  border-color: #c7c7c7 !important;
+  background: rgba(204, 230, 255, 0.45) !important;
 }
 /* Size sub-modifiers
  ========================================================================== */

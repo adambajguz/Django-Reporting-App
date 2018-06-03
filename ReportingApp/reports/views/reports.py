@@ -30,7 +30,7 @@ def reports_edit(request, **kwargs):
     try:
         plot_to_edit = user_plots.get(id=plot_id)
     except:
-        return render(request, 'error_page.html', context={'error_message': "No plot with id:" + str(plot_id) + " was found!"})
+        return render(request, 'error_page.html', context={'error_message': "No report with id:" + str(plot_id) + " was found!"})
 
     plot_form = PlotForm(request.user, request.POST or None,
         initial={
