@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block cotainer_start %} 
+
 	<form class="uk-form" method="post" name="edit_form" action="{% url 'reports_edit' id=report.id %}">
 		{% csrf_token %}
 
@@ -77,7 +78,7 @@
 			{% endif %}
 
 			{% for element in report_element_formset %}
-				<div class="link-formset">
+				<div class="formset">
 					<div class="uk-form-row">
 						{% if element.element_name.errors %}
 							<div class="uk-alert uk-alert-danger">
@@ -87,7 +88,7 @@
 							</div>
 						{% endif %}
 						
-						<label class="uk-form-label" for="{{ element.element_name.name }}">{{ element.element_name.label_tag|safe }}</label>
+						<div class="uk-form-label" for="{{ element.element_name.name }}">{{ element.element_name.label_tag|safe }}</div>
 
 						<div class="uk-form-controls">
 							{{ element.element_name }}
@@ -103,7 +104,7 @@
 							</div>
 						{% endif %}
 
-						<label class="uk-form-label" for="{{ element.element_order.name }}">{{ element.element_order.label_tag|safe }}</label>
+						<div class="uk-form-label" for="{{ element.element_order.name }}">{{ element.element_order.label_tag|safe }}</div>
 
 						<div class="uk-form-controls">
 							{{ element.element_order }}
@@ -111,7 +112,7 @@
 					</div>
 
 					<div class="uk-form-row">
-						<label class="uk-form-label" for="{{ element.element_order.name }}">{{ element.element_order.label_tag|safe }}</label>
+						<div class="uk-form-label" for="{{ element.element_order.name }}">{{ element.element_order.label_tag|safe }}</div>
 
 						<div class="uk-form-controls">
 							{{ element.element_type }}
@@ -119,86 +120,76 @@
 					</div>
 
 					<div id="element-text">
-						<div id="element-text">
-							<div class="uk-form-row">
-								<label class="uk-form-label" for="{{ element.text.name }}">{{ element.text.label_tag|safe }}</label>
+						<div class="uk-form-row">
+							<div class="uk-form-label" for="{{ element.text.name }}">{{ element.text.label_tag|safe }}</div>
 
-								<div class="uk-form-controls">
-									{{ element.text }}
-								</div>
+							<div class="uk-form-controls">
+								{{ element.text }}
 							</div>
 						</div>
 					</div>
 
-					<div id="element-table-plot">
-						<div class="uk-form-row">
-							<label class="uk-form-label" for="{{ element.caption.name }}">{{ element.caption.label_tag|safe }}</label>
+					<div class="uk-form-row">
+						<div class="uk-form-label" for="{{ element.caption.name }}">{{ element.caption.label_tag|safe }}</div>
 
-							<div class="uk-form-controls">
-								{{ element.caption }}
-							</div>
+						<div class="uk-form-controls">
+							{{ element.caption }}
 						</div>
 					</div>
 
-					<div id="element-table">
-						<div class="uk-form-row">
-							<label class="uk-form-label" for="{{ element.style.name }}">{{ element.style.label_tag|safe }}</label>
+					<div class="uk-form-row">
+						<div class="uk-form-label" for="{{ element.style.name }}">{{ element.style.label_tag|safe }}</div>
 
-							<div class="uk-form-controls">
-								{{ element.style }}
-							</div>
+						<div class="uk-form-controls">
+							{{ element.style }}
 						</div>
-						
-						<div class="uk-form-row">
-							<label class="uk-form-label" for="{{ element.caption.name }}">{{ element.spreadsheet.label_tag|safe }}</label>
-	
-							<div class="uk-form-controls">
-								{{ element.spreadsheet }}
-							</div>
-						</div>
+					</div>
+					
+					<div class="uk-form-row">
+						<div class="uk-form-label" for="{{ element.caption.name }}">{{ element.spreadsheet.label_tag|safe }}</div>
 
-						<div class="uk-form-row">
-							<label class="uk-form-label" for="{{ element.columns.name }}">{{ element.columns.label_tag|safe }}</label>
-
-							<div class="uk-form-controls">
-								{{ element.columns }}
-							</div>
+						<div class="uk-form-controls">
+							{{ element.spreadsheet }}
 						</div>
 					</div>
 
-					<div id="element-plot">
-						<div class="uk-form-row">
-							<label class="uk-form-label" for="{{ element.plot.name }}">{{ element.plot.label_tag|safe }}</label>
+					<div class="uk-form-row">
+						<div class="uk-form-label" for="{{ element.columns.name }}">{{ element.columns.label_tag|safe }}</div>
 
-							<div class="uk-form-controls">
-								{{ element.plot }}
-							</div>
+						<div class="uk-form-controls">
+							{{ element.columns }}
 						</div>
 					</div>
 
-					<div id="element-report">
-						<div class="uk-form-row">
-							<label class="uk-form-label" for="{{ element.embedded_raport.name }}">{{ element.embedded_raport.label_tag|safe }}</label>
+					<div class="uk-form-row">
+						<div class="uk-form-label" for="{{ element.plot.name }}">{{ element.plot.label_tag|safe }}</div>
 
-							<div class="uk-form-controls">
-								{{ element.embedded_raport }}
-							</div>
+						<div class="uk-form-controls">
+							{{ element.plot }}
 						</div>
+					</div>
 
-						<div class="uk-form-row">
-							<label class="uk-form-label" for="{{ element.element_start.name }}">{{ element.element_start.label_tag|safe }}</label>
+					<div class="uk-form-row">
+						<div class="uk-form-label" for="{{ element.embedded_raport.name }}">{{ element.embedded_raport.label_tag|safe }}</div>
 
-							<div class="uk-form-controls">
-								{{ element.element_start }}
-							</div>
+						<div class="uk-form-controls">
+							{{ element.embedded_raport }}
 						</div>
+					</div>
 
-						<div class="uk-form-row">
-							<label class="uk-form-label" for="{{ element.element_end.name }}">{{ element.element_end.label_tag|safe }}</label>
+					<div class="uk-form-row">
+						<div class="uk-form-label" for="{{ element.element_start.name }}">{{ element.element_start.label_tag|safe }}</div>
 
-							<div class="uk-form-controls">
-								{{ element.element_end }}
-							</div>
+						<div class="uk-form-controls">
+							{{ element.element_start }}
+						</div>
+					</div>
+
+					<div class="uk-form-row">
+						<div class="uk-form-label" for="{{ element.element_end.name }}">{{ element.element_end.label_tag|safe }}</div>
+
+						<div class="uk-form-controls">
+							{{ element.element_end }}
 						</div>
 					</div>
 				</div>
@@ -209,48 +200,154 @@
 </div>
 
 <script>
-	$('.link-formset').formset({
-		addText: 'add link',
-		deleteText: 'remove'
+		/* Fire an event handler to the specified node. Event handlers can detect that the event was fired programatically
+		* by testing for a 'synthetic=true' property on the event object
+		* @param {HTMLNode} node The node to fire the event handler on.
+		* @param {String} eventName The name of the event without the "on" (e.g., "focus")
+		*/
+	   function fireEvent(node, eventName) {
+		   // Make sure we use the ownerDocument from the provided node to avoid cross-window problems
+		   var doc;
+		   if (node.ownerDocument) {
+			   doc = node.ownerDocument;
+		   } else if (node.nodeType == 9){
+			   // the node may be the document itself, nodeType 9 = DOCUMENT_NODE
+			   doc = node;
+		   } else {
+			   throw new Error("Invalid node passed to fireEvent: " + node.id);
+		   }
+	   
+			if (node.dispatchEvent) {
+			   // Gecko-style approach (now the standard) takes more work
+			   var eventClass = "";
+	   
+			   // Different events have different event classes.
+			   // If this switch statement can't map an eventName to an eventClass,
+			   // the event firing is going to fail.
+			   switch (eventName) {
+				   case "click": // Dispatching of 'click' appears to not work correctly in Safari. Use 'mousedown' or 'mouseup' instead.
+				   case "mousedown":
+				   case "mouseup":
+					   eventClass = "MouseEvents";
+					   break;
+	   
+				   case "focus":
+				   case "change":
+				   case "blur":
+				   case "select":
+					   eventClass = "HTMLEvents";
+					   break;
+	   
+				   default:
+					   throw "fireEvent: Couldn't find an event class for event '" + eventName + "'.";
+					   break;
+			   }
+			   var event = doc.createEvent(eventClass);
+			   event.initEvent(eventName, true, true); // All events created as bubbling and cancelable.
+	   
+			   event.synthetic = true; // allow detection of synthetic events
+			   // The second parameter says go ahead with the default action
+			   node.dispatchEvent(event, true);
+		   } else  if (node.fireEvent) {
+			   // IE-old school style, you can drop this if you don't need to support IE8 and lower
+			   var event = doc.createEventObject();
+			   event.synthetic = true; // allow detection of synthetic events
+			   node.fireEvent("on" + eventName, event);
+		   }
+	   };
+
+	function onCreate(row) {
+		$('[data-onload]').each(function(){
+			fireEvent($(this), "onchange");
+		});
+	}
+
+	$('[data-onload]').each(function(){
+		fireEvent(this, "onload");
 	});
 
-	function myFunction(e) {
-		var text = document.getElementById("element-text");
-		var table_plot = document.getElementById("element-table-plot");
-		var table = document.getElementById("element-table");
-		var plot = document.getElementById("element-plot");
-		var report = document.getElementById("element-report");
+	$('.formset').formset({
+		addText: 'add element',
+		deleteText: 'remove',
+		added: onCreate,
+	});
 
+
+
+	function showOrHide(el, el_show) {
+		var el_label = $('label[for=' + el.id + ']');
+		if(el_show === true) {
+			el.style.display = "block";
+			$(el.parentElement).show();
+			el_label.show();
+			$(el.parentElement).show();
+			$(el.parentElement.parentElement).show();
+		} else {
+			el.style.display = "none";
+			$(el.parentElement).hide();
+			el_label.hide();
+			$(el_label.parentElement).hide();
+			$(el.parentElement.parentElement).hide();
+		}
+	}
+
+	function myFunction(e) {
+		console.log("ONLOAD");
+		console.log(e)
 		var selected = e.target.value;
-		console.log(selected)
+		var selected_id = e.target.id.match(/\d+/)[0]
+
+		var text = document.getElementById("id_form-" + selected_id + "-text");
+
+		var caption = document.getElementById("id_form-" + selected_id + "-caption");
+
+		var style = document.getElementById("id_form-" + selected_id + "-style");
+		var spreadsheet = document.getElementById("id_form-" + selected_id + "-spreadsheet");
+		var columns = document.getElementById("id_form-" + selected_id + "-columns");
+
+		var plot = document.getElementById("id_form-" + selected_id + "-plot");
+
+		var embedded_raport = document.getElementById("id_form-" + selected_id + "-embedded_raport");
+		var element_start = document.getElementById("id_form-" + selected_id + "-element_start");
+		var element_end = document.getElementById("id_form-" + selected_id + "-element_end");
+
+		console.log()
+
+		var text_show = false;
+		var caption_show = false;
+		var style_show = false;
+		var spreadsheet_show = false;
+		var columns_show = false;
+		var plot_show = false;
+		var embedded_raport_show = false;
+		var element_start_show = false;
+		var element_end_show = false;
 
 		if (selected === "X") {
-			text.style.display = "block";
-			table_plot.style.display = "none";
-			table.style.display = "none";
-			plot.style.display = "none";
-			report.style.display = "none";
+			text_show = true;
 		} else if (selected === "T") {
-			text.style.display = "none";
-			table_plot.style.display = "block";
-			table.style.display = "block";
-			plot.style.display = "none";
-			report.style.display = "none";
+			caption_show = true;
+			spreadsheet_show = true;
+			style_show = true;
+			columns_show = true;
 		} else if (selected === "P") {
-			text.style.display = "none";
-			table_plot.style.display = "block";
-			table.style.display = "none";
-			plot.style.display = "block";
-			report.style.display = "none";
+			caption_show = true;
+			plot_show = true;
 		} else if (selected === "R") {
-			text.style.display = "none";
-			table_plot.style.display = "none";
-			table.style.display = "none";
-			plot.style.display = "none";
-			report.style.display = "block";
+			embedded_raport_show = true;
+			element_start_show = true;
+			element_end_show = true;
 		}
 
+		showOrHide(text, text_show);
+		showOrHide(caption, caption_show);
+		showOrHide(style, style_show);
+		showOrHide(spreadsheet, spreadsheet_show);
+		showOrHide(columns, columns_show);
+		showOrHide(plot, plot_show);
+		showOrHide(embedded_raport, embedded_raport_show);
+		showOrHide(element_start, element_start_show);
+		showOrHide(element_end, element_end_show);
 	}
 </script>
-
 {% endblock %}

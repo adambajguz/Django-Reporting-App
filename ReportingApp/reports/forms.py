@@ -24,7 +24,7 @@ class ReportForm(forms.Form):
 class ReportElementForm(forms.Form):
     element_name = forms.CharField(max_length=32, widget=forms.TextInput(attrs={'placeholder': 'Element name'}))
     element_order = forms.IntegerField()
-    element_type = forms.ChoiceField(label='', choices=ReportElement.ELEMENT_TYPE, widget=forms.Select(attrs={'onchange':'myFunction(event)'}))
+    element_type = forms.ChoiceField(label='', choices=ReportElement.ELEMENT_TYPE, widget=forms.Select(attrs={'onchange':'myFunction(event)', 'onload': 'myFunction(this)'}))
 
     # ==== Text ====
     text = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Text', 'rows':4}), required=False)

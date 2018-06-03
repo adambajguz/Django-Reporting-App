@@ -44,9 +44,10 @@ def reports_edit(request, **kwargs):
 
     if request.method == 'POST':
         report_form = ReportForm(request.POST)
-        report_element_formset= ReportElementFormSet(request.POST)
+        report_element_formset = ReportElementFormSet(request.POST)
+        print("==============")
 
-        if report_form.is_valid() and report_element_formser.is_valid():
+        if report_form.is_valid() and report_element_formset.is_valid():
 
             report_new_data = report_form.cleaned_data
             # Update `report` object
@@ -55,6 +56,44 @@ def reports_edit(request, **kwargs):
                 setattr(report_to_edit, attr, value)
 
             new_elements = []
+
+        print("==============")
+        for link_form in report_element_formset:
+            print(link_form.cleaned_data)
+
+
+    #   if request.method == 'POST':
+    #     profile_form = ProfileForm(request.POST, user=user)
+    #     link_formset = LinkFormSet(request.POST)
+
+    #     if profile_form.is_valid() and link_formset.is_valid():
+    #         # Save user info
+    #         user.first_name = profile_form.cleaned_data.get('first_name')
+    #         user.last_name = profile_form.cleaned_data.get('last_name')
+    #         user.save()
+
+    #         # Now save the data for each form in the formset
+    #         new_links = []
+
+    #         for link_form in link_formset:
+    #             anchor = link_form.cleaned_data.get('anchor')
+    #             url = link_form.cleaned_data.get('url')
+
+    #             if anchor and url:
+    #                 new_links.append(UserLink(user=user, anchor=anchor, url=url))
+
+    #         try:
+    #             with transaction.atomic():
+    #                 #Replace the old with the new
+    #                 UserLink.objects.filter(user=user).delete()
+    #                 UserLink.objects.bulk_create(new_links)
+
+    #                 # And notify our users that it worked
+    #                 messages.success(request, 'You have updated your profile.')
+
+    #         except IntegrityError: #If the transaction failed
+    #             messages.error(request, 'There was an error saving your profile.')
+    #             return redirect(reverse('profile-settings'))
 
     else:
         report_form = ReportForm(initial={
