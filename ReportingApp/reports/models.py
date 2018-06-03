@@ -160,7 +160,7 @@ class Plot(models.Model):
 	plot_name = models.CharField(max_length=255)
 	plot_creation_date = models.DateField(auto_now_add=True, editable=False)
 	plot_last_modification = models.DateTimeField(auto_now=True)
-	plot_type = models.CharField(max_length=1, choices=PLOT_TYPES)
+	plot_type = models.CharField(max_length=1, choices=PLOT_TYPES, default='B')
 
 	data_columns = models.TextField(default='')
 	grouping_columns = models.TextField(default='')
@@ -210,12 +210,14 @@ class ReportElement(models.Model):
 
 	element_name = models.CharField(max_length=255)
 	element_order = models.IntegerField()
+	element_type = models.CharField(max_length=1, choices=ELEMENT_TYPE, default='X')
 
 	# ==== Text ====
 	text = models.TextField()
 
 	# ==== Table & plot common ====
 	caption = models.CharField(max_length=255)
+	spreadsheet = models.ForeignKey(Spreadsheet, on_delete=models.CASCADE, null=True, blank=True)
 
 	# ==== Table ====
 	TABLE_STYLE = (
@@ -226,7 +228,6 @@ class ReportElement(models.Model):
 	)
 
 	style = models.CharField(max_length=1, choices=TABLE_STYLE, default='C')
-	rows_columns_inverted = models.BooleanField(default=False)
 	columns = models.TextField(default='')
 
 	# ==== Plot ====
@@ -234,7 +235,6 @@ class ReportElement(models.Model):
 
 	# ==== Report ====
 	report = models.ForeignKey(Report, related_name='report', on_delete=models.CASCADE)
-	embedded_raport_caption = models.CharField(max_length=255)
 	embedded_raport = models.ForeignKey(Report, related_name='reportEmbedded', on_delete=models.CASCADE)
 	element_start = models.IntegerField()
 	element_end = models.IntegerField()

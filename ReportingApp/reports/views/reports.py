@@ -3,6 +3,9 @@ from django.contrib.auth.decorators import login_required
 
 from reports.models import *
 
+from django.forms.formsets import formset_factory
+from reports.forms import ReportForm, ReportElementForm
+from django.forms.formsets import BaseFormSet
 
 @login_required
 def reports(request):
@@ -22,63 +25,44 @@ def reports_add(request):
 @login_required
 def reports_edit(request, **kwargs):
     # Get id
-    plot_id = kwargs.get('id')
+    report_id = kwargs.get('id')
 
-    # Get current user's plots
-    user_plots = request.user.plot_set.all()
-    # Check if the `plot_id` is correct
+    # Get current user's reports
+    user_reports = request.user.report_set.all()
+    # Check if the `report_id` is correct
     try:
-        plot_to_edit = user_plots.get(id=plot_id)
+        report_to_edit = user_reports.get(id=report_id)
     except:
-        return render(request, 'error_page.html', context={'error_message': "No report with id:" + str(plot_id) + " was found!"})
+        return render(request, 'error_page.html', context={'error_message': "No report with id:" + str(report_id) + " was found!"})
 
-    plot_form = PlotForm(request.user, request.POST or None,
-        initial={
-            'plot_name': plot_to_edit.plot_name,
-            'plot_type': plot_to_edit.plot_type,
-            'spreadsheet': plot_to_edit.spreadsheet,
-        }
-    )
+    # Create the formset, specifying the form and formset we want to use
+    ReportElementFormSet = formset_factory(ReportElementForm, formset=BaseFormSet)
+
+    # Get our existing link data for this user. This is used as initial data.
+    report_elements = ReportElement.objects.filter(report=report_to_edit).order_by('element_order')
+    report_elements_data = report_elements.values()
 
     if request.method == 'POST':
-        if request.POST.get('delete'):
-            return redirect('plots_delete', id=plot_id)
+        report_form = ReportForm(request.POST)
+        report_element_formset= ReportElementFormSet(request.POST)
 
-        if plot_form.is_valid():
-            new_data = plot_form.cleaned_data
-            # Update `plot` object
-            for attr, value in new_data.items():
+        if report_form.is_valid() and report_element_formser.is_valid():
+
+            report_new_data = report_form.cleaned_data
+            # Update `report` object
+            for attr, value in report_new_data.items():
                 # print('{} = {}'.format(attr, value))
-                setattr(plot_to_edit, attr, value)
+                setattr(report_to_edit, attr, value)
 
+            new_elements = []
 
-        plot_to_edit.data_columns = str(request.POST.getlist('data_col')).strip('[]').replace("'", "")
-        plot_to_edit.grouping_columns = str(request.POST.getlist('grouping_col')).strip('[]').replace("'", "")
+    else:
+        report_form = ReportForm(initial={
+            'report_name': report_to_edit.report_name,
+        })
+        report_element_formset = ReportElementFormSet(initial=report_elements_data,)
 
-        plot_to_edit.save()
-
-    print("Test",plot_to_edit.data_columns)
-
-    data_columns = [int(i) for i in plot_to_edit.data_columns.replace("'", "").split(', ')]
-    grouping_columns = [int(i) for i in plot_to_edit.grouping_columns.replace("'", "").split(', ')]
-    # data_columns = []
-    # grouping_columns = []
-    actual_plot = BarChart(
-            height = 600,
-            width = 800,
-            explicit_size = True,
-            title = "Title"
-        )
-
-    columns = Column.objects.filter(spreadsheet=plot_to_edit.spreadsheet)
-    actual_plot.set_data(columns.filter(id__in=data_columns))
-
-    return render(request, 'plots_edit.html', context={'plot': plot_to_edit,
-                                                       'plot_form': plot_form,
-                                                       'plot_graphics': actual_plot.generate(),
-                                                       'columns': columns,
-                                                       'data_columns': data_columns,
-                                                       'grouping_columns': grouping_columns})
+    return render(request, 'reports_edit.html', context={'report': report_to_edit, 'report_form': report_form, 'report_element_formset': report_element_formset})
 
 @login_required
 def reports_delete(request, **kwargs):
