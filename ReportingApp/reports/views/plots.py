@@ -61,10 +61,18 @@ def plots_edit(request, **kwargs):
 
     print("Test",plot_to_edit.data_columns)
 
-    data_columns = [int(i) for i in plot_to_edit.data_columns.replace("'", "").split(', ')]
-    grouping_columns = [int(i) for i in plot_to_edit.grouping_columns.replace("'", "").split(', ')]
-    # data_columns = []
-    # grouping_columns = []
+    data_column_str = plot_to_edit.data_columns.replace("'", "")
+    grouping_column_str = plot_to_edit.grouping_columns.replace("'", "")
+
+    data_columns = []
+    grouping_columns = []
+    if len(data_column_str) > 0:
+        data_columns = [int(i) for i in data_column_str.split(', ')]
+
+    if len(grouping_column_str) > 0:
+        grouping_columns = [int(i) for i in grouping_column_str.split(', ')]
+
+
     actual_plot = BarChart(
             height = 600,
             width = 800,
