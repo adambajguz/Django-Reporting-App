@@ -6,6 +6,8 @@ from reports.forms import PlotForm
 from reports.models import Spreadsheet, Column, Cell, Plot
 from reports.charts import *
 
+from django.contrib import messages
+
 
 @login_required
 def plots(request):
@@ -58,6 +60,9 @@ def plots_edit(request, **kwargs):
         plot_to_edit.grouping_columns = str(request.POST.getlist('grouping_col')).strip('[]').replace("'", "")
 
         plot_to_edit.save()
+
+        # And notify our users that it worked
+        messages.success(request, '<i class="uk-icon-floppy-o"></i> Plot saved!', extra_tags='safe')
 
     data_column_str = plot_to_edit.data_columns.replace("'", "")
     grouping_column_str = plot_to_edit.grouping_columns.replace("'", "")

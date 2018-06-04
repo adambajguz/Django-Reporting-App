@@ -104,6 +104,8 @@ class Plot(models.Model):
 	data_columns = models.TextField(default='')
 	grouping_columns = models.TextField(default='')
 
+	def __str__(self):
+		return self.plot_name
 
 	@classmethod
 	def create(cls, user):
@@ -130,6 +132,9 @@ class Report(models.Model):
 
 	report_creation_date = models.DateField(auto_now_add=True, editable=False)
 	report_last_modification = models.DateTimeField(auto_now=True)
+
+	def __str__(self):
+		return self.report_name
 
 	@classmethod
 	def create(cls, user):
@@ -169,7 +174,6 @@ class ReportElement(models.Model):
 	)
 
 	style = models.CharField(max_length=1, choices=TABLE_STYLE, default='C')
-	columns = models.TextField(default='', blank=True, null=True)
 
 	# ==== Plot ====
 	plot = models.ForeignKey(Plot, on_delete=models.CASCADE, blank=True, null=True)

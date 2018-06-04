@@ -142,14 +142,6 @@
 							</div>
 						</div>
 
-						<div class="uk-form-row" {% if element.element_type.value != 'T' %}hidden{% endif %}>
-							<div class="uk-form-label" for="{{ element.columns.name }}">{{ element.columns.label_tag|safe }}</div>
-
-							<div class="uk-form-controls">
-								{{ element.columns }}
-							</div>
-						</div>
-					
 						<div class="uk-form-row" {% if element.element_type.value != 'P' %}hidden{% endif %}>
 							<div class="uk-form-label" for="{{ element.plot.name }}">{{ element.plot.label_tag|safe }}</div>
 
@@ -191,10 +183,16 @@
 
 </div>
 
+{% if messages %}
+   <script>
+	{% for message in messages %}
+	UIkit.notify('{% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}', {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}'success'
+	{% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}'warning'{% else %} 'danger'{% endif %});    {% endfor %}
+   </script>
+{% endif %}
+
+
 <script>
-
-	
-
 	function showOrHide(el, el_show) {
 		var el_label = $('label[for=' + el.id + ']');
 		if(el_show === true) {
@@ -224,7 +222,6 @@
 
 		var style = document.getElementById("id_form-" + selected_id + "-style");
 		var spreadsheet = document.getElementById("id_form-" + selected_id + "-spreadsheet");
-		var columns = document.getElementById("id_form-" + selected_id + "-columns");
 
 		var plot = document.getElementById("id_form-" + selected_id + "-plot");
 
@@ -264,7 +261,6 @@
 		showOrHide(caption, caption_show);
 		showOrHide(style, style_show);
 		showOrHide(spreadsheet, spreadsheet_show);
-		showOrHide(columns, columns_show);
 		showOrHide(plot, plot_show);
 		showOrHide(embedded_raport, embedded_raport_show);
 		showOrHide(element_start, element_start_show);

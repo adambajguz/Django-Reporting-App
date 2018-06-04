@@ -3705,38 +3705,38 @@ select.uk-form-width-mini {
  * Modifier: `uk-button-primary`
  */
 .uk-button-primary {
-  background-color: #00a8e6;
+  background-color: #0073e6;
   color: #fff;
 }
 /* Hover */
 .uk-button-primary:hover,
 .uk-button-primary:focus {
-  background-color: #35b3ee;
+  background-color: #2290ff;
   color: #fff;
 }
 /* Active */
 .uk-button-primary:active,
 .uk-button-primary.uk-active {
-  background-color: #0091ca;
+  background-color: #1088ff;
   color: #fff;
 }
 /*
  * Modifier: `uk-button-success`
  */
 .uk-button-success {
-  background-color: #8cc14c;
+  background-color: #61b43b;
   color: #fff;
 }
 /* Hover */
 .uk-button-success:hover,
 .uk-button-success:focus {
-  background-color: #8ec73b;
+  background-color: #67c73b;
   color: #fff;
 }
 /* Active */
 .uk-button-success:active,
 .uk-button-success.uk-active {
-  background-color: #72ae41;
+  background-color: #41ae41;
   color: #fff;
 }
 /*

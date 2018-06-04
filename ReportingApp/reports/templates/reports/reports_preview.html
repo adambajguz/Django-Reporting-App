@@ -1,10 +1,10 @@
-{% extends "base_spreadsheets_quickactions.html" %}
+{% extends "base_reports_quickactions.html" %}
 
 {% load custom_tags %}
 {% load widget_tweeks %}
 
 {% block breadcrumbs %}
-	{{ block.super }} » Edit Spreadsheet
+	{{ block.super }} » Report preview
 {% endblock %}
 
 {% block cotainer_start %} 
@@ -97,14 +97,5 @@
 		</table>
 	</div>
 </div>
-
-{% if messages %}
-   <script>
-	{% for message in messages %}
-		UIkit.notify('{% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}', {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}'success'
-									  {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}'warning'{% else %} 'danger'{% endif %});
-    {% endfor %}
-   </script>
-{% endif %}
 
 {% endblock %}

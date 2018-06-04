@@ -59,22 +59,32 @@ def reports_edit(request, **kwargs):
     # Create the formset, specifying the form and formset we want to use
     ReportElementFormSet = formset_factory(ReportElementForm, formset=BaseFormSet, extra=0)
 
-    # Get our existing link data for this user. This is used as initial data.
-    report_elements = ReportElement.objects.filter(report=report_to_edit).order_by('element_order')
+    # Get our data for. This is used as initial data.
+    report_elements = ReportElement.objects.filter(report=report_to_edit)
     report_elements_count = report_elements.count()
+
+    print("==========")
+    for el in report_elements:
+        print(dir(el))
+    print("==========")
     report_elements_data = report_elements.values()
+    for el in report_elements:
+        a = getattr(el, 'spreadsheet')
+        print(a)
+
+    # get ids usign values() and get queryset of object using Spreadsheet.objects.filter(id=id) 
+    #x.fields["nazwa_fieldu"].initial = coś
 
 
+
+    print("--------------")
 
     if request.method == 'POST':
         if request.POST.get('delete'):
-            return redirect('plots_delete', id=report_id)
-
-        if request.POST.get('add'):
-            return redirect('reports_add_element', id=report_id)
+            return redirect('reports_delete', id=report_id)
 
         report_form = ReportForm(request.POST)
-        report_element_formset = ReportElementFormSet(request.POST)
+        report_element_formset = ReportElementFormSet(request.POST, form_kwargs = {'user': request.user})
 
         if report_form.is_valid() and report_element_formset.is_valid():
             report_new_data = report_form.cleaned_data
@@ -84,7 +94,6 @@ def reports_edit(request, **kwargs):
                 setattr(report_to_edit, attr, value)
             report_to_edit.save()
 
-            print("rr",report_to_edit.report_description)
             # Now save the data for each form in the formset
             new_elements = []
 
@@ -104,21 +113,34 @@ def reports_edit(request, **kwargs):
                     ReportElement.objects.bulk_create(new_elements)
 
                     # And notify our users that it worked
-                    messages.success(request, 'You have updated your profile.')
+                    messages.success(request, '<i class="uk-icon-floppy-o"></i> Report saved!', extra_tags='safe')
 
             except IntegrityError: #If the transaction failed
-                messages.error(request, 'There was an error saving your profile.')
+                messages.error(request, '<i class="uk-icon-ban"></i> There was an error saving your report.', extra_tags='safe')
+
+        if request.POST.get('add'):
+            return redirect('reports_add_element', id=report_id)
 
     else:
         report_form = ReportForm(initial={
             'report_name': report_to_edit.report_name,
             'report_description': report_to_edit.report_description,
         })
-        report_element_formset = ReportElementFormSet(initial=report_elements_data,)
 
+        # a = [{'plot': Plot.objects.filter(id__in=report_elements.values("plot_id"))}]
+        report_element_formset = ReportElementFormSet(initial=report_elements_data, form_kwargs = {'user': request.user})
     return render(request, 'reports_edit.html', context={'report': report_to_edit, 'report_form': report_form, 'report_element_formset': report_element_formset,
                                                          'report_elements_count': report_elements_count,})
 
+
+@login_required
+def reports_preview(request, **kwargs):
+    return render(request, 'reports_edit.html', context={'report': report_to_edit, 'report_form': report_form, 'report_element_formset': report_element_formset,
+                                                         'report_elements_count': report_elements_count,})
+@login_required
+def reports_pdf(request, **kwargs):
+    return render(request, 'reports_edit.html', context={'report': report_to_edit, 'report_form': report_form, 'report_element_formset': report_element_formset,
+                                                         'report_elements_count': report_elements_count,})
 @login_required
 def reports_delete(request, **kwargs):
     report_id = kwargs.get('id')

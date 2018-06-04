@@ -71,4 +71,11 @@
 	</div>
 </div>
 
+{% if messages %}
+   <script>
+	{% for message in messages %}
+	UIkit.notify('{% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}', {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}'success'
+	{% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}'warning'{% else %} 'danger'{% endif %});    {% endfor %}
+   </script>
+{% endif %}
 {% endblock %}

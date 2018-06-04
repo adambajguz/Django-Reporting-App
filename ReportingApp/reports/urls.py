@@ -24,5 +24,6 @@ urlpatterns = [
     url(r'^reports/(?P<id>\d+)/edit/$', views.reports_edit, name='reports_edit'),
     url(r'^reports/(?P<id>\d+)/edit/add_element/$', views.reports_add_element, name='reports_add_element'),
     url(r'^reports/(?P<id>\d+)/edit/element/(?P<eid>\d+)/delete$', views.reports_delete_element, name='reports_delete_element'),
-
+    url(r'^reports/(?P<id>\d+)/preview/$', views.reports_preview, name='reports_preview'),
+    url(r'^reports/(?P<id>\d+)/pdf/$', views.reports_pdf, name='reports_pdf'),
 ]

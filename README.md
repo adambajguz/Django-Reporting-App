@@ -1,5 +1,7 @@
-# Django-Raporting-App
+﻿# Django-Raporting-App
 
+l: rswtaSheetPro
+h: rSwt@2018
 
 ## TEMAT:
 

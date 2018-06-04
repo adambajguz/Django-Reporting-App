@@ -37,11 +37,10 @@ class ReportElementForm(forms.Form):
 
     # ==== Table ====
     style = forms.ChoiceField(required=False, choices=ReportElement.TABLE_STYLE)
-    spreadsheet = forms.ChoiceField(required=False)
-    columns = forms.ChoiceField(required=False)
+    spreadsheet = forms.ChoiceField()
 
     # ==== Plot ====
-    plot = forms.ChoiceField(required=False)
+    plot = forms.ChoiceField()
 
     # ==== Report ====
     embedded_raport = forms.ChoiceField(required=False)
@@ -49,11 +48,15 @@ class ReportElementForm(forms.Form):
     element_end = forms.IntegerField(required=False)
 
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        if user:
+            self.user = user
         super(ReportElementForm, self).__init__(*args, **kwargs)
-        self.fields['spreadsheet'] = forms.ModelChoiceField(required=False, queryset=Spreadsheet.objects.filter(user=2))
-        self.fields['columns'] = forms.ModelChoiceField(required=False, queryset=Report.objects.filter(user=2))
-        self.fields['plot'] = forms.ModelChoiceField(required=False, queryset=Plot.objects.filter(user=2))
-        self.fields['embedded_raport'] = forms.ModelChoiceField(required=False, queryset=Report.objects.filter(user=2))
+
+        self.fields['spreadsheet'] = forms.ModelChoiceField(required=False, queryset=Spreadsheet.objects.filter(user=user.id))
+        self.fields['columns'] = forms.ModelChoiceField(required=False, queryset=Report.objects.filter(user=user.id))
+        self.fields['plot'] = forms.ModelChoiceField(required=False, queryset=Plot.objects.filter(user=user.id))
+        self.fields['embedded_raport'] = forms.ModelChoiceField(required=False, queryset=Report.objects.filter(user=user.id))
 
 
 # class BaseReportElementFormSet(BaseFormSet):

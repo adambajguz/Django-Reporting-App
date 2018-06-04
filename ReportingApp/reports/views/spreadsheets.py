@@ -8,6 +8,8 @@ from reports.forms import SpreadsheetForm
 
 from reports.utils.PdfRender import PdfRender
 
+from django.contrib import messages
+
 
 @login_required
 def spreadsheets(request):
@@ -75,6 +77,9 @@ def spreadsheets_edit(request, **kwargs):
                         record.contents = cell
                         record.save(update_fields=['contents'])
 
+        # And notify our users that it worked
+        messages.success(request, '<i class="uk-icon-floppy-o"></i> Spreadsheet saved!', extra_tags='safe')
+
         # Update `spreadsheet` object
         for attr, value in new_data.items():
             # print('{} = {}'.format(attr, value))
@@ -91,12 +96,18 @@ def spreadsheets_edit(request, **kwargs):
 
             spreadsheet_to_edit.row_number = spreadsheet_to_edit.row_number + 1
             spreadsheet_to_edit.save()
+            
+            # And notify our users that it worked
+            messages.warning(request, '<i class="uk-icon-arrows-v"></i> Row inserted!', extra_tags='safe')
         elif request.POST.get('add_column'):
             #Add new column
             Column.add_column(spreadsheet_to_edit)
 
             #Reload columns since we added one new
             columns = Column.objects.filter(spreadsheet__id = spreadsheet_to_edit.id)
+
+            # And notify our users that it worked
+            messages.warning(request, '<i class="uk-icon-arrows-h"></i> Column inserted!', extra_tags='safe')
 
     rows = []
     for current_column in columns:
