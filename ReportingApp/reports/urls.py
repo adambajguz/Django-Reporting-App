@@ -22,4 +22,7 @@ urlpatterns = [
     path(r'reports/add/', views.reports_add, name='reports_add'),
     url(r'^reports/(?P<id>\d+)/delete/$', views.reports_delete, name='reports_delete'),
     url(r'^reports/(?P<id>\d+)/edit/$', views.reports_edit, name='reports_edit'),
+    url(r'^reports/(?P<id>\d+)/edit/add_element/$', views.reports_add_element, name='reports_add_element'),
+    url(r'^reports/(?P<id>\d+)/edit/element/(?P<eid>\d+)/delete$', views.reports_delete_element, name='reports_delete_element'),
+
 ]

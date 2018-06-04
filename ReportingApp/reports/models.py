@@ -31,67 +31,6 @@ class Spreadsheet(models.Model):
 
 		return new_spreadsheet
 
-	def last_modification_days_ago(self):
-		time = timezone.now()
-		format_str=""
-
-		if self.spreadsheet_last_modification.hour == time.hour:
-			minutes = time.minute - self.spreadsheet_last_modification.minute
-
-			if minutes == 0:
-				return "just now"
-			elif minutes == 1:
-				format_str = " minute ago"
-			else:
-				format_str = " minutes ago"
-
-			return str(minutes) + format_str
-		else:
-			if self.spreadsheet_last_modification.day == time.day:
-				hours = time.hour - self.spreadsheet_last_modification.hour
-
-				if hours == 0:
-					return "this hour"
-				elif hours == 1:
-					format_str = " hour ago"
-				else:
-					format_str = " hours ago"
-
-				return str(hours) + format_str
-			else:
-				if self.spreadsheet_last_modification.month == time.month:
-					days = time.day - self.spreadsheet_last_modification.day
-
-					if days == 0:
-						return "yesterday"
-					elif days == 1:
-						format_str = " day ago"
-					else:
-						format_str = " days ago"
-					return str(days) + format_str
-				else:
-					if self.spreadsheet_last_modification.year == time.year:
-						months = time.month - self.spreadsheet_last_modification.month
-
-						if months == 0:
-							return "this month"
-						elif months == 1:
-							format_str = " month ago"
-						else:
-							format_str = " months ago"
-						return str(months) + format_str
-					else:
-						years = time.year - self.spreadsheet_last_modification.year
-
-						if years == 0:
-							return "this year"
-						elif years == 1:
-							format_str = " year ago"
-						else:
-							format_str = " years ago"
-						return str(years) + format_str
-		return self.spreadsheet_last_modification
-
 class Column(models.Model):
 	spreadsheet = models.ForeignKey(Spreadsheet, on_delete=models.CASCADE)
 	column_name = models.CharField(max_length=255)
@@ -187,6 +126,8 @@ class Plot(models.Model):
 class Report(models.Model):
 	user = models.ForeignKey(User, unique=False, on_delete=models.CASCADE)
 	report_name = models.CharField(max_length=255)
+	report_description = models.TextField(default='')
+
 	report_creation_date = models.DateField(auto_now_add=True, editable=False)
 	report_last_modification = models.DateTimeField(auto_now=True)
 
@@ -199,7 +140,7 @@ class Report(models.Model):
 		return new_report
 
 class ReportElement(models.Model):
-	report = models.ForeignKey(Report, on_delete=models.CASCADE)
+	report = models.ForeignKey(Report, related_name='reportElements', on_delete=models.CASCADE)
 	
 	ELEMENT_TYPE = (
 		('X', 'Text Block'),
@@ -228,16 +169,15 @@ class ReportElement(models.Model):
 	)
 
 	style = models.CharField(max_length=1, choices=TABLE_STYLE, default='C')
-	columns = models.TextField(default='')
+	columns = models.TextField(default='', blank=True, null=True)
 
 	# ==== Plot ====
-	plot = models.ForeignKey(Plot, on_delete=models.CASCADE)
+	plot = models.ForeignKey(Plot, on_delete=models.CASCADE, blank=True, null=True)
 
 	# ==== Report ====
-	report = models.ForeignKey(Report, related_name='report', on_delete=models.CASCADE)
-	embedded_raport = models.ForeignKey(Report, related_name='reportEmbedded', on_delete=models.CASCADE)
-	element_start = models.IntegerField()
-	element_end = models.IntegerField()
+	embedded_raport = models.ForeignKey(Report, related_name='reportEmbedded', on_delete=models.CASCADE, blank=True, null=True)
+	element_start = models.IntegerField(blank=True, null=True)
+	element_end = models.IntegerField(blank=True, null=True)
 
 
 # class ReportElementText(models.Model):

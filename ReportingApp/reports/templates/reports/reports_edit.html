@@ -38,29 +38,11 @@
 
 	<hr style="color: #CCE6FF; border-color: #CCE6FF; background-color: #CCE6FF;">
 
-	<p>Columns properties:</p>
-	<div class="uk-panel uk-panel-box" style="max-height: 190px; overflow-y: scroll;">
-		<dl class="uk-description-list-line">
-			{% for column in columns %}
-				<dt><em>{{ column.column_name }}</em></dt>
-				<dd>
-					<b>Use as: </b>
-					<label>
-						<input type="checkbox" name="data_col" value="{{ column.id }}" {% if column.id in data_columns %}checked{% endif %}>
-						data source, 
-					</label>
-					<label>
-						<input type="checkbox" name="grouping_col" value="{{ column.id }}" {% if column.id in grouping_columns %}checked{% endif %}>
-						grouping
-					</label>
-				</dd>
-			{% endfor %}
-		</dl>
-	</div>
+	<button name="add" value="Add" class="uk-button uk-button-success"><i class="uk-icon-plus"></i> Add element</button>
 
 	<hr style="color: #CCE6FF; border-color: #CCE6FF; background-color: #CCE6FF;">
 
-	<button name="delete" value="Delete" class="uk-margin-bottom uk-button uk-button-danger"><i class="uk-icon-trash"></i> Delete plot</button>
+	<button name="delete" value="Delete" class="uk-margin-bottom uk-button uk-button-danger"><i class="uk-icon-trash"></i> Delete report</button>
 	<button class="uk-margin-bottom uk-button uk-button-primary"><i class="uk-icon-save"></i> Save</button>
 {% endblock %}
 
@@ -68,9 +50,16 @@
 
 <div class="uk-width-1-1">
 
-		{{ report_element_formset.management_form }}
+		{% if not report_elements_count %}
+			<table class="uk-table uk-table-hover uk-table-striped">
+				<caption>You have {{ num_reports }} report{% if num_reports != 1%}s{% endif %}</caption>
+			</table>
+		{% endif %}
 
-		<div class="uk-form uk-form-stacked">
+
+		<div class="uk-form uk-form-stacked" {% if not report_element_formset.instance.pk %}class="dynamic"{% endif %}>
+			{{report_element_formset.management_form}}
+
 			{% if report_element_formset.non_form_errors %}
 				{% for error in report_element_formset.non_form_errors %}
 					{{ error|escape }}
@@ -78,120 +67,123 @@
 			{% endif %}
 
 			{% for element in report_element_formset %}
-				<div class="formset">
-					<div class="uk-form-row">
-						{% if element.element_name.errors %}
-							<div class="uk-alert uk-alert-danger">
-								{% for error in element.element_name.errors %}
-									{{ error|escape }}
-								{% endfor %}
-							</div>
-						{% endif %}
-						
-						<div class="uk-form-label" for="{{ element.element_name.name }}">{{ element.element_name.label_tag|safe }}</div>
 
-						<div class="uk-form-controls">
-							{{ element.element_name }}
-						</div>
-					</div>
-		
-					<div class="uk-form-row">
-						{% if element.element_order.errors %}
-							<div class="uk-alert uk-alert-danger">
-								{% for error in element.element_order.errors %}
-									{{ error|escape }}
-								{% endfor %}
-							</div>
-						{% endif %}
-
-						<div class="uk-form-label" for="{{ element.element_order.name }}">{{ element.element_order.label_tag|safe }}</div>
-
-						<div class="uk-form-controls">
-							{{ element.element_order }}
-						</div>
-					</div>
-
-					<div class="uk-form-row">
-						<div class="uk-form-label" for="{{ element.element_order.name }}">{{ element.element_order.label_tag|safe }}</div>
-
-						<div class="uk-form-controls">
-							{{ element.element_type }}
-						</div>
-					</div>
-
-					<div id="element-text">
-						<div class="uk-form-row">
-							<div class="uk-form-label" for="{{ element.text.name }}">{{ element.text.label_tag|safe }}</div>
+				<a class="uk-button uk-button-mini uk-border-circle" href="{% url 'reports_delete_element' id=report.id eid=element.id.value %}">
+					<em><i class="uk-icon-remove"></i></em>
+				</a>
+				{{ element.id }}
+				<div class="uk-form uk-form-horizontal">
+					<fieldset data-uk-margin class="uk-form-row">
+							{% if element.element_name.errors %}
+								<div class="uk-alert uk-alert-danger">
+									{% for error in element.element_name.errors %}
+										{{ error|escape }}
+									{% endfor %}
+								</div>
+							{% endif %}
+							
+							<div class="uk-form-label" for="{{ element.element_name.name }}">{{ element.element_name.label_tag|safe }}</div>
 
 							<div class="uk-form-controls">
-								{{ element.text }}
+								{{ element.element_name }}
+							</div>
+			
+							{% if element.element_order.errors %}
+								<div class="uk-alert uk-alert-danger">
+									{% for error in element.element_order.errors %}
+										{{ error|escape }}
+									{% endfor %}
+								</div>
+							{% endif %}
+
+							<div class="uk-form-label" for="{{ element.element_order.name }}">{{ element.element_order.label_tag|safe }}</div>
+
+							<div class="uk-form-controls">
+								{{ element.element_order }}
+							</div>
+
+							<div class="uk-form-label" for="{{ element.element_order.name }}">{{ element.element_type.label_tag|safe }}</div>
+
+							<div class="uk-form-controls">
+								{{ element.element_type }}
+							</div>
+					</fieldset>
+
+					<div class="uk-form-row" {% if element.element_type.value != 'X' and element.element_type.value != None %}hidden{% endif %}>
+						<div class="uk-form-label" for="{{ element.text.name }}">{{ element.text.label_tag|safe }}</div>
+
+						<div class="uk-form-controls">
+							{{ element.text }}
+						</div>
+					</div>
+
+					<fieldset data-uk-margin class="uk-form-row">
+						<div class="uk-form-row" {% if element.element_type.value != 'T' and element.element_type.value != 'P' %}hidden{% endif %}>
+							<div class="uk-form-label" for="{{ element.caption.name }}">{{ element.caption.label_tag|safe }}</div>
+
+							<div class="uk-form-controls">
+								{{ element.caption }}
 							</div>
 						</div>
-					</div>
 
-					<div class="uk-form-row">
-						<div class="uk-form-label" for="{{ element.caption.name }}">{{ element.caption.label_tag|safe }}</div>
+						<div class="uk-form-row" {% if element.element_type.value != 'T' %}hidden{% endif %}>
+							<div class="uk-form-label" for="{{ element.style.name }}">{{ element.style.label_tag|safe }}</div>
 
-						<div class="uk-form-controls">
-							{{ element.caption }}
+							<div class="uk-form-controls">
+								{{ element.style }}
+							</div>
 						</div>
-					</div>
+						
+						<div class="uk-form-row" {% if element.element_type.value != 'T' %}hidden{% endif %}>
+							<div class="uk-form-label" for="{{ element.caption.name }}">{{ element.spreadsheet.label_tag|safe }}</div>
 
-					<div class="uk-form-row">
-						<div class="uk-form-label" for="{{ element.style.name }}">{{ element.style.label_tag|safe }}</div>
-
-						<div class="uk-form-controls">
-							{{ element.style }}
+							<div class="uk-form-controls">
+								{{ element.spreadsheet }}
+							</div>
 						</div>
-					</div>
+
+						<div class="uk-form-row" {% if element.element_type.value != 'T' %}hidden{% endif %}>
+							<div class="uk-form-label" for="{{ element.columns.name }}">{{ element.columns.label_tag|safe }}</div>
+
+							<div class="uk-form-controls">
+								{{ element.columns }}
+							</div>
+						</div>
 					
-					<div class="uk-form-row">
-						<div class="uk-form-label" for="{{ element.caption.name }}">{{ element.spreadsheet.label_tag|safe }}</div>
+						<div class="uk-form-row" {% if element.element_type.value != 'P' %}hidden{% endif %}>
+							<div class="uk-form-label" for="{{ element.plot.name }}">{{ element.plot.label_tag|safe }}</div>
 
-						<div class="uk-form-controls">
-							{{ element.spreadsheet }}
+							<div class="uk-form-controls">
+								{{ element.plot }}
+							</div>
 						</div>
-					</div>
+					</fieldset>
 
-					<div class="uk-form-row">
-						<div class="uk-form-label" for="{{ element.columns.name }}">{{ element.columns.label_tag|safe }}</div>
+					<fieldset data-uk-margin class="uk-form-row">
+						<div class="uk-form-row" {% if element.element_type.value != 'R' %}hidden{% endif %}>
+							<div class="uk-form-label" for="{{ element.embedded_raport.name }}">{{ element.embedded_raport.label_tag|safe }}</div>
 
-						<div class="uk-form-controls">
-							{{ element.columns }}
+							<div class="uk-form-controls">
+								{{ element.embedded_raport }}
+							</div>
 						</div>
-					</div>
 
-					<div class="uk-form-row">
-						<div class="uk-form-label" for="{{ element.plot.name }}">{{ element.plot.label_tag|safe }}</div>
+						<div class="uk-form-row" {% if element.element_type.value != 'R' %}hidden{% endif %}>
+							<div class="uk-form-label" for="{{ element.element_start.name }}">{{ element.element_start.label_tag|safe }}</div>
 
-						<div class="uk-form-controls">
-							{{ element.plot }}
+							<div class="uk-form-controls">
+								{{ element.element_start }}
+							</div>
 						</div>
-					</div>
 
-					<div class="uk-form-row">
-						<div class="uk-form-label" for="{{ element.embedded_raport.name }}">{{ element.embedded_raport.label_tag|safe }}</div>
+						<div class="uk-form-row" {% if element.element_type.value != 'R' %}hidden{% endif %}>
+							<div class="uk-form-label" for="{{ element.element_end.name }}">{{ element.element_end.label_tag|safe }}</div>
 
-						<div class="uk-form-controls">
-							{{ element.embedded_raport }}
+							<div class="uk-form-controls">
+								{{ element.element_end }}
+							</div>
 						</div>
-					</div>
-
-					<div class="uk-form-row">
-						<div class="uk-form-label" for="{{ element.element_start.name }}">{{ element.element_start.label_tag|safe }}</div>
-
-						<div class="uk-form-controls">
-							{{ element.element_start }}
-						</div>
-					</div>
-
-					<div class="uk-form-row">
-						<div class="uk-form-label" for="{{ element.element_end.name }}">{{ element.element_end.label_tag|safe }}</div>
-
-						<div class="uk-form-controls">
-							{{ element.element_end }}
-						</div>
-					</div>
+					</fieldset>
 				</div>
 				<hr>
 			{% endfor %}
@@ -200,79 +192,8 @@
 </div>
 
 <script>
-		/* Fire an event handler to the specified node. Event handlers can detect that the event was fired programatically
-		* by testing for a 'synthetic=true' property on the event object
-		* @param {HTMLNode} node The node to fire the event handler on.
-		* @param {String} eventName The name of the event without the "on" (e.g., "focus")
-		*/
-	   function fireEvent(node, eventName) {
-		   // Make sure we use the ownerDocument from the provided node to avoid cross-window problems
-		   var doc;
-		   if (node.ownerDocument) {
-			   doc = node.ownerDocument;
-		   } else if (node.nodeType == 9){
-			   // the node may be the document itself, nodeType 9 = DOCUMENT_NODE
-			   doc = node;
-		   } else {
-			   throw new Error("Invalid node passed to fireEvent: " + node.id);
-		   }
-	   
-			if (node.dispatchEvent) {
-			   // Gecko-style approach (now the standard) takes more work
-			   var eventClass = "";
-	   
-			   // Different events have different event classes.
-			   // If this switch statement can't map an eventName to an eventClass,
-			   // the event firing is going to fail.
-			   switch (eventName) {
-				   case "click": // Dispatching of 'click' appears to not work correctly in Safari. Use 'mousedown' or 'mouseup' instead.
-				   case "mousedown":
-				   case "mouseup":
-					   eventClass = "MouseEvents";
-					   break;
-	   
-				   case "focus":
-				   case "change":
-				   case "blur":
-				   case "select":
-					   eventClass = "HTMLEvents";
-					   break;
-	   
-				   default:
-					   throw "fireEvent: Couldn't find an event class for event '" + eventName + "'.";
-					   break;
-			   }
-			   var event = doc.createEvent(eventClass);
-			   event.initEvent(eventName, true, true); // All events created as bubbling and cancelable.
-	   
-			   event.synthetic = true; // allow detection of synthetic events
-			   // The second parameter says go ahead with the default action
-			   node.dispatchEvent(event, true);
-		   } else  if (node.fireEvent) {
-			   // IE-old school style, you can drop this if you don't need to support IE8 and lower
-			   var event = doc.createEventObject();
-			   event.synthetic = true; // allow detection of synthetic events
-			   node.fireEvent("on" + eventName, event);
-		   }
-	   };
 
-	function onCreate(row) {
-		$('[data-onload]').each(function(){
-			fireEvent($(this), "onchange");
-		});
-	}
-
-	$('[data-onload]').each(function(){
-		fireEvent(this, "onload");
-	});
-
-	$('.formset').formset({
-		addText: 'add element',
-		deleteText: 'remove',
-		added: onCreate,
-	});
-
-
+	
 
 	function showOrHide(el, el_show) {
 		var el_label = $('label[for=' + el.id + ']');

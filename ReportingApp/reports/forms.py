@@ -19,18 +19,21 @@ class PlotForm(forms.Form):
 
 class ReportForm(forms.Form):
     report_name = forms.CharField(max_length=32, widget=forms.TextInput(attrs={'placeholder': 'Report name'}))
+    report_description = forms.CharField(required=False, widget=forms.Textarea(attrs={'placeholder': 'Report description', 'rows':4}))
 
 
 class ReportElementForm(forms.Form):
-    element_name = forms.CharField(max_length=32, widget=forms.TextInput(attrs={'placeholder': 'Element name'}))
-    element_order = forms.IntegerField()
-    element_type = forms.ChoiceField(label='', choices=ReportElement.ELEMENT_TYPE, widget=forms.Select(attrs={'onchange':'myFunction(event)', 'onload': 'myFunction(this)'}))
+    id = forms.IntegerField(required=False, widget=forms.HiddenInput())
+
+    element_name = forms.CharField(required=False, max_length=32, widget=forms.TextInput(attrs={'placeholder': 'Element name'}))
+    element_order = forms.IntegerField(required=False,)
+    element_type = forms.ChoiceField(required=False, choices=ReportElement.ELEMENT_TYPE, widget=forms.Select(attrs={'onchange':'myFunction(event)'}))
 
     # ==== Text ====
     text = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Text', 'rows':4}), required=False)
 
     # ==== Table & plot common ====
-    caption = forms.CharField(required=False, max_length=32, widget=forms.TextInput(attrs={'placeholder': 'Spreadsheet name'}))
+    caption = forms.CharField(required=False, max_length=32, widget=forms.TextInput(attrs={'placeholder': 'Caption'}))
 
     # ==== Table ====
     style = forms.ChoiceField(required=False, choices=ReportElement.TABLE_STYLE)
@@ -47,9 +50,11 @@ class ReportElementForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(ReportElementForm, self).__init__(*args, **kwargs)
-        self.fields['spreadsheet'] = forms.ModelChoiceField(queryset=Spreadsheet.objects.filter(user=2))
-        self.fields['plot'] = forms.ModelChoiceField(queryset=Plot.objects.filter(user=2))
-        self.fields['embedded_raport'] = forms.ModelChoiceField(queryset=Report.objects.filter(user=2))
+        self.fields['spreadsheet'] = forms.ModelChoiceField(required=False, queryset=Spreadsheet.objects.filter(user=2))
+        self.fields['columns'] = forms.ModelChoiceField(required=False, queryset=Report.objects.filter(user=2))
+        self.fields['plot'] = forms.ModelChoiceField(required=False, queryset=Plot.objects.filter(user=2))
+        self.fields['embedded_raport'] = forms.ModelChoiceField(required=False, queryset=Report.objects.filter(user=2))
+
 
 # class BaseReportElementFormSet(BaseFormSet):
 #     def clean(self):

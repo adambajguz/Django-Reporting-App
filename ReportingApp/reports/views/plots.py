@@ -59,8 +59,6 @@ def plots_edit(request, **kwargs):
 
         plot_to_edit.save()
 
-    print("Test",plot_to_edit.data_columns)
-
     data_column_str = plot_to_edit.data_columns.replace("'", "")
     grouping_column_str = plot_to_edit.grouping_columns.replace("'", "")
 
