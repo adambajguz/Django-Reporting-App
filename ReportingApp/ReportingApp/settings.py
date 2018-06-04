@@ -24,7 +24,7 @@ SECRET_KEY = 'd#t3un_+)w!qj*fe!geznt^9kgdj@j=-nnm^$ae4v+yk#pvkzd'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['rswtasheetpro.pythonanywhere.com']
 
 
 # Application definition
@@ -129,6 +129,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+#STATIC_ROOT = '/home/rswtaSheetPro/Django-Raporting-App/ReportingApp/reports/static'
+STATIC_ROOT = '/home/rswtaSheetPro/Django-Raporting-App/ReportingApp/static'
 
 LOGIN_REDIRECT_URL = '/reports/'
 
