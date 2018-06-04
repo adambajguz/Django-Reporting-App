@@ -129,6 +129,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = '/home/rswtaSheetPro/Django-Raporting-App/ReportingApp/reports/static'
 
 LOGIN_REDIRECT_URL = '/reports/'
 
