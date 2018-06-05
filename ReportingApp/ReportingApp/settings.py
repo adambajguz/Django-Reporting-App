@@ -24,7 +24,7 @@ SECRET_KEY = 'd#t3un_+)w!qj*fe!geznt^9kgdj@j=-nnm^$ae4v+yk#pvkzd'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['rswtasheetpro.pythonanywhere.com']
+ALLOWED_HOSTS = ['rswtasheetpro.pythonanywhere.com', 'localhost', 'localhost:8383',]
 
 
 # Application definition

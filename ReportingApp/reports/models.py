@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import datetime, timedelta
 
+from reports.charts import *
+
 class Spreadsheet(models.Model):
 	user = models.ForeignKey(User, unique=False, on_delete=models.CASCADE)
 	spreadsheet_name = models.CharField(max_length=255)
@@ -30,6 +32,19 @@ class Spreadsheet(models.Model):
 		Column.add_multiple_columns_and_cells(new_spreadsheet, num_cells=5, num_columns=3)
 
 		return new_spreadsheet
+
+	def table(self):
+		columns = Column.objects.filter(spreadsheet__id = self.id)
+
+		rows = []
+		for current_column in columns:
+			cells = current_column.cells.all()
+			rows.append(cells.values_list('contents', flat=True))
+
+		return {'num_rows': range(0, self.row_number),
+				'rows': rows,
+				'columns': columns,}
+
 
 class Column(models.Model):
 	spreadsheet = models.ForeignKey(Spreadsheet, on_delete=models.CASCADE)
@@ -114,6 +129,39 @@ class Plot(models.Model):
 		new_plot = Plot.objects.create(plot_name='New Plot #' + str(plots_count + 1), user=user)
 
 		return new_plot
+
+	def chart(self):
+		data_column_str = self.data_columns.replace("'", "")
+		grouping_column_str = self.grouping_columns.replace("'", "")
+
+		data_columns = []
+		grouping_columns = []
+		if len(data_column_str) > 0:
+			data_columns = [int(i) for i in data_column_str.split(', ')]
+
+		if len(grouping_column_str) > 0:
+			grouping_columns = [int(i) for i in grouping_column_str.split(', ')]
+
+		actual_plot = None
+		if self.plot_type == 'B':
+			actual_plot = BarChart(explicit_size = True)
+		elif self.plot_type == 'L':
+			actual_plot = LineChart(explicit_size = True)
+		elif self.plot_type == 'R':
+			actual_plot = RadarChart(explicit_size = True)
+		elif self.plot_type == 'P':
+			actual_plot = PieChart(explicit_size = True)
+		elif self.plot_type == 'X':
+			actual_plot = BoxChart(explicit_size = True)
+		else: # elif self.plot_type == 'X':
+			actual_plot = PyramidChart(explicit_size = True)
+
+		columns = Column.objects.filter(spreadsheet=self.spreadsheet)
+		actual_plot.set_data(columns.filter(id__in=data_columns))
+		actual_plot.height = 600
+		actual_plot.width = 800
+
+		return actual_plot.generate()
 
 # class PlotData(models.Model):
 # 	PLOTDATA_TYPES = (

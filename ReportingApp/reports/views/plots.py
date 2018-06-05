@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required
 from reports.forms import PlotForm
 
 from reports.models import Spreadsheet, Column, Cell, Plot
-from reports.charts import *
 
 from django.contrib import messages
 
@@ -75,28 +74,27 @@ def plots_edit(request, **kwargs):
     if len(grouping_column_str) > 0:
         grouping_columns = [int(i) for i in grouping_column_str.split(', ')]
 
-    actual_plot = None
-    if plot_to_edit.plot_type == 'B':
-        actual_plot = BarChart(explicit_size = True)
-    elif plot_to_edit.plot_type == 'L':
-        actual_plot = LineChart(explicit_size = True)
-    elif plot_to_edit.plot_type == 'R':
-        actual_plot = RadarChart(explicit_size = True)
-    elif plot_to_edit.plot_type == 'P':
-        actual_plot = PieChart(explicit_size = True)
-    elif plot_to_edit.plot_type == 'X':
-        actual_plot = BoxChart(explicit_size = True)
-    else: # elif plot_to_edit.plot_type == 'X':
-        actual_plot = PyramidChart(explicit_size = True)
+    # actual_plot = None
+    # if plot_to_edit.plot_type == 'B':
+    #     actual_plot = BarChart(explicit_size = True)
+    # elif plot_to_edit.plot_type == 'L':
+    #     actual_plot = LineChart(explicit_size = True)
+    # elif plot_to_edit.plot_type == 'R':
+    #     actual_plot = RadarChart(explicit_size = True)
+    # elif plot_to_edit.plot_type == 'P':
+    #     actual_plot = PieChart(explicit_size = True)
+    # elif plot_to_edit.plot_type == 'X':
+    #     actual_plot = BoxChart(explicit_size = True)
+    # else: # elif plot_to_edit.plot_type == 'X':
+    #     actual_plot = PyramidChart(explicit_size = True)
 
     columns = Column.objects.filter(spreadsheet=plot_to_edit.spreadsheet)
-    actual_plot.set_data(columns.filter(id__in=data_columns))
-    actual_plot.height = 600
-    actual_plot.width = 800
+    # actual_plot.set_data(columns.filter(id__in=data_columns))
+    # actual_plot.height = 600
+    # actual_plot.width = 800
 
     return render(request, 'plots_edit.html', context={'plot': plot_to_edit,
                                                        'plot_form': plot_form,
-                                                       'plot_graphics': actual_plot.generate(),
                                                        'columns': columns,
                                                        'data_columns': data_columns,
                                                        'grouping_columns': grouping_columns})

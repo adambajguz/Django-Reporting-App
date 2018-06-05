@@ -1,6 +1,5 @@
 import pygal
 from pygal.style import DefaultStyle
-from reports.models import Column
 
 from django.db.models import FloatField
 from django.db.models.functions import Cast

@@ -60,7 +60,7 @@ def reports_edit(request, **kwargs):
     ReportElementFormSet = formset_factory(ReportElementForm, formset=BaseFormSet, extra=0)
 
     # Get our data for. This is used as initial data.
-    report_elements = ReportElement.objects.filter(report=report_to_edit)
+    report_elements = ReportElement.objects.filter(report=report_to_edit).order_by("element_order")
     report_elements_count = report_elements.count()
 
     print("==========")
@@ -135,8 +135,26 @@ def reports_edit(request, **kwargs):
 
 @login_required
 def reports_preview(request, **kwargs):
-    return render(request, 'reports_edit.html', context={'report': report_to_edit, 'report_form': report_form, 'report_element_formset': report_element_formset,
-                                                         'report_elements_count': report_elements_count,})
+    # Get id
+    report_id = kwargs.get('id')
+
+    # Get current user's reports
+    user_reports = request.user.report_set.all()
+    # Check if the `report_id` is correct
+    try:
+        report_to_preview = user_reports.get(id=report_id)
+    except:
+        return render(request, 'error_page.html', context={'error_message': "No report with id:" + str(report_id) + " was found!"})
+
+    # Get our data for. This is used as initial data.
+    report_elements = ReportElement.objects.filter(report=report_to_preview).order_by("element_order")
+    report_elements_count = report_elements.count()
+
+    for el in report_elements:
+       print(el)
+
+
+    return render(request, 'reports_preview.html', context={'report': report_to_preview, 'report_elements': report_elements, 'report_elements_count': report_elements_count,})
 @login_required
 def reports_pdf(request, **kwargs):
     return render(request, 'reports_edit.html', context={'report': report_to_edit, 'report_form': report_form, 'report_element_formset': report_element_formset,

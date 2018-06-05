@@ -103,21 +103,13 @@ def spreadsheets_edit(request, **kwargs):
             #Add new column
             Column.add_column(spreadsheet_to_edit)
 
-            #Reload columns since we added one new
-            columns = Column.objects.filter(spreadsheet__id = spreadsheet_to_edit.id)
-
             # And notify our users that it worked
             messages.warning(request, '<i class="uk-icon-arrows-h"></i> Column inserted!', extra_tags='safe')
 
-    rows = []
-    for current_column in columns:
-        cells = current_column.cells.all()
-        rows.append(cells.values_list('contents', flat=True))
 
     return render(request, 'spreadsheets_edit.html', context={'spreadsheet': spreadsheet_to_edit,
                                                               'spreadsheet_form': spreadsheet_form,
-                                                              'columns': columns,
-                                                              'num_rows': range(0, spreadsheet_to_edit.row_number), 'rows': rows})
+                                                              'table': spreadsheet_to_edit.table(),})
 
 @login_required
 def spreadsheets_pdf(request, **kwargs):

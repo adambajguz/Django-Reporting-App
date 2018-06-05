@@ -51,12 +51,12 @@
 <div class="uk-width-1-1">
 	<div class="uk-overflow-container">
 		<table class="uk-table uk-table-hover uk-table-striped uk-table-condensed ">
-			{% if spreadsheet.column_number > 0%}
+			{% if spreadsheet.column_number > 0 %}
 			<thead>
 				<tr>
 					<th class="uk-text-bold" colspan="2"><span>No.</span></th>
 
-					{% for current_column in columns %}
+					{% for current_column in table.columns %}
 					<th class="uk-text-bold">
 						<input type="text" style="min-width: 150px;" name="header_C{{ forloop.counter }}" 
 							class="uk-width-1-1 uk-form-blank" value="{{current_column.column_name}}">
@@ -71,7 +71,7 @@
 			</thead>
 
 			<tbody>
-				{% for it in num_rows %}
+				{% for it in table.num_rows %}
 				<tr>
 					<td>
 						<strong class="uk-float-right">{{forloop.counter}}</strong>
@@ -82,10 +82,10 @@
 						</a>	
 					</td>
 
-					{% for current_column in columns %}
+					{% for current_column in table.columns %}
 					<td colspan="2">
 						<input type="text" style="min-width: 150px;" name="cells_C{{ forloop.counter }}"
-								class="uk-width-1-1 uk-form-blank" value="{{ rows | index:forloop.counter0 | index:it }}">
+								class="uk-width-1-1 uk-form-blank" value="{{ table.rows | index:forloop.counter0 | index:it }}">
 					</td>
 					{% endfor %}
 				</tr>
