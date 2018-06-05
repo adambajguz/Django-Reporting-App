@@ -52,6 +52,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'ReportingApp.urls'
 
 REPORTS_TEMPLES_PATH = os.path.join(BASE_DIR, 'reports', 'templates')
+TEMPLES_PATH = os.path.join(BASE_DIR,'templates')
 
 TEMPLATES = [
     {
@@ -59,6 +60,7 @@ TEMPLATES = [
         'DIRS': [
             './templates',
             REPORTS_TEMPLES_PATH,
+			TEMPLES_PATH,
             os.path.join(REPORTS_TEMPLES_PATH, 'base'),
             os.path.join(REPORTS_TEMPLES_PATH, 'spreadsheets'),
             os.path.join(REPORTS_TEMPLES_PATH, 'plots'),
