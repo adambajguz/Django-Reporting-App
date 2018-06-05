@@ -1,6 +1,6 @@
 ﻿# Django-Raporting-App
 
-w: http://rswtasheetpro.pythonanywhere.com/
+http://rswtasheetpro.pythonanywhere.com/
 l: rswtaSheetPro
 h: rSwt@2018
 
