@@ -44,6 +44,16 @@
 
 	<button name="delete" value="Delete" class="uk-margin-bottom uk-button uk-button-danger"><i class="uk-icon-trash"></i> Delete report</button>
 	<button class="uk-margin-bottom uk-button uk-button-primary"><i class="uk-icon-save"></i> Save</button>
+
+	<script>
+			$(function(){
+				$("body").on("click", ".uk-button[data-message]", function(){
+					UIkit.notify($(this).data(), {
+						status: 'primary',
+						timeout: 5000,
+					});
+				});
+			})		</script>
 {% endblock %}
 
 {% block content %}

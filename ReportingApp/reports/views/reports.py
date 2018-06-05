@@ -184,9 +184,6 @@ def reports_pdf(request, **kwargs):
         if request.POST.get('edit'):
             return redirect('reports_edit', id=report_id)
 
-        if request.POST.get('pdf'):
-            return redirect('reports_preview', id=report_id)
-
     # Get our data for. This is used as initial data.
     report_elements = ReportElement.objects.filter(report=report_to_preview).order_by("element_order")
     report_elements_count = report_elements.count()
