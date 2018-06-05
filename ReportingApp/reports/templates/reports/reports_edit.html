@@ -72,43 +72,26 @@
 					<em><i class="uk-icon-remove"></i></em>
 				</a>
 				{{ element.id }}
-				<div class="uk-form uk-form-horizontal">
-					<fieldset data-uk-margin class="uk-form-row">
-							{% if element.element_name.errors %}
-								<div class="uk-alert uk-alert-danger">
-									{% for error in element.element_name.errors %}
-										{{ error|escape }}
-									{% endfor %}
-								</div>
-							{% endif %}
-							
-							<div class="uk-form-label" for="{{ element.element_name.name }}">{{ element.element_name.label_tag|safe }}</div>
+				<div class="uk-form uk-form-stacked">
+					<fieldset data-uk-margin class="uk-form-row">						
+							<div class="uk-form-controls uk-form-controls-text">
+								<p class="uk-form-controls-condensed">
+									<b>{{ element.element_name.label_tag|safe }}</b>
+									{{ element.element_name }}
 
-							<div class="uk-form-controls">
-								{{ element.element_name }}
-							</div>
-			
-							{% if element.element_order.errors %}
-								<div class="uk-alert uk-alert-danger">
-									{% for error in element.element_order.errors %}
-										{{ error|escape }}
-									{% endfor %}
-								</div>
-							{% endif %}
+									<b>{{ element.element_order.label_tag|safe }}</b>
+									{{ element.element_order }}
 
-							<div class="uk-form-label" for="{{ element.element_order.name }}">{{ element.element_order.label_tag|safe }}</div>
 
-							<div class="uk-form-controls">
-								{{ element.element_order }}
-							</div>
-
-							<div class="uk-form-label" for="{{ element.element_order.name }}">{{ element.element_type.label_tag|safe }}</div>
-
-							<div class="uk-form-controls">
-								{{ element.element_type }}
+								</p>
+								<p>
+									<b>{{ element.element_type.label_tag|safe }}</b>
+									{{ element.element_type }}
+								</p>
 							</div>
 					</fieldset>
 
+					
 					<div class="uk-form-row" {% if element.element_type.value != 'X' and element.element_type.value != None %}hidden{% endif %}>
 						<div class="uk-form-label" for="{{ element.text.name }}">{{ element.text.label_tag|safe }}</div>
 
@@ -118,36 +101,31 @@
 					</div>
 
 					<fieldset data-uk-margin class="uk-form-row">
-						<div class="uk-form-row" {% if element.element_type.value != 'T' and element.element_type.value != 'P' %}hidden{% endif %}>
-							<div class="uk-form-label" for="{{ element.caption.name }}">{{ element.caption.label_tag|safe }}</div>
-
-							<div class="uk-form-controls">
-								{{ element.caption }}
-							</div>
-						</div>
-
-						<div class="uk-form-row" {% if element.element_type.value != 'T' %}hidden{% endif %}>
-							<div class="uk-form-label" for="{{ element.style.name }}">{{ element.style.label_tag|safe }}</div>
-
-							<div class="uk-form-controls">
-								{{ element.style }}
-							</div>
-						</div>
-						
-						<div class="uk-form-row" {% if element.element_type.value != 'T' %}hidden{% endif %}>
-							<div class="uk-form-label" for="{{ element.caption.name }}">{{ element.spreadsheet.label_tag|safe }}</div>
-
-							<div class="uk-form-controls">
-								{{ element.spreadsheet }}
-							</div>
-						</div>
-
-						<div class="uk-form-row" {% if element.element_type.value != 'P' %}hidden{% endif %}>
-							<div class="uk-form-label" for="{{ element.plot.name }}">{{ element.plot.label_tag|safe }}</div>
-
-							<div class="uk-form-controls">
-								{{ element.plot }}
-							</div>
+						<div class="uk-form-controls uk-form-controls-text">
+							<p class="uk-form-controls-condensed">
+								<span>
+									<span {% if element.element_type.value != 'T' and element.element_type.value != 'P' %}hidden{% endif %}>
+										<b>{{ element.caption.label_tag|safe }}</b>
+										{{ element.caption }}
+									</span>
+								</span>
+								<span>
+									<span {% if element.element_type.value != 'T' %}hidden{% endif %}>
+										<b>{{ element.style.label_tag|safe }}</b>
+										{{ element.style }}
+									</span>
+									<span {% if element.element_type.value != 'T' %}hidden{% endif %}>
+										<b>{{ element.spreadsheet.label_tag|safe }}</b>
+										{{ element.spreadsheet }}
+									</span>
+								</span>
+								<span>
+									<span {% if element.element_type.value != 'P' %}hidden{% endif %}>
+										<b>{{ element.plot.label_tag|safe }}</b>
+										{{ element.plot }}
+									</span>
+								</span>
+							</p>
 						</div>
 					</fieldset>
 

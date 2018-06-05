@@ -3124,6 +3124,25 @@ html:not(.uk-touch) .uk-nav-offcanvas ul a:hover {
 .uk-table-striped tbody tr:nth-of-type(odd) {
   background: #fafafa;
 }
+/* Modifier: `uk-table-header-fill`
+ ========================================================================== */
+ .uk-table-header-fill thead tr th {
+  background: #cccccc;
+}
+/* Modifier: `uk-table-office`
+ ========================================================================== */
+ .uk-table-office thead tr th {
+  background: #68c3ff;
+}
+.uk-table-office tbody tr:nth-of-type(odd) {
+  background: #c1ebff;
+}
+.uk-table-office tbody td {
+  border-bottom: 1px solid #45abff;
+}
+.uk-table-office tbody tr:hover {
+  background: #dff1ff;
+}
 /* Modifier: `uk-table-condensed`
  ========================================================================== */
 .uk-table-condensed td {

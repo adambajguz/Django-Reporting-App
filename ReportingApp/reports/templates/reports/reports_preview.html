@@ -8,28 +8,35 @@
 {% endblock %}
 
 {% block cotainer_start %} 
+	<form class="uk-form" method="post" name="edit_form" action="{% url 'reports_preview' id=report.id %}">
+		{% csrf_token %}
 {% endblock %}
 
 {% block cotainer_end %} 
+	</form>
 {% endblock %}
 
 {% block quick_actions %}
 	
-
+	<p>Creation: {{ report.report_creation_date }}</p>
 	<p>Last modification: {{ report.report_last_modification }}</p>
-
 
 	<hr style="color: #CCE6FF; border-color: #CCE6FF; background-color: #CCE6FF;">
 
-	<button name="delete" value="Delete" class="uk-margin-bottom uk-button uk-button-danger"><i class="uk-icon-trash"></i> Delete report</button>
+	<button name="pdf" value="PDF" class="uk-margin-bottom uk-button uk-button-primary"><i class="uk-icon-file-pdf-o"></i> Generate PDF</button>
+	<p>
+		<button name="edit" value="Edit" class="uk-margin-bottom uk-button uk-button-success"><i class="uk-icon-pencil"></i> Edit report</button>
+		<button name="delete" value="Delete" class="uk-margin-bottom uk-button uk-button-danger"><i class="uk-icon-trash"></i> Delete report</button>
+	</p>
 {% endblock %}
 
 {% block content %}
 
-<div class="uk-width-1-1">
+<div class="uk-width-2-3 uk-container-center">
 	<h1>{{ report.report_name }}</h1>
-	<h2>{{ report.description }}</h2>
+	<h3>{{ report.report_description }}</h2>
 
+	<hr>
 	{% for element in report_elements %}
 		{% if element.element_type == "X" %}
 
@@ -46,10 +53,15 @@
 
 			<h3>{{ element.caption }}</h3>
 			<div class="uk-overflow-container">
-				<table class="uk-table uk-table-hover uk-table-striped uk-table-condensed ">
+				<table class="uk-table uk-table-condensed
+							{% if element.style == "C" %}uk-table-hover uk-table-striped uk-table-header-fill{% endif %}
+							{% if element.style == "M" %}uk-table-hover{% endif %}
+							{% if element.style == "O" %}uk-table-office{% endif %}
+							{% if element.style == "A" %}uk-table-hover uk-table-striped{% endif %}
+							">
 					<thead>
 						<tr>
-							<th class="uk-text-bold" colspan="2"><span>No.</span></th>
+							{% if element.style != "M" and element.style != "O" %}<th class="uk-text-bold"><span>No.</span></th>{% endif %}
 		
 							{% for current_column in element.spreadsheet.table.columns %}
 							<th class="uk-text-bold">
@@ -62,10 +74,12 @@
 					<tbody>
 						{% for it in element.spreadsheet.table.num_rows %}
 						<tr>
+							{% if element.style != "M" and element.style != "O" %}
 							<td>
 								<strong class="uk-float-right">{{forloop.counter}}</strong>
 							</td>
-	
+							{% endif %}
+
 							{% for current_column in element.spreadsheet.table.columns %}
 							<td>
 								{{ element.spreadsheet.table.rows | index:forloop.counter0 | index:it }}
@@ -83,12 +97,6 @@
 
 		{% endif %}
 	{% endfor %}
-
-
-
-
-
-
 </div>
 
 

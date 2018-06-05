@@ -146,12 +146,21 @@ def reports_preview(request, **kwargs):
     except:
         return render(request, 'error_page.html', context={'error_message': "No report with id:" + str(report_id) + " was found!"})
 
+    if request.method == 'POST':
+        if request.POST.get('delete'):
+            return redirect('reports_delete', id=report_id)
+
+        if request.POST.get('edit'):
+            return redirect('reports_edit', id=report_id)
+
+        if request.POST.get('pdf'):
+            return redirect('reports_preview', id=report_id)
+            
     # Get our data for. This is used as initial data.
     report_elements = ReportElement.objects.filter(report=report_to_preview).order_by("element_order")
     report_elements_count = report_elements.count()
 
-    for el in report_elements:
-       print(el)
+
 
 
     return render(request, 'reports_preview.html', context={'report': report_to_preview, 'report_elements': report_elements, 'report_elements_count': report_elements_count,})

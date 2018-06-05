@@ -26,11 +26,11 @@ class ReportElementForm(forms.Form):
     id = forms.IntegerField(required=False, widget=forms.HiddenInput())
 
     element_name = forms.CharField(required=False, max_length=32, widget=forms.TextInput(attrs={'placeholder': 'Element name'}))
-    element_order = forms.IntegerField(required=False,)
+    element_order = forms.IntegerField(required=False, widget=forms.NumberInput(attrs={'class': "uk-form-width-small"}))
     element_type = forms.ChoiceField(required=False, choices=ReportElement.ELEMENT_TYPE, widget=forms.Select(attrs={'onchange':'myFunction(event)'}))
 
     # ==== Text ====
-    text = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Text', 'rows':4}), required=False)
+    text = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Text', 'rows':10, 'cols': 75}), required=False)
 
     # ==== Table & plot common ====
     caption = forms.CharField(required=False, max_length=32, widget=forms.TextInput(attrs={'placeholder': 'Caption'}))

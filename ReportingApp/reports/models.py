@@ -158,8 +158,8 @@ class Plot(models.Model):
 
 		columns = Column.objects.filter(spreadsheet=self.spreadsheet)
 		actual_plot.set_data(columns.filter(id__in=data_columns))
-		actual_plot.height = 600
-		actual_plot.width = 800
+		actual_plot.height = 480
+		actual_plot.width = 640
 
 		return actual_plot.generate()
 
