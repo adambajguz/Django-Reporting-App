@@ -52,7 +52,12 @@
 					</i>
 				</td>
 				<td class="uk-width-2-10">
-					<a class="uk-button uk-button-success uk-button-mini" href="{% url 'spreadsheets_edit' id=spreadsheet.id %}">
+					<a class="uk-button uk-button-primary uk-button-mini" 
+					   data-message="<i class='uk-icon-spinner uk-icon-spin'></i> Generating PDF"
+					   href="{% url 'spreadsheets_pdf' id=spreadsheet.id %}">
+							<i class="uk-icon-file-pdf-o"></i> PDF
+					</a>
+					<a class="uk-margin-small-left uk-button uk-button-success uk-button-mini" href="{% url 'spreadsheets_edit' id=spreadsheet.id %}">
 						<i class="uk-icon-pencil"></i> Edit
 					</a>
 					<a class="uk-margin-small-left uk-button uk-button-danger uk-button-mini " href="{% url 'spreadsheets_delete' id=spreadsheet.id %}">
@@ -66,4 +71,14 @@
 	{% endif %}
 </div>
 
+<script>
+		$(function(){
+			$("body").on("click", ".uk-button[data-message]", function(){
+				UIkit.notify($(this).data(), {
+					status: 'primary',
+					timeout: 5000,
+				});
+			});
+		})
+	</script>
 {% endblock %}

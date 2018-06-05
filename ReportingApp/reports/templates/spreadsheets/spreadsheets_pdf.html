@@ -1,25 +1,109 @@
-{% extends "base_pdf.html" %}
-
 {% load custom_tags %}
 
-{% block content %}
 <!DOCTYPE html>
 
 <html>
 <head>
-	<title>FC-python wrapper</title>
+	<style>
+		@page {
+			size: letter landscape;
+			margin: 2cm;
+		}
+
+	/* ========================================================================
+	Component: Table
+	========================================================================== */
+	/*
+	* 1. Remove most spacing between table cells.
+	* 2. Block element behavior
+	* 3. Style
+	*/
+	table {
+		/* 1 */
+		border-collapse: collapse;
+		border-spacing: 0;
+		/* 2 */
+		width: 100%;
+		/* 3 */
+		margin-bottom: 15px;
+	}
+
+	table th,
+	table td {
+		border-bottom: 1px solid rgb(0, 0, 0);
+		padding: 2px 4px;
+	}
+	/*
+	* Set alignment
+	*/
+	table th {
+		text-align: left;
+
+	}
+	table td {
+		vertical-align: top;
+	}
+	table thead th {
+		vertical-align: bottom;
+	}
+	/*
+	* Caption and footer
+	*/
+	table caption,
+	table tfoot {
+		font-size: 12px;
+		font-style: italic;
+	}
+	table caption {
+		text-align: left;
+		color: #999;
+	}
+
+	/* Sub-modifier: `uk-table-middle`
+	========================================================================== */
+	.uk-table-middle,
+	.uk-table-middle td {
+		vertical-align: middle !important;
+	}
+	/* Modifier: `uk-table-striped`
+	========================================================================== */
+	.uk-table-striped tbody tr:nth-of-type(odd) {
+		background: #fafafa;
+	}
+	/* Modifier: `uk-table-header-fill`
+	========================================================================== */
+	.uk-table-header-fill thead tr th {
+		background: #cccccc;
+	}
+	/* Modifier: `uk-table-office`
+	========================================================================== */
+	.uk-table-office thead tr th {
+		background: #68c3ff;
+	}
+	.uk-table-office tbody tr:nth-of-type(odd) {
+		background: #c1ebff;
+	}
+	.uk-table-office tbody td {
+		border-bottom: 1px solid #45abff;
+	}
+	.uk-table-office tbody tr:hover {
+		background: #dff1ff;
+	}
+	/* Modifier: `uk-table-condensed`
+	========================================================================== */
+	.uk-table-condensed td {
+		padding: 0;
+	}
+
+		
+	</style>
+
+	<title>{{ spreadsheet.spreadsheet_name }}</title>
 </head>
 <body>
-	<div id="chart-1">{{ output|safe }}</div>
-</body>
-</html>
-<!-- 
- 
-
-<div class="uk-width-1-1">
-	<div id="chart-1">{{ output|safe }}</div>
-		<div class="uk-overflow-container">
-			<table class="uk-table uk-table-hover uk-table-striped uk-table-condensed ">
+	<h1>{{ spreadsheet.spreadsheet_name }}</h1>
+	<div class="uk-width-1-1">
+			<table class="uk-table uk-table-hover uk-table-striped uk-table-condensed">
 				<thead>
 					<tr>
 						<th class="uk-text-bold"><span class="uk-float-right">No.</span></th>
@@ -47,7 +131,6 @@
 					{% endfor %}
 				</tbody>
 			</table>
-		</div>
-</div> -->
-
-{% endblock %}
+	</div> 
+</body>
+</html>

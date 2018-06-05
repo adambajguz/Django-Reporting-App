@@ -32,7 +32,7 @@
 
 {% block content %}
 
-<div class="uk-width-2-3 uk-container-center">
+<div class="uk-width-1-1">
 	<h1>{{ report.report_name }}</h1>
 	<h3>{{ report.report_description }}</h2>
 
@@ -45,7 +45,7 @@
 		{% elif element.element_type == "P" %}
 
 			<h3>{{ element.caption }}</h3>
-			<p>
+			<p class="uk-margin-auto">
 				<embed type="image/svg+xml" src="{{ element.plot.chart|safe }}"/>
 			</p>
 
@@ -93,7 +93,72 @@
 
 		{% elif element.element_type == "R" %}
 
-			<p>Report</p>
+			<h3>{{ element.embedded_raport.report_name }}</h3>
+
+			<hr>
+
+			<div class="uk-width-1-1">			
+				{% for element_EM in element.embedded_raport.reportElements.all %}
+					{% if element_EM.element_order >= element.element_start and element_EM.element_order <= element.element_end %}
+						{% if element_EM.element_type == "X" %}
+				
+							<p>{{ element_EM.text }}</p>
+				
+						{% elif element_EM.element_type == "P" %}
+				
+							<h3>{{ element_EM.caption }}</h3>
+							<p class="uk-margin-auto">
+								<embed type="image/svg+xml" src="{{ element_EM.plot.chart|safe }}"/>
+							</p>
+				
+						{% elif element_EM.element_type == "T" %}
+				
+							<h3>{{ element_EM.caption }}</h3>
+							<div class="uk-overflow-container">
+								<table class="uk-table uk-table-condensed
+											{% if element_EM.style == "C" %}uk-table-hover uk-table-striped uk-table-header-fill{% endif %}
+											{% if element_EM.style == "M" %}uk-table-hover{% endif %}
+											{% if element_EM.style == "O" %}uk-table-office{% endif %}
+											{% if element_EM.style == "A" %}uk-table-hover uk-table-striped{% endif %}
+											">
+									<thead>
+										<tr>
+											{% if element_EM.style != "M" and element_EM.style != "O" %}<th class="uk-text-bold"><span>No.</span></th>{% endif %}
+						
+											{% for current_column in element_EM.spreadsheet.table.columns %}
+											<th class="uk-text-bold">
+												{{current_column.column_name}}
+											</th>
+											{% endfor %}
+										</tr>
+									</thead>
+						
+									<tbody>
+										{% for it in element_EM.spreadsheet.table.num_rows %}
+										<tr>
+											{% if element_EM.style != "M" and element_EM.style != "O" %}
+											<td>
+												<strong class="uk-float-right">{{forloop.counter}}</strong>
+											</td>
+											{% endif %}
+				
+											{% for current_column in element_EM.spreadsheet.table.columns %}
+											<td>
+												{{ element_EM.spreadsheet.table.rows | index:forloop.counter0 | index:it }}
+											</td>
+											{% endfor %}
+										</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>				
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+			</div>
+				
+
+			<hr>
 
 		{% endif %}
 	{% endfor %}

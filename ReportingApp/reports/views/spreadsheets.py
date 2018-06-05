@@ -141,7 +141,8 @@ def spreadsheets_pdf(request, **kwargs):
         rows.append(cells.values_list('contents', flat=True))
 
 
-    return PdfRender.render('spreadsheets_pdf.html', params={'spreadsheet': spreadsheet_to_edit,
+    return PdfRender.render('spreadsheets_pdf.html', params={'request':request,
+                                                              'spreadsheet': spreadsheet_to_edit,
                                                               'columns': columns,
                                                               'num_rows': range(0, spreadsheet_to_edit.row_number), 'rows': rows})
 

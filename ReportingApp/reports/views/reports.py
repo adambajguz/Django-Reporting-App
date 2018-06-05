@@ -11,6 +11,9 @@ from django.forms.formsets import BaseFormSet
 from django.db import IntegrityError, transaction
 from django.contrib import messages
 
+from reports.utils.PdfRender import PdfRender
+
+
 @login_required
 def reports(request):
     # Filter reports by currenly logon user
@@ -155,19 +158,41 @@ def reports_preview(request, **kwargs):
 
         if request.POST.get('pdf'):
             return redirect('reports_preview', id=report_id)
-            
+
     # Get our data for. This is used as initial data.
     report_elements = ReportElement.objects.filter(report=report_to_preview).order_by("element_order")
     report_elements_count = report_elements.count()
 
-
-
-
     return render(request, 'reports_preview.html', context={'report': report_to_preview, 'report_elements': report_elements, 'report_elements_count': report_elements_count,})
 @login_required
 def reports_pdf(request, **kwargs):
-    return render(request, 'reports_edit.html', context={'report': report_to_edit, 'report_form': report_form, 'report_element_formset': report_element_formset,
-                                                         'report_elements_count': report_elements_count,})
+    # Get id
+    report_id = kwargs.get('id')
+
+    # Get current user's reports
+    user_reports = request.user.report_set.all()
+    # Check if the `report_id` is correct
+    try:
+        report_to_preview = user_reports.get(id=report_id)
+    except:
+        return render(request, 'error_page.html', context={'error_message': "No report with id:" + str(report_id) + " was found!"})
+
+    if request.method == 'POST':
+        if request.POST.get('delete'):
+            return redirect('reports_delete', id=report_id)
+
+        if request.POST.get('edit'):
+            return redirect('reports_edit', id=report_id)
+
+        if request.POST.get('pdf'):
+            return redirect('reports_preview', id=report_id)
+
+    # Get our data for. This is used as initial data.
+    report_elements = ReportElement.objects.filter(report=report_to_preview).order_by("element_order")
+    report_elements_count = report_elements.count()
+
+    return PdfRender.render('reports_pdf.html', params={'report': report_to_preview, 'report_elements': report_elements, 'report_elements_count': report_elements_count,})
+    
 @login_required
 def reports_delete(request, **kwargs):
     report_id = kwargs.get('id')
