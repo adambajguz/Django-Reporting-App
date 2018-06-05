@@ -22,7 +22,7 @@
 					<li>{{ user.email }}</li>
 					<li><hr></li>
 					<li class="uk-margin-top uk-margin-small-bottom"><i class="uk-icon-calendar-plus-o"></i> Joined on  <i>{{ user.date_joined }}</i></li>
-					<li><i class="uk-icon-calendar"></i> Last login on  <i>{{ user.last_login }}</i></li>
+					<li><i class="uk-icon-calendar"></i> Last login on <i>{{ user.last_login }}</i></li>
 				</ul>
 			</div>
 		</div>
@@ -32,8 +32,8 @@
 				<h3 class="uk-panel-title"><i class="uk-icon-line-chart"></i> Statistics</h3>
 				<ul class="uk-list uk-list-space">
 					<li><b>Spreadsheets count:</b> {{ num_spreadsheets }}</li>
-					<li><b>Plots count:</b> n/a</li>
-					<li><b>Reports count:</b> n/a</li>
+					<li><b>Plots count:</b> {{ num_plots }}</li>
+					<li><b>Reports count:</b> {{ num_reports }}</li>
 				</ul>
 			</div>
 		</div>

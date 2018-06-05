@@ -8,7 +8,7 @@ from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
 
-from reports.models import Spreadsheet
+from reports.models import Spreadsheet, Plot, Report
 
 from .forms import RegistrationForm, UserDetailsChangeForm, UserPasswordChangeForm
 
@@ -63,10 +63,12 @@ def register(request, **kwargs):
 
 @login_required
 def profile(request):
-    spreadsheets = Spreadsheet.objects.filter(user__id = request.user.id)
-    num_spreadsheets = spreadsheets.count()
+    id = request.user.id
+    num_spreadsheets = Spreadsheet.objects.filter(user__id = id).count()
+    num_plots = Plot.objects.filter(user__id = id).count()
+    num_reports = Report.objects.filter(user__id = id).count()
 
-    return render(request, 'account/profile.html', context={'user': request.user, 'num_spreadsheets': num_spreadsheets})
+    return render(request, 'account/profile.html', context={'user': request.user, 'num_spreadsheets': num_spreadsheets, 'num_plots': num_plots, 'num_reports': num_reports})
 
 
 @login_required
@@ -80,13 +82,13 @@ def settings(request):
             'last_name': req_user.last_name,
             'username': req_user.username,
             'email': req_user.email,
-        }
+        },user=request.user
     )
     user_password_form = UserPasswordChangeForm(user=req_user)
 
     if request.method == 'POST':
         if 'submit' in request.POST:
-            user_details_form = UserDetailsChangeForm(request.POST)            
+            user_details_form = UserDetailsChangeForm(request.POST, user=request.user)            
             if user_details_form.is_valid():
 
                 data = user_details_form.cleaned_data
@@ -111,6 +113,3 @@ def settings(request):
                 #     login(request, user)
 
     return render(request, 'account/settings.html', context={'details_form': user_details_form, 'password_form': user_password_form})
-
-# def change_Account_details(request):
-#     form = 

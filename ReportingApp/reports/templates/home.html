@@ -5,82 +5,107 @@
 {% block content %}
 
 <div class="uk-width-1-1">
-	<h1>Raporting App</h1>
+	<h1>Welcome to <em>Raporting App</em></h1>
+	<h3>Currently <b>{{ users_count }}</b> users are using our platform and have created <b>{{ objects_count }}</b> spreadsheets, plots or reports.</h3>
+	<br>
+	<br>
+	<div class="uk-block uk-block-muted">
+		<div class="uk-container uk-container-center">
+			<h1>Gallery</h1>
+			<ul id="filter" class="uk-subnav uk-subnav-pill">
+				<li class="uk-active" data-uk-filter=""><a href="#">All</a></li>
+				<li data-uk-filter="filter-spreadsheet" class=""><a href="#">Spreadsheets</a></li>
+				<li data-uk-filter="filter-plot" class=""><a href="#">Plots</a></li>
+				<li data-uk-filter="filter-report" class=""><a href="#">Reports</a></li>
+				<li data-uk-filter="filter-pdf" class=""><a href="#">PDF</a></li>
 
-	<p>Welcome to
-		<em>Raporting App</em>.</p>
-
-
-	<br>	<br>
-	<hr>
-	<br>	<br>
-
-	<ul id="filter" class="uk-subnav uk-subnav-pill">
-		<li class="uk-active" data-uk-filter=""><a href="#">All</a></li>
-		<li data-uk-filter="filter-a" class=""><a href="#">Filter A</a></li>
-		<li data-uk-filter="filter-b" class=""><a href="#">Filter B</a></li>
-	</ul>
-
-	<div class="uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-large-1-4 tm-grid-heights" data-uk-grid="{gutter: 20, controls: '#filter'}" style="position: relative; margin-left: -20px; height: 394px;">
-		<div data-uk-filter="filter-a" data-grid-prepared="true" aria-hidden="false" 
-		style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 0px; opacity: 1; left: 0px; display: block;">
-		<div class="uk-panel-box">A 1</div></div>
-		<div data-uk-filter="filter-b" data-grid-prepared="true" aria-hidden="false" 
-		style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 0px; opacity: 1; left: 210.688px; display: block;"
-		><div class="uk-panel-box">B 2</div></div>
-		<div data-uk-filter="filter-a" data-grid-prepared="true" aria-hidden="false" 
-		style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 0px; opacity: 1; left: 421.375px; display: block;">
-		<div class="uk-panel-box">A 3</div></div>
-		<div data-uk-filter="filter-b" data-grid-prepared="true" aria-hidden="false" 
-		style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 0px; opacity: 1; left: 632.063px; display: block;">
-		<div class="uk-panel-box">B 4</div></div>
-		<div data-uk-filter="filter-b" data-grid-prepared="true" aria-hidden="false" 
-		style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 132px; opacity: 1; left: 0px; display: block;">
-		<div class="uk-panel-box">B 5</div></div>
-		<div data-uk-filter="filter-a" data-grid-prepared="true" aria-hidden="false" 
-		style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 152px; opacity: 1; left: 210.688px; display: block;">
-		<div class="uk-panel-box">A 6</div></div>
-		<div data-uk-filter="filter-b" data-grid-prepared="true" aria-hidden="false" 
-		style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 212px; opacity: 1; left: 421.375px; display: block;">
-		<div class="uk-panel-box">B 7</div></div>
-		<div data-uk-filter="filter-a,filter-b" data-grid-prepared="true" aria-hidden="false" 
-		style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 172px; opacity: 1; left: 632.063px;">
-		<div class="uk-panel-box">A+B 8</div></div>
+			</ul>
+		
+			<div class="uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-large-1-4 tm-grid-heights"
+				data-uk-grid="{gutter: 20, controls: '#filter'}" style="position: relative; margin-left: -20px; height: 394px;">
+				{% comment %} Spreadsheets {% endcomment %}
+				<div data-uk-filter="filter-spreadsheet" data-grid-prepared="true" aria-hidden="false" 
+				style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 0px; opacity: 1; left: 0px; display: block;">
+					<a href="{% static 'img/spreadsheet1.png' %}" data-uk-lightbox="{group:'group2'}" title="Spreadsheets list">
+						<img src="{% static 'img/spreadsheet1.png' %}" width="800" height="600" alt="">
+					</a>
+				</div>
+				<div data-uk-filter="filter-spreadsheet" data-grid-prepared="true" aria-hidden="false" 
+				style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 0px; opacity: 1; left: 0px; display: block;">
+					<a href="{% static 'img/spreadsheet2.png' %}" data-uk-lightbox="{group:'group2'}" title="Spreadsheet editing">
+						<img src="{% static 'img/spreadsheet2.png' %}" width="800" height="600" alt="">
+					</a>
+				</div>
+				<div data-uk-filter="filter-spreadsheet, filter-pdf" data-grid-prepared="true" aria-hidden="false" 
+				style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 0px; opacity: 1; left: 0px; display: block;">
+					<a href="{% static 'img/spreadsheet3.png' %}" data-uk-lightbox="{group:'group2'}" title="PDF from spreadsheet">
+						<img src="{% static 'img/spreadsheet3.png' %}" width="800" height="600" alt="">
+					</a>
+				</div>
+		
+				{% comment %} Plots {% endcomment %}
+				<div data-uk-filter="filter-plot" data-grid-prepared="true" aria-hidden="false" 
+				style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 0px; opacity: 1; left: 0px; display: block;">
+					<a href="{% static 'img/plot1.png' %}" data-uk-lightbox="{group:'group2'}" title="Plots list">
+						<img src="{% static 'img/plot1.png' %}" width="800" height="600" alt="">
+					</a>
+				</div>
+				<div data-uk-filter="filter-plot" data-grid-prepared="true" aria-hidden="false" 
+				style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 0px; opacity: 1; left: 0px; display: block;">
+					<a href="{% static 'img/4a.png' %}" data-uk-lightbox="{group:'group2'}" title="Bar plot">
+						<img src="{% static 'img/4a.png' %}" width="800" height="600" alt="">
+					</a>
+				</div>
+				<div data-uk-filter="filter-plot" data-grid-prepared="true" aria-hidden="false" 
+				style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 0px; opacity: 1; left: 0px; display: block;">
+					<a href="{% static 'img/4b.png' %}" data-uk-lightbox="{group:'group2'}" title="Linear plot">
+						<img src="{% static 'img/4b.png' %}" width="800" height="600" alt="">
+					</a>
+				</div>
+				<div data-uk-filter="filter-plot" data-grid-prepared="true" aria-hidden="false" 
+				style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 0px; opacity: 1; left: 0px; display: block;">
+					<a href="{% static 'img/4c.png' %}" data-uk-lightbox="{group:'group2'}" title="Pie plot">
+						<img src="{% static 'img/4c.png' %}" width="800" height="600" alt="">
+					</a>
+				</div>
+				<div data-uk-filter="filter-plot" data-grid-prepared="true" aria-hidden="false" 
+				style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 0px; opacity: 1; left: 0px; display: block;">
+					<a href="{% static 'img/4d.png' %}" data-uk-lightbox="{group:'group2'}" title="Radar plot">
+						<img src="{% static 'img/4d.png' %}" width="800" height="600" alt="">
+					</a>
+				</div>
+				<div data-uk-filter="filter-plot" data-grid-prepared="true" aria-hidden="false" 
+				style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 0px; opacity: 1; left: 0px; display: block;">
+					<a href="{% static 'img/4e.png' %}" data-uk-lightbox="{group:'group2'}" title="Box plot">
+						<img src="{% static 'img/4e.png' %}" width="800" height="600" alt="">
+					</a>
+				</div>
+				<div data-uk-filter="filter-plot" data-grid-prepared="true" aria-hidden="false" 
+				style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 0px; opacity: 1; left: 0px; display: block;">
+					<a href="{% static 'img/4f.png' %}" data-uk-lightbox="{group:'group2'}" title="Pyramid plot">
+						<img src="{% static 'img/4f.png' %}" width="800" height="600" alt="">
+					</a>
+				</div>
+		
+				{% comment %} PDF {% endcomment %}
+				<div data-uk-filter="filter-report" data-grid-prepared="true" aria-hidden="false" 
+				style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 0px; opacity: 1; left: 0px; display: block;">
+					<a href="{% static 'img/report1.png' %}" data-uk-lightbox="{group:'group2'}" title="Reports preview">
+						<img src="{% static 'img/report1.png' %}" width="800" height="600" alt="">
+					</a>
+				</div>
+				<div data-uk-filter="filter-report, filter-pdf" data-grid-prepared="true" aria-hidden="false" 
+				style="position: absolute; box-sizing: border-box; padding-left: 20px; padding-bottom: 20px; top: 0px; opacity: 1; left: 0px; display: block;">
+					<a href="{% static 'img/report2.png' %}" data-uk-lightbox="{group:'group2'}" title="PDF from report">
+						<img src="{% static 'img/report2.png' %}" width="800" height="600" alt="">
+					</a>
+				</div>
+			</div>
+		</div>
 	</div>
+	
 
-	<br>	<br>
-	<hr>
-	<br>	<br>
-
-	<div class="uk-grid uk-grid-width-medium-1-4" data-uk-grid-margin="">
-		<div class="uk-row-first">
-			<a href="{% static 'img/placeholder_800x600_1.jpg' %}" data-uk-lightbox="{group:'group1'}" title="Title">
-				<img src="{% static 'img/placeholder_800x600_1.jpg' %}" width="800" height="600" alt="">
-			</a>
-		</div>
-		<div>
-			<a href="{% static 'img/placeholder_800x600_2.jpg' %}" data-lightbox-type="image" data-uk-lightbox="{group:'group1'}" title="Title">
-				<img src="{% static 'img/placeholder_800x600_2.jpg' %}" width="800" height="600" alt="">
-			</a>
-		</div>
-		<div>
-			<a href="{% static 'img/placeholder_800x600_3.jpg' %}" data-lightbox-type="image" data-uk-lightbox="{group:'group1'}" title="Title">
-				<img src="{% static 'img/placeholder_800x600_3.jpg' %}" width="800" height="600" alt="">
-			</a>
-		</div>
-		<div>
-			<a href="{% static 'img/placeholder_800x600_4.jpg' %}" data-lightbox-type="image" data-uk-lightbox="{group:'group1'}" title="Title">
-				<img src="{% static 'img/placeholder_800x600_2.jpg' %}" width="800" height="600" alt="">
-			</a>
-		</div>
-
-	</div>
-
-	<br>	<br>
-	<hr>
-	<br>	<br>
-
-	<textarea data-uk-htmleditor="{markdown:true, mode:'tab', maxsplitsize:800}">
+	{% comment %} <textarea data-uk-htmleditor="{markdown:true, mode:'tab', maxsplitsize:800}">
 #Heading
 
 Lorem ipsum dolor sit **amet**, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. [This is a link](#)
@@ -93,6 +118,6 @@ Lorem ipsum dolor sit **amet**, consectetur adipisicing elit, sed do eiusmod tem
 
 Ut enim ad *minim* veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 	</textarea>
-</div>
+</div> {% endcomment %}
 
 {% endblock %}

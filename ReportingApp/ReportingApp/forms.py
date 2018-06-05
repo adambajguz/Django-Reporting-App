@@ -66,15 +66,20 @@ class UserDetailsChangeForm(forms.Form):
                              label=mark_safe('<i class="uk-icon-envelope"></i> e-mail'),
                              widget=forms.TextInput(attrs={'placeholder': 'Email', 'class': "uk-width-1-1"}))
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user")
+        super(UserDetailsChangeForm, self).__init__(*args, **kwargs)
+
+
     def clean_username(self):
         username = self.cleaned_data['username']
-        if User.objects.filter(username=username).exists():
+        if User.objects.filter(username=username).exclude(id=self.user.id).exists():
             raise ValidationError("A user with that username already exists.")
         return username
 
     def clean_email(self):
         email = self.cleaned_data['email']
-        if User.objects.filter(email=email).exists():
+        if User.objects.filter(email=email).exclude(id=self.user.id).exists():
             raise ValidationError("Email is already in use.")
         return email
 

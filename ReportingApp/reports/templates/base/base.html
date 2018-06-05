@@ -4,7 +4,7 @@
 <head>
 
 	{% block title %}
-	<title>Django ReportingApp</title>
+	<title>ReportingApp</title>
 	{% endblock %}
 
 	<meta charset="utf-8">
@@ -14,7 +14,7 @@
 	{% load static %}
 	<link rel="stylesheet" href={% static 'uikit/css/uikit.almost-flat.css' %} />
 	<link rel="stylesheet" href={% static 'uikit/css/components/sticky.min.css' %} />
-	<link rel="stylesheet" href={% static 'uikit/css/components/slidenav.almost-flat.min.css' %} />
+	<link rel="stylesheet" href={% static 'uikit/css/components/slidenav.css' %} />
 	<link rel="stylesheet" href={% static 'uikit/css/components/tooltip.min.css' %} />
 	<link rel="stylesheet" href={% static 'uikit/css/components/notify.almost-flat.min.css' %} />
 	<link rel="stylesheet" href={% static 'uikit/css/components/htmleditor.almost-flat.css' %} />
@@ -57,7 +57,17 @@
 					<h3 class="uk-panel-title"><i class="uk-icon-info"></i> About app</h3>
 					<div class="uk-grid">
 						<div class="uk-width-1-1">
-							Test
+							<p><em>ReportingApp is a Django application for simple spreadsheet, plot and both website and PDF reports creation.</em></p>
+							<hr>
+							<p>
+								<b>Authors:</b> <br>
+								<ul class="uk-list">
+									<li>Adam Bajguz,</li>
+									<li>Magdalena Kalisz,</li>
+									<li>Krzysztof Kiełczewski,</li>
+									<li>Michał Kierzkowski</li>
+								</ul>
+							</p>
 						</div>
 					</div>
 				</div>

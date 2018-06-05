@@ -46,12 +46,12 @@
 					<b>Use as: </b>
 					<label>
 						<input type="checkbox" name="data_col" value="{{ column.id }}" {% if column.id in data_columns %}checked{% endif %}>
-						data source, 
+						data source
 					</label>
-					<label>
+					{% comment %} <label>
 						<input type="checkbox" name="grouping_col" value="{{ column.id }}" {% if column.id in grouping_columns %}checked{% endif %}>
 						grouping
-					</label>
+					</label> {% endcomment %}
 				</dd>
 			{% endfor %}
 		</dl>
