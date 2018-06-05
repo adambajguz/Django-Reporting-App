@@ -18,10 +18,16 @@ from django.urls import include, path
 from django.conf.urls import url
 from . import views
 from django.contrib.auth import views as auth_views
-    # from django.contrib.auth.decorators import user_passes_test
-    # from django.contrib.auth.decorators import login_required
-    # login_forbidden = user_passes_test(lambda u: u.is_anonymous(), '/')
+from django.conf.urls import handler400, handler403, handler404, handler500
 
+# from django.contrib.auth.decorators import user_passes_test
+# from django.contrib.auth.decorators import login_required
+# login_forbidden = user_passes_test(lambda u: u.is_anonymous(), '/')
+
+# handler404 = 'views.my_custom_page_not_found_view404'
+# handler500 = 'views.my_custom_error_view500'
+# handler403 = 'views.my_custom_permission_denied_view403'
+# handler400 = 'views.my_custom_bad_request_view400'
 
 urlpatterns = [
     path('admin/', admin.site.urls),

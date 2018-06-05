@@ -15,6 +15,25 @@ from .forms import RegistrationForm, UserDetailsChangeForm, UserPasswordChangeFo
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth import authenticate, login
 
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+
+
+def my_custom_page_not_found_view404(request, exception, template_name='404.html'):
+    return render(request, '404.html', locals())
+
+def my_custom_error_view500(request, exception, template_name='500.html'):
+    return render(request, '500.html', locals())
+
+
+def my_custom_permission_denied_view403(request, exception, template_name='403.html'):
+    return render(request, '403.html', locals())
+
+def my_custom_bad_request_view400(request, exception, template_name='400.html'):
+    return render(request, '400.html', locals())
+
+
+
 def anonymous_required(view_function, redirect_to = None):
     return AnonymousRequired(view_function, redirect_to)
 

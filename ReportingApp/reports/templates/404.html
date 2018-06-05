@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block breadcrumbs %}
+	<a href="{% url 'home' %}">{{ block.super }}</a> » 404 error
+{% endblock %}
+
+{% block content %}
+
+<div class="uk-width-2-3 uk-container-center">
+	<h1>Resource not found - Error 404</h1>
+	<p>The requested resource could not be found but may be available again in the future.</p>
+</div>
+
+{% endblock %}

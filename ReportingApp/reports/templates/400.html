@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block breadcrumbs %}
+	<a href="{% url 'home' %}">{{ block.super }}</a> » 400 error
+{% endblock %}
+
+{% block content %}
+
+<div class="uk-width-2-3 uk-container-center">
+	<div class="uk-alert-danger">
+		<h1>Bad Request - Error 400</h1>
+		<p>The server cannot process the request due to something that is perceived to be a client error.</p>
+	</div>
+</div>
+
+{% endblock %}
