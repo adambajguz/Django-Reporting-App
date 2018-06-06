@@ -66,22 +66,6 @@ def reports_edit(request, **kwargs):
     report_elements = ReportElement.objects.filter(report=report_to_edit).order_by("element_order")
     report_elements_count = report_elements.count()
 
-    print("==========")
-    for el in report_elements:
-        print(dir(el))
-    print("==========")
-    report_elements_data = report_elements.values()
-    for el in report_elements:
-        a = getattr(el, 'spreadsheet')
-        print(a)
-
-    # get ids usign values() and get queryset of object using Spreadsheet.objects.filter(id=id) 
-    #x.fields["nazwa_fieldu"].initial = coś
-
-
-
-    print("--------------")
-
     if request.method == 'POST':
         if request.POST.get('delete'):
             return redirect('reports_delete', id=report_id)
@@ -130,8 +114,20 @@ def reports_edit(request, **kwargs):
             'report_description': report_to_edit.report_description,
         })
 
-        # a = [{'plot': Plot.objects.filter(id__in=report_elements.values("plot_id"))}]
-        report_element_formset = ReportElementFormSet(initial=report_elements_data, form_kwargs = {'user': request.user})
+        report_element_formset = ReportElementFormSet(initial=[{'id': el.id, 
+                                                                'element_name': el.element_name,
+                                                                'element_order': el.element_order,
+                                                                'element_type': el.element_type,
+                                                                'text': el.text,
+                                                                'caption': el.caption,
+                                                                'style': el.style,
+                                                                'spreadsheet': el.spreadsheet,
+                                                                'plot': el.plot,
+                                                                'embedded_raport': el.embedded_raport,
+                                                                'element_start': el.element_start,
+                                                                'element_end': el.element_end,
+                                                                } for el in report_elements],
+                                                        form_kwargs = {'user': request.user})
     return render(request, 'reports_edit.html', context={'report': report_to_edit, 'report_form': report_form, 'report_element_formset': report_element_formset,
                                                          'report_elements_count': report_elements_count,})
 
