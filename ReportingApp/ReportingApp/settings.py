@@ -54,6 +54,7 @@ ROOT_URLCONF = 'ReportingApp.urls'
 
 REPORTS_TEMPLES_PATH = os.path.join(BASE_DIR, 'reports', 'templates')
 TEMPLES_PATH = os.path.join(BASE_DIR,'templates')
+IMAGES_PATH = os.path.join(BASE_DIR,'static','img')
 
 TEMPLATES = [
     {
@@ -66,6 +67,7 @@ TEMPLATES = [
             os.path.join(REPORTS_TEMPLES_PATH, 'spreadsheets'),
             os.path.join(REPORTS_TEMPLES_PATH, 'plots'),
             os.path.join(REPORTS_TEMPLES_PATH, 'reports'),
+			IMAGES_PATH,
         ],
         'APP_DIRS': True,
         'OPTIONS': {
