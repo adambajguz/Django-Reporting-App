@@ -26,8 +26,7 @@ ocena bdb - to co na ocenę db +:
 - aplikacja powinna mieć estetyczny wygląd (elementy graficzne) i/lub aplikacja powinna być bezpieczna i zawierać testy automatyczne,
 - aplikacja powinna realizować przynajmniej dwie z następujących funkcjonalności: wysyłanie emaili, wysyłanie sms, generowanie pliku pdf, prezentacja graficznego wykresu, captcha, prezentacja mapy google lub podobnej, upload plików, prezentacja kalendarza z wydarzeniami.
 
-## ETAP 1 (do wykonania i wysłania na CEZ):
-
-Zapisz strukturę bazy danych w postaci:
-
-NazwaTabeli(pole1:typ, pole2:typ, ...)
+Lista książek / List of books | Lista czytelników / List of readers
+------------ | -------------
+![](/ReportingApp/reports/static/img/spreadsheet1.png?raw=true) | ![](/ReportingApp/reports/static/img/report1.png?raw=true)
+![](/ReportingApp/reports/static/img/spreadsheet2.png?raw=true) | ![](/ReportingApp/reports/static/img/plot1.png?raw=true)
