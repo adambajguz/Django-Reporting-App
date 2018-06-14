@@ -1,4 +1,4 @@
-﻿# Django-Raporting-App
+﻿# Django-Reporting-App
 
 http://rswtasheetpro.pythonanywhere.com/
 l: rswtaSheetPro
