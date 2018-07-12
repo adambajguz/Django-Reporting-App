@@ -1,9 +1,5 @@
 ﻿# Django-Reporting-App
 
-http://rswtasheetpro.pythonanywhere.com/
-l: rswtaSheetPro
-h: rSwt@2018
-
 ## TEMAT:
 
 4) Aplikacja Django wspomagająca tworzenie raportów
